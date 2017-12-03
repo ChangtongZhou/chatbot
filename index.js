@@ -13,7 +13,7 @@ const
   request = require('request'),
 
 /* ===== ROUTES =============================================================== */
-const webhook require('./routes/webhook');
+const webhook = require('./routes/webhook');
 
 const app = express();
 // const app = express().use(bodyParser.json()); // creates express http server
