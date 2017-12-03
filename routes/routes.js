@@ -1,11 +1,11 @@
 
 // ===== MODULES ===============================================================
-// import express from 'express';
+import express from 'express';
 
 const my_token = process.env.FB_VERIFY_TOKEN;
 const my_access = process.env.FB_ACCESS_TOKEN;
 const 
-  express = require('express'),
+//  express = require('express'),
 //  app = express(),
   router = express.Router();
 
@@ -127,5 +127,5 @@ function callSendAPI (sender_psid, response) {
   });
 }
 
-module.exports = router;
-// export default router;
+//module.exports = router;
+export default router;

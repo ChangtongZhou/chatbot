@@ -13,7 +13,8 @@ const
   request = require('request');
 
 /* ===== ROUTES =============================================================== */
-const router = require('./routes/routes.js');
+//const router = require('./routes/routes.js');
+import router from './routes/routes';
 
 const app = express();
 // const app = express().use(bodyParser.json()); // creates express http server
@@ -176,4 +177,4 @@ app.get('/', function(req, res){
   // res.render('login');
 });
 
-// module.exports = app;
+module.exports = app;
