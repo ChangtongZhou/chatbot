@@ -9,7 +9,7 @@ const
   app = express(),
   router = express.Router();
 
-app.get('/webhook', (req, res) => {
+router.get('/webhook', (req, res) => {
 
   // Your verify token. Should be a random string.
   let VERIFY_TOKEN = my_token;
@@ -42,7 +42,7 @@ app.get('/webhook', (req, res) => {
  * Allow users to send us messages
  */
 // Creates the endpoint for our webhook 
-app.post('/webhook', (req, res) => {  
+router.post('/webhook', (req, res) => {  
  
   let body = req.body;
 
