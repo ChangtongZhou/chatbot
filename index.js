@@ -8,7 +8,7 @@
 const 
   express = require('express'),
   bodyParser = require('body-parser'),
-  request = request('request'),
+  request = require('request'),
   app = express().use(bodyParser.json()); // creates express http server
 
 app.use(express.static(__dirname + '/client/static')); // add css files into html/ejs files (static contents)
