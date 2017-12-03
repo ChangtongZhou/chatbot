@@ -6,7 +6,7 @@ const my_token = process.env.FB_VERIFY_TOKEN;
 const my_access = process.env.FB_ACCESS_TOKEN;
 const router = express.Router();
 
-app.get('/webhook', (req, res) => {
+app.get('/', (req, res) => {
 
   // Your verify token. Should be a random string.
   let VERIFY_TOKEN = my_token;
@@ -39,7 +39,7 @@ app.get('/webhook', (req, res) => {
  * Allow users to send us messages
  */
 // Creates the endpoint for our webhook 
-app.post('/webhook', (req, res) => {  
+app.post('/', (req, res) => {  
  
   let body = req.body;
 
