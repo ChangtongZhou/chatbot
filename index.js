@@ -39,6 +39,7 @@ app.use(bodyParser.json())
 
 /* ===== ROUTES =============================================================== */
 import webhook from './routes/webhook';
+app.use('/webhook', webhook);
 
 /* 
  * Add webhook verification:
