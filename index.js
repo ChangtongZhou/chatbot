@@ -10,10 +10,10 @@
 const 
   express = require('express'),
   bodyParser = require('body-parser'),
-  request = require('request'),
+  request = require('request');
 
 /* ===== ROUTES =============================================================== */
-var webhook = require('./routes/webhook');
+const webhook = require('./routes/webhook');
 
 const app = express();
 // const app = express().use(bodyParser.json()); // creates express http server
@@ -176,4 +176,4 @@ app.get('/', function(req, res){
   // res.render('login');
 });
 
-module.exports = app;
+// module.exports = app;

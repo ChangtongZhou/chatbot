@@ -1,10 +1,13 @@
 
 // ===== MODULES ===============================================================
-import express from 'express';
+// import express from 'express';
 
 const my_token = process.env.FB_VERIFY_TOKEN;
 const my_access = process.env.FB_ACCESS_TOKEN;
-const router = express.Router();
+const 
+  express = require('express'),
+  app = express(),
+  router = express.Router();
 
 app.get('/', (req, res) => {
 
@@ -124,5 +127,5 @@ function callSendAPI (sender_psid, response) {
   });
 }
 
-module.exports = webhook;
+module.exports = router;
 // export default router;
