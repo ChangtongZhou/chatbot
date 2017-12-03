@@ -9,6 +9,12 @@ const
   express = require('express'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
+  app.use(express.static(__dirname + '/client/static')); // add css files into html/ejs files (static contents)
+
+  // tell express what view engine is (here we change view to .ejs)
+  app.set('views', __dirname + '/client/views');
+    app.set('view engine', 'html');
+  // app.set('view engine', 'ejs');
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
@@ -71,5 +77,10 @@ app.get('/webhook', (req, res) => {
       res.sendStatus(403);      
     }
   }
+});
+
+
+app.get('/', function(req, res){
+  res.render('index');
 });
 
