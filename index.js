@@ -13,7 +13,7 @@ const
   request = require('request');
 
 /* ===== ROUTES =============================================================== */
-const webhook = require('./routes/routes.js');
+const router = require('./routes/routes.js');
 
 const app = express();
 // const app = express().use(bodyParser.json()); // creates express http server
@@ -43,7 +43,7 @@ app.use (bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 
-app.use('/webhook', webhook);
+app.use('/webhook', router);
 
 /* 
  * Add webhook verification:
