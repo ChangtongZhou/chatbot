@@ -11,7 +11,12 @@ const
   express = require('express'),
   bodyParser = require('body-parser'),
   request = require('request'),
-  app = express().use(bodyParser.json()); // creates express http server
+
+/* ===== ROUTES =============================================================== */
+import webhook from './routes/webhook';
+
+const app = express();
+// const app = express().use(bodyParser.json()); // creates express http server
 
 
 /* =============================================
@@ -37,8 +42,7 @@ app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 app.use (bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-/* ===== ROUTES =============================================================== */
-import webhook from './routes/webhook';
+
 app.use('/webhook', webhook);
 
 /* 
@@ -172,3 +176,4 @@ app.get('/', function(req, res){
   // res.render('login');
 });
 
+module.exports = app;
