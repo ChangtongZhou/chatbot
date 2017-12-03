@@ -6,7 +6,7 @@ const my_token = process.env.FB_VERIFY_TOKEN;
 const my_access = process.env.FB_ACCESS_TOKEN;
 const 
   express = require('express'),
-  app = express(),
+//  app = express(),
   router = express.Router();
 
 router.get('/webhook', (req, res) => {
