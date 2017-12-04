@@ -40,7 +40,7 @@ app.use(express.static(__dirname + '/client/static')); // add css files into htm
    ============================================= */
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
-app.use (bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 
@@ -117,6 +117,9 @@ app.post('/webhook', (req, res) => {
       else if (webhookEvent.postback) {
         handlePostback(sender_psid, webhookEvent.postback);
       }
+
+      addPersistentMenu();
+      
      });
 
 
@@ -131,6 +134,7 @@ app.post('/webhook', (req, res) => {
 });
 
 /* ----------  Messenging API  ---------- */
+
 // handles messages events
 function handleMessage (sender_psid, received_message) {
   let response;
@@ -164,6 +168,11 @@ function handleMessage (sender_psid, received_message) {
                 "type": "postback",
                 "title": "No!",
                 "payload": "no",
+              },
+              {
+                "type":"phone_number",
+                "title":"call me maybe",
+                "payload":"+16692229605"
               }
             ],
           }]
@@ -236,7 +245,7 @@ function addPersistentMenu(){
     qs: { access_token: my_access },
     method: 'POST',
     json:{
-  "get_started":{
+    "get_started":{
     "payload":"GET_STARTED_PAYLOAD"
    }
  }
@@ -253,51 +262,51 @@ function addPersistentMenu(){
     qs: { access_token: my_access },
     method: 'POST',
     json:{
-"persistent_menu":[
-    {
-      "locale":"default",
-      "composer_input_disabled":true,
-      "call_to_actions":[
+      "persistent_menu":[
         {
-          "title":"Home",
-          "type":"postback",
-          "payload":"HOME"
-        },
-        {
-          "title":"Nested Menu Example",
-          "type":"nested",
+          "locale":"default",
+          "composer_input_disabled":true,
           "call_to_actions":[
             {
-              "title":"Who am I",
+              "title":"Home",
               "type":"postback",
-              "payload":"WHO"
+              "payload":"HOME"
             },
             {
-              "title":"Joke",
-              "type":"postback",
-              "payload":"joke"
+              "title":"Nested Menu Example",
+              "type":"nested",
+              "call_to_actions":[
+                {
+                  "title":"Who am I",
+                  "type":"postback",
+                  "payload":"WHO"
+                },
+                {
+                  "title":"Joke",
+                  "type":"postback",
+                  "payload":"joke"
+                },
+                {
+                  "title":"Contact Info",
+                  "type":"postback",
+                  "payload":"CONTACT"
+                }
+              ]
             },
             {
-              "title":"Contact Info",
-              "type":"postback",
-              "payload":"CONTACT"
+              "type":"web_url",
+              "title":"Latest News",
+              "url":"http://foxnews.com",
+              "webview_height_ratio":"full"
             }
           ]
         },
-        {
-          "type":"web_url",
-          "title":"Latest News",
-          "url":"http://foxnews.com",
-          "webview_height_ratio":"full"
+            {
+              "locale":"zh_CN",
+              "composer_input_disabled":false
+            }
+          ]
         }
-      ]
-    },
-    {
-      "locale":"zh_CN",
-      "composer_input_disabled":false
-    }
-    ]
-    }
 
 }, function(error, response, body) {
     console.log(response)
