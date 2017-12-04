@@ -303,7 +303,14 @@ function addPersistentMenu(){
         },
             {
               "locale":"zh_CN",
-              "composer_input_disabled":false
+              "composer_input_disabled":false,
+              "call_to_actions": [
+                {
+                  "title": "Talk to me",
+                  "type": "postback",
+                  "payload":"YES"
+                }
+              ]
             }
           ]
         }
