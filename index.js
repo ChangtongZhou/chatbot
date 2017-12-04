@@ -114,9 +114,9 @@ app.post('/webhook', (req, res) => {
       if (webhookEvent.message) {
         handleMessage(sender_psid, webhookEvent.message);
       } 
-      // else if (webEvent.postback) {
-      //   handlePostback(sender_psid, webhookEvent.postback);
-      // }
+      else if (webhookEvent.postback) {
+        handlePostback(sender_psid, webhookEvent.postback);
+      }
      });
 
 
@@ -168,9 +168,6 @@ function handleMessage (sender_psid, received_message) {
             ],
           }]
         }
-      }, 
-      "get_started" : {
-        "payload": 
       }
     }
   }
