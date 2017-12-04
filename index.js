@@ -114,9 +114,9 @@ app.post('/webhook', (req, res) => {
       if (webhookEvent.message) {
         handleMessage(sender_psid, webhookEvent.message);
       } 
-      // else if (webEvent.postback) {
-          // do something
-        //}
+      else if (webEvent.postback) {
+        handlePostback(sender_psid, webhookEvent.postback);
+      }
      });
 
 
