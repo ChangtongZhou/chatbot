@@ -134,6 +134,9 @@ app.post('/webhook', (req, res) => {
 });
 
 /* ----------  Messenging API  ---------- */
+function firstEntity(nlp, name) {
+  return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
+}
 
 // handles messages events
 function handleMessage (sender_psid, received_message) {
@@ -143,9 +146,17 @@ function handleMessage (sender_psid, received_message) {
   if (received_message.text) {
     // Creates the payload for a basic text message, which
     // will be added to the body of our request to the Send API
-    response = {
-      "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+    const greeting = firstEntity(received_message.nlp, 'greeting');
+    if (greeting && greeting.confidence > 0.8) {
+      response = {
+        "text": "Howdy!"
+      }
+    } else {
+      response = {
+        "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+      }
     }
+    received_message.nlp.entitles
   } else if (received_message.attachments) {
     // Gets the URL of the message attachment
     let attachment_url = received_message.attachments[0].payload.url;
@@ -268,47 +279,47 @@ function addPersistentMenu(){
           "composer_input_disabled":false,
           "call_to_actions":[
             {
-              "title":"Home",
+              "title":"Show me my todo list",
               "type":"postback",
-              "payload":"HOME"
+              "payload":"SHOW_TODO_LIST"
             },
-            {
-              "title":"Nested Menu Example",
-              "type":"nested",
-              "call_to_actions":[
-                {
-                  "title":"Who am I",
-                  "type":"postback",
-                  "payload":"WHO"
-                },
-                {
-                  "title":"Joke",
-                  "type":"postback",
-                  "payload":"joke"
-                },
-                {
-                  "title":"Contact Info",
-                  "type":"postback",
-                  "payload":"CONTACT"
-                }
-              ]
-            },
+            // {
+            //   "title":"Nested Menu Example",
+            //   "type":"nested",
+            //   "call_to_actions":[
+            //     {
+            //       "title":"Who am I",
+            //       "type":"postback",
+            //       "payload":"WHO"
+            //     },
+            //     {
+            //       "title":"Joke",
+            //       "type":"postback",
+            //       "payload":"joke"
+            //     },
+            //     {
+            //       "title":"Contact Info",
+            //       "type":"postback",
+            //       "payload":"CONTACT"
+            //     }
+            //   ]
+            // },
             {
               "type":"web_url",
-              "title":"Latest News",
-              "url":"http://foxnews.com",
+              "title":"Open PayPal",
+              "url":"http://paypal.com",
               "webview_height_ratio":"full"
             }
           ]
         },
             {
-              "locale":"zh_CN",
+              "locale":"en_US",
               "composer_input_disabled":false,
               "call_to_actions": [
                 {
-                  "title": "Talk to me",
+                  "title": ".",
                   "type": "postback",
-                  "payload":"YES"
+                  "payload": "YES"
                 }
               ]
             }
