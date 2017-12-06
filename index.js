@@ -387,30 +387,32 @@ function addPersistentMenu(){
               "locale":"default",
               "composer_input_disabled": true,
               "call_to_actions":[
+                // Row 1:
                 {
-                  "title":"My Account",
+                  "title":"Start my todo list",
                   "type":"nested",
                   "call_to_actions":[
                     {
-                      "title":"Pay Bill",
+                      "title":"Create",
                       "type":"postback",
-                      "payload":"PAYBILL_PAYLOAD"
+                      "payload":"CREATE_PAYLOAD"
                     },
                     {
-                      "title":"History",
+                      "title":"Edit/Update",
                       "type":"postback",
-                      "payload":"HISTORY_PAYLOAD"
+                      "payload":"UPDATE_PAYLOAD"
                     },
                     {
-                      "title":"Contact Info",
+                      "title":"Delete",
                       "type":"postback",
-                      "payload":"CONTACT_INFO_PAYLOAD"
+                      "payload":"DELETE_PAYLOAD"
                     }
                   ]
                 },
+                // Row 2:
                 {
                   "type":"web_url",
-                  "title":"Latest News",
+                  "title":"Show me my todo list",
                   "url":"http://petershats.parseapp.com/hat-news",
                   "webview_height_ratio":"full"
                 }
