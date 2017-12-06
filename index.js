@@ -48,7 +48,7 @@ app.use(bodyParser.json())
    ============================================= */
 // require Mongoose
 var mongoose = require ('mongoose');
-var uristring = 'mongodb://35.160.59.136/to_do_list';
+var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/to_do_list_db';
 mongoose.connect(uristring, function (err, res) {
   if (err) {
     console.log ("ERROR connecting to: " + uristring + ". " + err);
