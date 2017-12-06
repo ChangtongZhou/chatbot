@@ -48,7 +48,7 @@ app.use(bodyParser.json())
    ============================================= */
 // require Mongoose
 var mongoose = require ('mongoose');
-var uristring = 'mongodb://localhost/to_do_list';
+var uristring = 'mongodb://35.160.59.136/to_do_list';
 mongoose.connect(uristring, function (err, res) {
   if (err) {
     console.log ("ERROR connecting to: " + uristring + ". " + err);
@@ -353,6 +353,7 @@ app.get('/', function(req, res){
 
 /* ----------  Persistant Menu API  ---------- */
 function addPersistentMenu(){
+
  request({
     url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
     qs: { access_token: my_access },
