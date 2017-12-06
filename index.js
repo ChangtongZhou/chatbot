@@ -283,7 +283,7 @@ function sendGenericMessage(sender) {
     }
     request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:token},
+      qs: {access_token:my_access},
       method: 'POST',
       json: {
         recipient: {id:sender},
