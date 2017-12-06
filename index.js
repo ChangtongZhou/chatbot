@@ -139,7 +139,7 @@ app.post('/webhook', (req, res) => {
       console.log ('Sender PSID is: ' + sender_psid);
 
       // Check which event 
-      if (webhookEvent.message) {
+      if (webhookEvent.message && webhookEvent.message.text) {
         handleMessage(sender_psid, webhookEvent.message);
       } 
       else if (webhookEvent.postback) {
@@ -174,19 +174,24 @@ function handleMessage (sender_psid, received_message) {
   if (received_message.text) {
     // Creates the payload for a basic text message, which
     // will be added to the body of our request to the Send API
+    let text = received_message.text;
     const greeting = firstEntity(received_message.nlp, 'greetings');
     if (greeting && greeting.confidence > 0.8) {
       response = {
         "text": "Howdy!"
       }
     } else {
-      if(received_message.text.substring(0, 4) == "/add") {
+      // special messages to trigger the cards
+      if (text == "Generic") {
+        sendGenericMessage(sender_psid);
+      }
+      if(text.substring(0, 4) == "/add") {
         // add new item to list
-      } else if(received_message.text.substring(0, 7) == "/create") {
+      } else if(text.substring(0, 7) == "/create") {
         // create a new list
-      } else if(received_message.text.substring(0, 7) == "/delete") {
+      } else if(text.substring(0, 7) == "/delete") {
         // delete current list
-      } else if(received_message.text.substring(0, 5) == "/edit") {
+      } else if(text.substring(0, 5) == "/edit") {
         // edit list item
       } else {
         response = {
@@ -223,18 +228,17 @@ function handleMessage (sender_psid, received_message) {
                 "payload":"+16692229605"
               }
             ],
-          } //, 
-          // {
-          //   "title": "Second card",
-          //   "subtitle": "Element #2 of an hscroll",
-          //   "image_url": "https://github.com/jw84/messenger-bot-tutorial",
-          //   "buttons": [{
-          //     "type": "postback",
-          //     "title": "Click me!",
-          //     "payload": "Payload for second element in a generic bubble"
-          //   }
-            ]
-          // }]
+          }, 
+          {
+            "title": "Second card",
+            "subtitle": "Element #2 of an hscroll",
+            "image_url": "https://github.com/jw84/messenger-bot-tutorial",
+            "buttons": [{
+              "type": "postback",
+              "title": "Click me!",
+              "payload": "Payload for second element in a generic bubble"
+            }]
+          }]
         }
       }
     }
@@ -244,6 +248,56 @@ function handleMessage (sender_psid, received_message) {
   // Sends the response message
   callSendAPI (sender_psid, response);
 }
+
+function sendGenericMessage(sender) {
+    let messageData = {
+      "attachment": {
+        "type": "template",
+        "payload": {
+        "template_type": "generic",
+          "elements": [{
+          "title": "First card",
+            "subtitle": "Element #1 of an hscroll",
+            "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+            "buttons": [{
+              "type": "web_url",
+              "url": "https://www.messenger.com",
+              "title": "web url"
+            }, {
+              "type": "postback",
+              "title": "Postback",
+              "payload": "Payload for first element in a generic bubble",
+            }],
+          }, {
+            "title": "Second card",
+            "subtitle": "Element #2 of an hscroll",
+            "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+            "buttons": [{
+              "type": "postback",
+              "title": "Postback",
+              "payload": "Payload for second element in a generic bubble",
+            }],
+          }]
+        }
+      }
+    }
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:token},
+      method: 'POST',
+      json: {
+        recipient: {id:sender},
+        message: messageData,
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+        console.log('Error: ', response.body.error)
+      }
+    })
+}
+
 
 // handles messaging_postbakcs events
 function handlePostback(sender_psid, received_postback) {
