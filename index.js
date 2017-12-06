@@ -426,7 +426,7 @@ function addPersistentMenu(){
               "composer_input_disabled":false,
               "call_to_actions": [
                 {
-                  "title": ".",
+                  "title": "Testing testing zz",
                   "type": "postback",
                   "payload": "YES"
                 }
