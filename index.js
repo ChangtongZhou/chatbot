@@ -423,7 +423,7 @@ function addPersistentMenu(){
               "composer_input_disabled":false,
               "call_to_actions":[
                 {
-                  "title":"Pay Bill",
+                  "title":"Testing on mobile",
                   "type":"postback",
                   "payload":"PAYBILL_PAYLOAD"
                 }
