@@ -223,16 +223,18 @@ function handleMessage (sender_psid, received_message) {
                 "payload":"+16692229605"
               }
             ],
-          }, {
-            "title": "Second card",
-            "subtitle": "Element #2 of an hscroll",
-            "image_url": "https://github.com/jw84/messenger-bot-tutorial",
-            "buttons": [{
-              "type": "postback",
-              "title": "Click me!",
-              "payload": "Payload for second element in a generic bubble"
-            }]
-          }]
+          } //, 
+          // {
+          //   "title": "Second card",
+          //   "subtitle": "Element #2 of an hscroll",
+          //   "image_url": "https://github.com/jw84/messenger-bot-tutorial",
+          //   "buttons": [{
+          //     "type": "postback",
+          //     "title": "Click me!",
+          //     "payload": "Payload for second element in a generic bubble"
+          //   }
+            ]
+          // }]
         }
       }
     }
