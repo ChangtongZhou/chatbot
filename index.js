@@ -48,7 +48,10 @@ app.use(bodyParser.json())
    ============================================= */
 // require Mongoose
 var mongoose = require ('mongoose');
-var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/to_do_list_db';
+var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/bot_db';
+// testing:
+// console.log(mongoose.connection.readyState);
+
 mongoose.connect(uristring, function (err, res) {
   if (err) {
     console.log ("ERROR connecting to: " + uristring + ". " + err);
@@ -62,10 +65,12 @@ mongoose.connect(uristring, function (err, res) {
 
 // User Schema:
 var UserSchema = new mongoose.Schema({
-  name: {type: String},
-  priority: {type: Number},
-  items: {type: Array},
-}, {timestamps: true});
+  name: String,
+  items: [{
+    text: { type: String, trim: true },
+      priority: { type: Number, min: 0 } 
+    }]}, 
+  {timestamps: true});
 
 mongoose.model('User', UserSchema); // We are setting this Schema in our Models as 'User'
 var User = mongoose.model ('User'); // We are retrieving this Schema from our Models, named 'User'
@@ -376,64 +381,110 @@ function addPersistentMenu(){
     qs: { access_token: my_access },
     method: 'POST',
     json:{
-      "persistent_menu":[
-        {
-          "locale":"default",
-          "composer_input_disabled":false,
-          "call_to_actions":[
+
+          "persistent_menu":[
             {
-              "title":"Show me my todo list",
-              "type":"postback",
-              "payload":"SHOW_TODO_LIST"
-            },
-            {
-              "title":"Start todo list",
-              "type":"postback",
-              "payload":"CREATE_TODO_LIST"
-            },
-            
-            // {
-            //   "title":"Nested Menu Example",
-            //   "type":"nested",
-            //   "call_to_actions":[
-            //     {
-            //       "title":"Who am I",
-            //       "type":"postback",
-            //       "payload":"WHO"
-            //     },
-            //     {
-            //       "title":"Joke",
-            //       "type":"postback",
-            //       "payload":"joke"
-            //     },
-            //     {
-            //       "title":"Contact Info",
-            //       "type":"postback",
-            //       "payload":"CONTACT"
-            //     }
-            //   ]
-            // },
-            {
-              "type":"web_url",
-              "title":"Open PayPal",
-              "url":"http://paypal.com",
-              "webview_height_ratio":"full"
-            }
-          ]
-        },
-            {
-              "locale":"en_US",
-              "composer_input_disabled":false,
-              "call_to_actions": [
+              "locale":"default",
+              "composer_input_disabled": true,
+              "call_to_actions":[
                 {
-                  "title": "Testing testing zz",
-                  "type": "postback",
-                  "payload": "YES"
+                  "title":"My Account",
+                  "type":"nested",
+                  "call_to_actions":[
+                    {
+                      "title":"Pay Bill",
+                      "type":"postback",
+                      "payload":"PAYBILL_PAYLOAD"
+                    },
+                    {
+                      "title":"History",
+                      "type":"postback",
+                      "payload":"HISTORY_PAYLOAD"
+                    },
+                    {
+                      "title":"Contact Info",
+                      "type":"postback",
+                      "payload":"CONTACT_INFO_PAYLOAD"
+                    }
+                  ]
+                },
+                {
+                  "type":"web_url",
+                  "title":"Latest News",
+                  "url":"http://petershats.parseapp.com/hat-news",
+                  "webview_height_ratio":"full"
                 }
               ]
+            },
+            {
+              "locale":"zh_CN",
+              "composer_input_disabled":false,
+              "call_to_actions":[
+                {
+                  "title":"Pay Bill",
+                  "type":"postback",
+                  "payload":"PAYBILL_PAYLOAD"
+                }
+              ]    
             }
           ]
         }
+      // "persistent_menu":[
+      //    {
+      //     "locale":"default",
+      //     "composer_input_disabled":false,
+      //     "call_to_actions":[
+      //       {
+      //         "title":"Show me my todo list",
+      //         "type":"postback",
+      //         "payload":"SHOW_TODO_LIST"
+      //       },
+      //       {
+      //         "title":"Start todo list",
+      //         "type":"postback",
+      //         "payload":"CREATE_TODO_LIST"
+      //       }]
+            
+      //       {
+      //         "title":"Nested Menu Example",
+      //         "type":"nested",
+      //         "call_to_actions":[
+      //           {
+      //             "title":"Who am I",
+      //             "type":"postback",
+      //             "payload":"WHO"
+      //           },
+      //           {
+      //             "title":"Joke",
+      //             "type":"postback",
+      //             "payload":"joke"
+      //           },
+      //           {
+      //             "title":"Contact Info",
+      //             "type":"postback",
+      //             "payload":"CONTACT"
+      //           }
+      //         ]
+      //       },
+      //       {
+      //         "type":"web_url",
+      //         "title":"Open PayPal",
+      //         "url":"http://paypal.com",
+      //         "webview_height_ratio":"full"
+      //       },
+      //       {
+      //         "locale":"en_US",
+      //         "composer_input_disabled":false,
+      //         "call_to_actions": [
+      //           {
+      //             "title": "Testing testing zz",
+      //             "type": "postback",
+      //             "payload": "YES"
+      //           }
+      //         ]
+      //       }
+      //     ]
+        
 
 }, function(error, response, body) {
     console.log(response)
