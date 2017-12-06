@@ -43,8 +43,36 @@ app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
+/* =============================================
+   =                 MongoDB Setup                =
+   ============================================= */
+// require Mongoose
+var mongoose = require ('mongoose');
+var uristring = 'mongodb://localhost/to_do_list';
+mongoose.connect(uristring, function (err, res) {
+  if (err) {
+    console.log ("ERROR connecting to: " + uristring + ". " + err);
+  } else {
+    console.log("Succeeded connected to: " + uristring);
+  }
+});
+// mongoose.connect('https://safe-crag-36560.herokuapp.com/to_do_list');
 
-// app.use('/webhook', router);
+/* ----------  Create Mongoose Schemas ---------- */
+
+// User Schema:
+var UserSchema = new mongoose.Schema({
+  name: {type: String},
+  priority: {type: Number},
+  items: {type: Array},
+}, {timestamps: true});
+
+mongoose.model('User', UserSchema); // We are setting this Schema in our Models as 'User'
+var User = mongoose.model ('User'); // We are retrieving this Schema from our Models, named 'User'
+
+
+
+
 
 
 /* =============================================
@@ -152,8 +180,18 @@ function handleMessage (sender_psid, received_message) {
         "text": "Howdy!"
       }
     } else {
-      response = {
-        "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+      if(received_message.text.substring(0, 4) == "/add") {
+        // add new item to list
+      } else if(received_message.text.substring(0, 7) == "/create") {
+        // create a new list
+      } else if(received_message.text.substring(0, 7) == "/delete") {
+        // delete current list
+      } else if(received_message.text.substring(0, 5) == "/edit") {
+        // edit list item
+      } else {
+        response = {
+          "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+        }
       }
     }
   } else if (received_message.attachments) {
@@ -165,7 +203,7 @@ function handleMessage (sender_psid, received_message) {
         "payload": {
           "template_type": "generic",
           "elements": [{
-            "title": "Is this the right picture?",
+            "title": "First Card",
             "subtitle": "Tap a button to answer.",
             "image_url": attachment_url,
             "buttons": [
@@ -185,6 +223,15 @@ function handleMessage (sender_psid, received_message) {
                 "payload":"+16692229605"
               }
             ],
+          }, {
+            "title": "Second card",
+            "subtitle": "Element #2 of an hscroll",
+            "image_url": "https://github.com/jw84/messenger-bot-tutorial",
+            "buttons": [{
+              "type": "postback",
+              "title": "Click me!",
+              "payload": "Payload for second element in a generic bubble"
+            }]
           }]
         }
       }
@@ -232,7 +279,7 @@ function callSendAPI (sender_psid, response) {
     "qs": {"access_token": my_access},
     "method": "POST",
     "json": request_body
-  }, (err, res, body) => {
+  }, function (err, res, body){
     if (!err) {
       console.log ('message sent!')
     } else {
@@ -282,6 +329,12 @@ function addPersistentMenu(){
               "type":"postback",
               "payload":"SHOW_TODO_LIST"
             },
+            {
+              "title":"Start todo list",
+              "type":"postback",
+              "payload":"CREATE_TODO_LIST"
+            },
+            
             // {
             //   "title":"Nested Menu Example",
             //   "type":"nested",
