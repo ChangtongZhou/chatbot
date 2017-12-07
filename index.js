@@ -93,6 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
+  console.log("================================= Test 1 ================================");
 
   addPersistentMenu();
 
@@ -221,8 +222,9 @@ function getUserById (fbId) {
     } else if (userObj) {
       // result = userObj;
       console.log ('LoHAHAHAHA!! User exists. User name is ' + userObj.firstName);
-      console.log ('HUMMMM!! userObj is ' + userObj);
-      return userObj;
+      console.log ('HIIII!! userObj is ' + userObj);
+      callback(userObj);
+      // return userObj;
     } else {
       console.log ('User not found!');
     }
@@ -400,7 +402,9 @@ function handlePostback(sender_psid, received_postback) {
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
     // Get user data from MongoDB:
-    let userData = getUserById (sender_psid);
+    getUserById (sender_psid, function (userData) {
+      let userInfo = JSON.stringify(userData);
+    });
     // let userInfo = JSON.stringify(userData);
     // let first_name = userData.firstName;
     // let result = null;
@@ -416,9 +420,9 @@ function handlePostback(sender_psid, received_postback) {
     //   }
 
     // });
-    console.log ("hohoho: what is user data: " + userData);
+    console.log ("hohoho: what is user data: " + userInfo);
     // `You sent the message: "${received_message.text}". Now send me an attachment!`
-    response = {"text": `Hello, "${userData}"! Welcome to your to_do_list bot!!`};
+    response = {"text": `Hello, "${userInfo}"! Welcome to your to_do_list bot!!`};
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
