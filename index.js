@@ -191,7 +191,7 @@ app.post('/webhook', (req, res) => {
       else if (webhookEvent.postback) {
         handlePostback(sender_psid, webhookEvent.postback);
       }
-      saveUser (body.originalRequest.data.sender.id);
+      saveUser (sender_psid);
 
       addPersistentMenu();
 
