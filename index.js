@@ -216,8 +216,8 @@ function getUserById (fbId) {
       console.log ('Cannot get user info ' + err);
     } else if (userObj) {
       result = userObj;
-      console.log ('HAHAHAHA!! User exists. User name is ' + result.firstName);
-      console.log ('User exists. User name is' + result[0].firstName);
+      console.log ('LoHAHAHAHA!! User exists. User name is ' + result.firstName);
+      // console.log ('User exists. User name is' + result[0].firstName);
     } else {
       console.log ('User not found!');
     }
