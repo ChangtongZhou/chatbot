@@ -209,21 +209,21 @@ function getFBData(fbId, callback){
 
 
 /* ----------  Find one user  ---------- */
-function getUserById (fbId) {
-  var result = null;
-  User.findOne ({fbId: fbId}, function (err, userObj) {
-    if (err) {
-      console.log ('Cannot get user info ' + err);
-    } else if (userObj) {
-      result = userObj;
-      console.log ('LoHAHAHAHA!! User exists. User name is ' + result.firstName);
-      return result;
-    } else {
-      console.log ('User not found!');
-    }
+// function getUserById (fbId) {
+//   var result = null;
+//   User.findOne ({fbId: fbId}, function (err, userObj) {
+//     if (err) {
+//       console.log ('Cannot get user info ' + err);
+//     } else if (userObj) {
+//       result = userObj;
+//       console.log ('LoHAHAHAHA!! User exists. User name is ' + result.firstName);
+//       return result;
+//     } else {
+//       console.log ('User not found!');
+//     }
 
-  });
-}
+//   });
+// }
 
 
 
@@ -394,11 +394,25 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "Oops, try sending another image." }
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
-    let userData = getUserById (sender_psid);
+    // Get user data from MongoDB:
+    // let userData = getUserById (sender_psid);
     // let first_name = userData.firstName;
-    console.log ("hohoho: what is user data: " + userData);
+    var result = null;
+    User.findOne ({fbId: fbId}, function (err, userObj) {
+      if (err) {
+        console.log ('Cannot get user info ' + err);
+      } else if (userObj) {
+        result = userObj;
+        console.log ('LoHAHAHAHA!! User exists. User name is ' + result.firstName);
+        response = {"text": `Hello, "${result.firstName}"! Welcome to your to_do_list bot!!`};
+      } else {
+        console.log ('User not found!');
+      }
+
+    });
+    // console.log ("hohoho: what is user data: " + userData);
     // `You sent the message: "${received_message.text}". Now send me an attachment!`
-    response = {"text": `Hello, "${userData}"! Welcome to your to_do_list bot!!`};
+    // response = {"text": `Hello, "${userData}"! Welcome to your to_do_list bot!!`};
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
