@@ -95,6 +95,7 @@ app.post('/webhook', (req, res) => {
 
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
+    addPersistentMenu();
 
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
@@ -120,7 +121,7 @@ app.post('/webhook', (req, res) => {
       // Save User to MongoDB
       saveUser (sender_psid);
 
-      addPersistentMenu();
+      // addPersistentMenu();
 
      });
 
@@ -418,6 +419,7 @@ function callSendAPI (sender_psid, response) {
 /* ----------  Persistant Menu API  ---------- */
 function addPersistentMenu(){
 
+// Get _Started
  request({
     url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
     qs: { access_token: my_access },
@@ -440,55 +442,6 @@ function addPersistentMenu(){
     qs: { access_token: my_access },
     method: 'POST',
     json:{
-
-        //   "persistent_menu":[
-        //     {
-        //       "locale":"default",
-        //       "composer_input_disabled": false,
-        //       "call_to_actions":[
-        //         {
-        //           "title":"My Account",
-        //           "type":"nested",
-        //           "call_to_actions":[
-        //             {
-        //               "title":"Pay Bill",
-        //               "type":"postback",
-        //               "payload":"PAYBILL_PAYLOAD"
-        //             },
-        //             {
-        //               "title":"History",
-        //               "type":"postback",
-        //               "payload":"HISTORY_PAYLOAD"
-        //             },
-        //             {
-        //               "title":"Contact Info",
-        //               "type":"postback",
-        //               "payload":"CONTACT_INFO_PAYLOAD"
-        //             }
-        //           ]
-        //         },
-        //         {
-        //           "type":"web_url",
-        //           "title":"Latest News",
-        //           "url":"http://petershats.parseapp.com/hat-news",
-        //           "webview_height_ratio":"full"
-        //         }
-        //       ]
-        //     },
-        //     {
-        //       "locale":"zh_CN",
-        //       "composer_input_disabled":false,
-        //       "call_to_actions":[
-        //         {
-        //           "title":"Pay Bill",
-        //           "type":"postback",
-        //           "payload":"PAYBILL_PAYLOAD"
-        //         }
-        //       ]    
-        //     }
-        //   ]
-        // }
-
           "persistent_menu":[
             {
               "locale":"default",
@@ -539,64 +492,6 @@ function addPersistentMenu(){
             }
           ]
         }
-
-
-      // "persistent_menu":[
-      //    {
-      //     "locale":"default",
-      //     "composer_input_disabled":false,
-      //     "call_to_actions":[
-      //       {
-      //         "title":"Show me my todo list",
-      //         "type":"postback",
-      //         "payload":"SHOW_TODO_LIST"
-      //       },
-      //       {
-      //         "title":"Start todo list",
-      //         "type":"postback",
-      //         "payload":"CREATE_TODO_LIST"
-      //       }]
-            
-      //       {
-      //         "title":"Nested Menu Example",
-      //         "type":"nested",
-      //         "call_to_actions":[
-      //           {
-      //             "title":"Who am I",
-      //             "type":"postback",
-      //             "payload":"WHO"
-      //           },
-      //           {
-      //             "title":"Joke",
-      //             "type":"postback",
-      //             "payload":"joke"
-      //           },
-      //           {
-      //             "title":"Contact Info",
-      //             "type":"postback",
-      //             "payload":"CONTACT"
-      //           }
-      //         ]
-      //       },
-      //       {
-      //         "type":"web_url",
-      //         "title":"Open PayPal",
-      //         "url":"http://paypal.com",
-      //         "webview_height_ratio":"full"
-      //       },
-      //       {
-      //         "locale":"en_US",
-      //         "composer_input_disabled":false,
-      //         "call_to_actions": [
-      //           {
-      //             "title": "Testing testing zz",
-      //             "type": "postback",
-      //             "payload": "YES"
-      //           }
-      //         ]
-      //       }
-      //     ]
-        
 
 }, function(error, response, body) {
     console.log(response)
