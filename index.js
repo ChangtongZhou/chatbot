@@ -119,7 +119,7 @@ app.post('/webhook', (req, res) => {
         handleMessage(sender_psid, webhookEvent.message);
       } 
       else if (webhookEvent.postback) {
-        console.log("================================= Test 3 ================================");
+        console.log("================================= Test 4 ================================");
         handlePostback(sender_psid, webhookEvent.postback);
       }
 
@@ -404,9 +404,10 @@ function handlePostback(sender_psid, received_postback) {
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
     
-    // Get user data from MongoDB:
+    // Get user data from MongoDB by using callback:
     getUserById (sender_psid, function(userInfo){
-      console.log ("hohoho: what is user data: " + userInfo);
+      console.log ("hohoho: what is user data: " + userInfo.firstName);
+      response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
     });
       
     // let userInfo = JSON.stringify(userData);
@@ -426,7 +427,7 @@ function handlePostback(sender_psid, received_postback) {
     // });
     // console.log ("hohoho: what is user data: " + userInfo);
     // `You sent the message: "${received_message.text}". Now send me an attachment!`
-    // response = {"text": `Hello, "${userInfo}"! Welcome to your to_do_list bot!!`};
+    
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
