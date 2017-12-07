@@ -100,13 +100,14 @@ app.post('/webhook', (req, res) => {
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     // addPersistentMenu();
-
+    console.log ("HEYYYYYY, what is body: " + body);
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
 
       /* ----------  Messenger setup  ---------- */
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
+      // if (entry.messaging != null) {
       let webhookEvent = entry.messaging[0];
       console.log(webhookEvent);
 
@@ -122,6 +123,10 @@ app.post('/webhook', (req, res) => {
         console.log("================================= Test 4 ================================");
         handlePostback(sender_psid, webhookEvent.postback);
       }
+      // } else {
+
+      // }
+      
 
       // // Save User to MongoDB
       saveUser (sender_psid);
