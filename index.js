@@ -116,7 +116,6 @@ app.post('/webhook', (req, res) => {
       } 
       else if (webhookEvent.postback) {
         handlePostback(sender_psid, webhookEvent.postback);
-        getUserById (sender_psid);
       }
 
       // Save User to MongoDB
@@ -210,19 +209,18 @@ function getFBData(fbId, callback){
 
 
 /* ----------  Find one user  ---------- */
-function getUserById (fbId, callback) {
+function getUserById (fbId) {
   var result = null;
-  User.find (fbId, function (err, userObj) {
+  User.collection.find ({fbId: fbId}, function (err, userObj) {
     if (err) {
       console.log ('Cannot get user info ' + err);
     } else if (userObj) {
       result = userObj;
-      console.log ('User ' + fbId + 'exists. User name is' + result);
+      console.log ('User ' + result.firstName + 'exists. User name is' + result);
     } else {
       console.log ('User not found!');
     }
 
-    callback (fbId, userObj);
   });
 }
 
@@ -394,6 +392,7 @@ function handlePostback(sender_psid, received_postback) {
   } else if (payload === 'no') {
     response = { "text": "Oops, try sending another image." }
   } else if (payload == 'GET_STARTED_PAYLOAD') {
+    getUserById (sender_psid);
     response = {"text": "Welcome to your to_do_list bot!!"}
   }
   // Send the message to acknowledge the postback
