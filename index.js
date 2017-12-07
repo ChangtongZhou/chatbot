@@ -174,7 +174,7 @@ var User = mongoose.model ('User'); // We are retrieving this Schema from our Mo
 function saveUser (fbId, firstName, lastName) {
   getFBData (fbId, function (err, userData) {
     let user = {
-      fbId: fbID,
+      fbId: fbId,
       firstName: firstName || userData.first_name,
       lastName: lastName || userData.last_name
     };
