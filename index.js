@@ -398,7 +398,7 @@ function handlePostback(sender_psid, received_postback) {
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
     // Get user data from MongoDB:
-    let userData = getUserById (sender_psid);
+    let userData = JSON.parse(getUserById (sender_psid));
     // let first_name = userData.firstName;
     // let result = null;
     // User.findOne ({fbId: sender_psid}, function (err, userObj) {
