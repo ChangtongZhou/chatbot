@@ -43,81 +43,6 @@ app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-/* =============================================
-   =                 MongoDB Setup                =
-   ============================================= */
-// require Mongoose
-var mongoose = require ('mongoose');
-var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/bot_db';
-// testing:
-// console.log(mongoose.connection.readyState);
-
-mongoose.connect(uristring, function (err, res) {
-  if (err) {
-    console.log ("ERROR connecting to: " + uristring + ". " + err);
-  } else {
-    console.log("Succeeded connected to: " + uristring);
-  }
-});
-// mongoose.connect('https://safe-crag-36560.herokuapp.com/to_do_list');
-
-/* ----------  Create Mongoose Schemas ---------- */
-
-// User Schema:
-var UserSchema = new mongoose.Schema({
-  fbId: {type: String, required: true},
-  firstName: String,
-  lastName: String,
-  items: [{
-    text: { type: String, trim: true },
-      priority: { type: Number, min: 0 } 
-    }]}, 
-  {timestamps: true});
-
-// User model:
-mongoose.model('User', UserSchema); // We are setting this Schema in our Models as 'User'
-var User = mongoose.model ('User'); // We are retrieving this Schema from our Models, named 'User'
-
-/* ----------  Get User/sender data and save it on MongoDB  ---------- */
-function saveUser (fbId, firstName, lastName) {
-  getFBData (fbId, function (err, userData) {
-    let user = {
-      fbId: fbID,
-      firstName: firstName || userData.first_name,
-      lastName: lastName || userData.last_name
-    };
-
-    User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
-      if (err) console.log (err);
-      else console.log('user saved' + user);
-    });
-  });
-}
-
-/* ----------  Get User/sender data from Messenger Platform User Profile API  ---------- */
-function getFBData(fbId, callback){
-  request ({
-    method: 'GET',
-    url: 'https://graph.facebook.com/v2.6/' + fbId,
-    qs: {
-      access_token: my_access
-    }
-  },
-
-  function (err, res, body) {
-    let userData = null
-    if (err) console.log (err);
-    else userData = JSON.parse (res.body);
-    callback (err, userData);
-  });
-}
-
-
-
-
-
-
-
 
 /* =============================================
    =                 Webhook Setup                =
@@ -207,6 +132,81 @@ app.post('/webhook', (req, res) => {
   }
 
 });
+
+
+
+/* =============================================
+   =                 MongoDB Setup                =
+   ============================================= */
+// require Mongoose
+var mongoose = require ('mongoose');
+var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/bot_db';
+// testing:
+// console.log(mongoose.connection.readyState);
+
+mongoose.connect(uristring, function (err, res) {
+  if (err) {
+    console.log ("ERROR connecting to: " + uristring + ". " + err);
+  } else {
+    console.log("Succeeded connected to: " + uristring);
+  }
+});
+// mongoose.connect('https://safe-crag-36560.herokuapp.com/to_do_list');
+
+/* ----------  Create Mongoose Schemas ---------- */
+
+// User Schema:
+var UserSchema = new mongoose.Schema({
+  fbId: {type: String, required: true},
+  firstName: String,
+  lastName: String,
+  items: [{
+    text: { type: String, trim: true },
+      priority: { type: Number, min: 0 } 
+    }]}, 
+  {timestamps: true});
+
+// User model:
+mongoose.model('User', UserSchema); // We are setting this Schema in our Models as 'User'
+var User = mongoose.model ('User'); // We are retrieving this Schema from our Models, named 'User'
+
+/* ----------  Get User/sender data and save it on MongoDB  ---------- */
+function saveUser (fbId, firstName, lastName) {
+  getFBData (fbId, function (err, userData) {
+    let user = {
+      fbId: fbID,
+      firstName: firstName || userData.first_name,
+      lastName: lastName || userData.last_name
+    };
+
+    User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
+      if (err) console.log (err);
+      else console.log('user saved' + user);
+    });
+  });
+}
+
+/* ----------  Get User/sender data from Messenger Platform User Profile API  ---------- */
+function getFBData(fbId, callback){
+  request ({
+    method: 'GET',
+    url: 'https://graph.facebook.com/v2.6/' + fbId,
+    qs: {
+      access_token: my_access
+    }
+  },
+
+  function (err, res, body) {
+    let userData = null
+    if (err) console.log (err);
+    else userData = JSON.parse (res.body);
+    callback (err, userData);
+  });
+}
+
+
+
+
 
 /* ----------  Webview API  ---------- */
 app.get('/', function(req, res){
