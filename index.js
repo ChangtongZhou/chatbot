@@ -249,7 +249,6 @@ function handleMessage (sender_psid, received_message) {
       // special messages to trigger the cards
       if (text == "Generic") {
         sendGenericMessage(sender_psid);
-        callSendAPI (sender_psid, response);
       }
       if(text.substring(0, 4) == "/add") {
         // add new item to list
@@ -268,8 +267,8 @@ function handleMessage (sender_psid, received_message) {
   } else if (received_message.attachments) {
     // Gets the URL of the message attachment
     let attachment_url = received_message.attachments[0].payload.url;
-    handleAttachment(attachment_url);
-    callSendAPI (sender_psid, response);
+    handleAttachment(sender_psid, attachment_url);
+    // callSendAPI (sender_psid, response);
     // response = {
     //   "attachment": {
     //     "type": "template",
@@ -317,7 +316,7 @@ function handleMessage (sender_psid, received_message) {
   callSendAPI (sender_psid, response);
 }
 
-function handleAttachment (attachment_url) {
+function handleAttachment (sender_psid, attachment_url) {
     let response = {
       "attachment": {
         "type": "template",
@@ -358,6 +357,21 @@ function handleAttachment (attachment_url) {
         }
       }
     }
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:my_access},
+      method: 'POST',
+      json: {
+        recipient: {id:sender_psid},
+        message: messageData,
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+        console.log('Error: ', response.body.error)
+      }
+    })
 
 }
 
