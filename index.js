@@ -400,7 +400,7 @@ function handlePostback(sender_psid, received_postback) {
     console.log ("lolololololo: what is sender id: " + sender_psid);
     // Get user data from MongoDB:
     let userData = getUserById (sender_psid);
-    let userInfo = JSON.parse (userData);
+    let userInfo = JSON.stringify(userData);
     // let first_name = userData.firstName;
     // let result = null;
     // User.findOne ({fbId: sender_psid}, function (err, userObj) {
