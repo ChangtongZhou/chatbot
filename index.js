@@ -92,8 +92,6 @@ app.get('/webhook', (req, res) => {
 app.post('/webhook', (req, res) => {  
  
   let body = req.body;
-  // Save User to MongoDB
-  saveUser (sender_psid);
 
   addPersistentMenu();
 
@@ -123,7 +121,7 @@ app.post('/webhook', (req, res) => {
       }
 
       // // Save User to MongoDB
-      // saveUser (sender_psid);
+      saveUser (sender_psid);
 
       // addPersistentMenu();
 
