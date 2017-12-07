@@ -100,7 +100,7 @@ app.post('/webhook', (req, res) => {
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     // addPersistentMenu();
-    console.log ("HEYYYYYY, what is body: " + body);
+    console.log ("Hellllllo, what is body: " + JSON.stringify(body));
 
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
