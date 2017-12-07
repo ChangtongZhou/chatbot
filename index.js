@@ -184,7 +184,7 @@ function saveUser (fbId, firstName, lastName) {
 
     User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
       if (err) console.log (err);
-      else console.log('user saved' + user.firstName);
+      else console.log('user saved ' + user.firstName);
     });
   });
 }
@@ -211,11 +211,12 @@ function getFBData(fbId, callback){
 /* ----------  Find one user  ---------- */
 function getUserById (fbId) {
   var result = null;
-  User.find ({fbId: fbId}, function (err, userObj) {
+  User.findOne ({fbId: fbId}, function (err, userObj) {
     if (err) {
       console.log ('Cannot get user info ' + err);
     } else if (userObj) {
       result = userObj;
+      console.log ('HAHAHAHA!! User exists. User name is ' + result.firstName);
       console.log ('User exists. User name is' + result[0].firstName);
     } else {
       console.log ('User not found!');
