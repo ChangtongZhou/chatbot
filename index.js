@@ -65,15 +65,54 @@ mongoose.connect(uristring, function (err, res) {
 
 // User Schema:
 var UserSchema = new mongoose.Schema({
-  name: String,
+  fbId: {type: String, required: true},
+  firstName: String,
+  lastName: String,
   items: [{
     text: { type: String, trim: true },
       priority: { type: Number, min: 0 } 
     }]}, 
   {timestamps: true});
 
+// User model:
 mongoose.model('User', UserSchema); // We are setting this Schema in our Models as 'User'
 var User = mongoose.model ('User'); // We are retrieving this Schema from our Models, named 'User'
+
+/* ----------  Get User/sender data and save it on MongoDB  ---------- */
+function saveUser (fbId, firstName, lastName) {
+  getFBData (fbId, function (err, userData) {
+    let user = {
+      fbId: fbID,
+      firstName: firstName || userData.first_name,
+      lastName: lastName || userData.last_name
+    };
+
+    User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
+      if (err) console.log (err);
+      else console.log('user saved' + user);
+    });
+  });
+}
+
+/* ----------  Get User/sender data from Messenger Platform User Profile API  ---------- */
+function getFBData(fbId, callback){
+  request ({
+    method: 'GET',
+    url: 'https://graph.facebook.com/v2.6/' + fbId,
+    qs: {
+      access_token: my_access
+    }
+  },
+
+  function (err, res, body) {
+    let userData = null
+    if (err) console.log (err);
+    else userData = JSON.parse (res.body);
+    callback (err, userData);
+  });
+}
+
+
 
 
 
@@ -90,6 +129,8 @@ var User = mongoose.model ('User'); // We are retrieving this Schema from our Mo
 const my_token = process.env.FB_VERIFY_TOKEN;
 const my_access = process.env.FB_ACCESS_TOKEN;
 
+
+// Routes:
 app.get('/webhook', (req, res) => {
 
   // Your verify token. Should be a random string.
@@ -150,6 +191,7 @@ app.post('/webhook', (req, res) => {
       else if (webhookEvent.postback) {
         handlePostback(sender_psid, webhookEvent.postback);
       }
+      saveUser (body.originalRequest.data.sender.id);
 
       addPersistentMenu();
 
@@ -164,6 +206,12 @@ app.post('/webhook', (req, res) => {
     res.sendStatus(404);
   }
 
+});
+
+/* ----------  Webview API  ---------- */
+app.get('/', function(req, res){
+  res.send("Hello I am testing");
+  // res.render('login');
 });
 
 /* ----------  Messenging API  ---------- */
@@ -349,11 +397,7 @@ function callSendAPI (sender_psid, response) {
   });
 }
 
-/* ----------  Webview API  ---------- */
-app.get('/', function(req, res){
-  res.send("Hello I am testing");
-  // res.render('login');
-});
+
 
 
 /* ----------  Persistant Menu API  ---------- */
@@ -466,6 +510,7 @@ function addPersistentMenu(){
                 }
               ]
             },
+            // Differenet locales in another country (Optional)
             {
               "locale":"zh_CN",
               "composer_input_disabled":false,
