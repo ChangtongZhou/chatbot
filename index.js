@@ -381,11 +381,11 @@ function addPersistentMenu(){
     qs: { access_token: my_access },
     method: 'POST',
     json:{
-        
+
           "persistent_menu":[
             {
               "locale":"default",
-              "composer_input_disabled": true,
+              "composer_input_disabled": false,
               "call_to_actions":[
                 {
                   "title":"My Account",
