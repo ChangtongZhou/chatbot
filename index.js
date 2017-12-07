@@ -95,7 +95,7 @@ app.post('/webhook', (req, res) => {
 
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
-    addPersistentMenu();
+    // addPersistentMenu();
 
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
@@ -121,7 +121,7 @@ app.post('/webhook', (req, res) => {
       // Save User to MongoDB
       saveUser (sender_psid);
 
-      // addPersistentMenu();
+      addPersistentMenu();
 
      });
 
@@ -394,8 +394,11 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "Oops, try sending another image." }
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
-    getUserById (sender_psid);
-    response = {"text": "Welcome to your to_do_list bot!!"}
+    let userData = getUserById (sender_psid);
+    let first_name = userData.firstName;
+    console.log ("lolololololo: what is user name: " + first_name);
+    // `You sent the message: "${received_message.text}". Now send me an attachment!`
+    response = {"text": `Hello, "${first_name}"! Welcome to your to_do_list bot!!`};
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
