@@ -93,6 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
+
   addPersistentMenu();
 
   // Checks this is an event from a page subscription
@@ -398,7 +399,8 @@ function handlePostback(sender_psid, received_postback) {
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
     // Get user data from MongoDB:
-    let userData = JSON.parse(getUserById (sender_psid));
+    let userData = getUserById (sender_psid);
+    let userInfo = JSON.parse (userData);
     // let first_name = userData.firstName;
     // let result = null;
     // User.findOne ({fbId: sender_psid}, function (err, userObj) {
@@ -413,7 +415,7 @@ function handlePostback(sender_psid, received_postback) {
     //   }
 
     // });
-    console.log ("hohoho: what is user data: " + userData);
+    console.log ("hohoho: what is user data: " + userInfo);
     // `You sent the message: "${received_message.text}". Now send me an attachment!`
     response = {"text": `Hello, "${userData}"! Welcome to your to_do_list bot!!`};
   }
