@@ -116,6 +116,8 @@ app.post('/webhook', (req, res) => {
       else if (webhookEvent.postback) {
         handlePostback(sender_psid, webhookEvent.postback);
       }
+
+      // Save User to MongoDB
       saveUser (sender_psid);
 
       addPersistentMenu();
@@ -181,7 +183,7 @@ function saveUser (fbId, firstName, lastName) {
 
     User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
       if (err) console.log (err);
-      else console.log('user saved' + user);
+      else console.log('user saved' + user.firstName);
     });
   });
 }
@@ -203,6 +205,11 @@ function getFBData(fbId, callback){
     callback (err, userData);
   });
 }
+
+// function getUserById (fbId, callback){
+//   var result = null;
+//   User.findById
+// }
 
 
 
@@ -229,6 +236,11 @@ function handleMessage (sender_psid, received_message) {
     // will be added to the body of our request to the Send API
     let text = received_message.text;
     const greeting = firstEntity(received_message.nlp, 'greetings');
+    // if (text == "Get Started") {
+    //   response = {
+    //     "text": 
+    //   }
+    // }
     if (greeting && greeting.confidence > 0.8) {
       response = {
         "text": "Howdy!"
