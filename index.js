@@ -116,6 +116,7 @@ app.post('/webhook', (req, res) => {
       } 
       else if (webhookEvent.postback) {
         handlePostback(sender_psid, webhookEvent.postback);
+        getUserById (sender_psid);
       }
 
       // Save User to MongoDB
@@ -207,11 +208,23 @@ function getFBData(fbId, callback){
   });
 }
 
-// function getUserById (fbId, callback){
-//   var result = null;
-//   User.findById
-// }
 
+/* ----------  Find one user  ---------- */
+function getUserById (fbId, callback) {
+  var result = null;
+  User.findById (fbId, function (err, userObj) {
+    if (err) {
+      console.log (err);
+    } else if (userObj) {
+      result = userObj;
+      console.log ('User ' + fbId + 'exists. User name is' + result);
+    } else {
+      console.log ('User not found!');
+    }
+
+    callback (fbId, userObj);
+  });
+}
 
 
 
