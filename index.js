@@ -211,7 +211,7 @@ function getFBData(fbId, callback){
 /* ----------  Find one user  ---------- */
 function getUserById (fbId) {
   var result = null;
-  User.collection.find ({fbId: fbId}, function (err, userObj) {
+  User.find (fbId, function (err, userObj) {
     if (err) {
       console.log ('Cannot get user info ' + err);
     } else if (userObj) {
