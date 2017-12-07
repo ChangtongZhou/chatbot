@@ -216,7 +216,7 @@ function getUserById (fbId) {
       console.log ('Cannot get user info ' + err);
     } else if (userObj) {
       result = userObj;
-      console.log ('User ' + result.firstName + 'exists. User name is' + result);
+      console.log ('User ' + result.firstName + ' exists. User name is' + result);
     } else {
       console.log ('User not found!');
     }
@@ -382,7 +382,7 @@ function sendGenericMessage(sender_id) {
 // handles messaging_postbakcs events
 function handlePostback(sender_psid, received_postback) {
   let response;
-  
+  console.log ("what is received_postback" + received_postback);
   // Get the payload for the postback
   let payload = received_postback.payload;
 
@@ -392,6 +392,7 @@ function handlePostback(sender_psid, received_postback) {
   } else if (payload === 'no') {
     response = { "text": "Oops, try sending another image." }
   } else if (payload == 'GET_STARTED_PAYLOAD') {
+    console.log ("lolololololo: what is sender id: " + sender_psid);
     getUserById (sender_psid);
     response = {"text": "Welcome to your to_do_list bot!!"}
   }
