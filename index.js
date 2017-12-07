@@ -247,7 +247,7 @@ function handleMessage (sender_psid, received_message) {
       }
     } else {
       // special messages to trigger the cards
-      if (text == "Generic") {
+      if (text == "To Do List") {
         sendGenericMessage(sender_psid);
       }
       if(text.substring(0, 4) == "/add") {
@@ -264,10 +264,11 @@ function handleMessage (sender_psid, received_message) {
         }
       }
     }
-  } else if (received_message.attachments) {
-    // Gets the URL of the message attachment
-    let attachment_url = received_message.attachments[0].payload.url;
-    handleAttachment(sender_psid, attachment_url);
+  }
+  // else if (received_message.attachments) {
+  //   // Gets the URL of the message attachment
+  //   let attachment_url = received_message.attachments[0].payload.url;
+  //   handleAttachment(sender_psid, attachment_url);
     // callSendAPI (sender_psid, response);
     // response = {
     //   "attachment": {
@@ -309,70 +310,11 @@ function handleMessage (sender_psid, received_message) {
     //     }
     //   }
     // }
-  }
+  // }
   
 
   // Sends the response message
   callSendAPI (sender_psid, response);
-}
-
-function handleAttachment (sender_psid, attachment_url) {
-    let response = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "generic",
-          "elements": [{
-            "title": "First Card",
-            "subtitle": "Tap a button to answer.",
-            "image_url": attachment_url,
-            "buttons": [
-              {
-                "type": "postback",
-                "title": "Yes!",
-                "payload": "yes",
-              },
-              {
-                "type": "postback",
-                "title": "No!",
-                "payload": "no",
-              },
-              {
-                "type":"phone_number",
-                "title":"call me maybe",
-                "payload":"+16692229605"
-              }
-            ],
-          }, 
-          {
-            "title": "Second card",
-            "subtitle": "Element #2 of an hscroll",
-            "image_url": "https://github.com/jw84/messenger-bot-tutorial",
-            "buttons": [{
-              "type": "postback",
-              "title": "Click me!",
-              "payload": "Payload for second element in a generic bubble"
-            }]
-          }]
-        }
-      }
-    }
-    request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:my_access},
-      method: 'POST',
-      json: {
-        recipient: {id:sender_psid},
-        message: messageData,
-      }
-    }, function(error, response, body) {
-      if (error) {
-        console.log('Error sending messages: ', error)
-      } else if (response.body.error) {
-        console.log('Error: ', response.body.error)
-      }
-    })
-
 }
 
 function sendGenericMessage(sender_id) {
