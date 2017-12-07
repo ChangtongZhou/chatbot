@@ -212,9 +212,9 @@ function getFBData(fbId, callback){
 /* ----------  Find one user  ---------- */
 function getUserById (fbId, callback) {
   var result = null;
-  User.findById (fbId, function (err, userObj) {
+  User.find (fbId, function (err, userObj) {
     if (err) {
-      console.log (err);
+      console.log ('Cannot get user info ' + err);
     } else if (userObj) {
       result = userObj;
       console.log ('User ' + fbId + 'exists. User name is' + result);
