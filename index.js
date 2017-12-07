@@ -398,7 +398,7 @@ function handlePostback(sender_psid, received_postback) {
     // let userData = getUserById (sender_psid);
     // let first_name = userData.firstName;
     var result = null;
-    User.findOne ({fbId: fbId}, function (err, userObj) {
+    User.findOne ({fbId: sender_psid}, function (err, userObj) {
       if (err) {
         console.log ('Cannot get user info ' + err);
       } else if (userObj) {
