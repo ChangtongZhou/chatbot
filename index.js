@@ -92,6 +92,10 @@ app.get('/webhook', (req, res) => {
 app.post('/webhook', (req, res) => {  
  
   let body = req.body;
+  // Save User to MongoDB
+  saveUser (sender_psid);
+
+  addPersistentMenu();
 
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
@@ -118,10 +122,10 @@ app.post('/webhook', (req, res) => {
         handlePostback(sender_psid, webhookEvent.postback);
       }
 
-      // Save User to MongoDB
-      saveUser (sender_psid);
+      // // Save User to MongoDB
+      // saveUser (sender_psid);
 
-      addPersistentMenu();
+      // addPersistentMenu();
 
      });
 
