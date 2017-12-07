@@ -93,7 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  console.log("================================= Test 1 ================================");
+  // console.log("================================= Test 2 ================================");
 
   addPersistentMenu();
 
@@ -119,6 +119,7 @@ app.post('/webhook', (req, res) => {
         handleMessage(sender_psid, webhookEvent.message);
       } 
       else if (webhookEvent.postback) {
+        console.log("================================= Test 2 ================================");
         handlePostback(sender_psid, webhookEvent.postback);
       }
 
@@ -215,6 +216,12 @@ function getFBData(fbId, callback){
 
 /* ----------  Find one user  ---------- */
 function getUserById (fbId) {
+  getFBData (fbId, function (err, userData) {
+    let user = {
+      fbId: fbId,
+      firstName: userData.first_name,
+      lastName: userData.last_name
+    };
   // var result = null;
   User.findOne ({fbId: fbId}, function (err, userObj) {
     if (err) {
@@ -223,13 +230,14 @@ function getUserById (fbId) {
       // result = userObj;
       console.log ('LoHAHAHAHA!! User exists. User name is ' + userObj.firstName);
       console.log ('HIIII!! userObj is ' + userObj);
-      callback(userObj);
-      // return userObj;
+      // callback(userObj);
+      return userObj;
     } else {
       console.log ('User not found!');
     }
 
   });
+})
 }
 
 
@@ -401,10 +409,10 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "Oops, try sending another image." }
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
+    
     // Get user data from MongoDB:
-    getUserById (sender_psid, function (userData) {
-      let userInfo = JSON.stringify(userData);
-    });
+    let userInfo = getUserById (sender_psid) 
+      
     // let userInfo = JSON.stringify(userData);
     // let first_name = userData.firstName;
     // let result = null;
