@@ -115,7 +115,7 @@ app.post('/webhook', (req, res) => {
         handleMessage(sender_psid, webhookEvent.message);
       } 
       else if (webhookEvent.postback) {
-        handlePostback(sender_psid, webhookEvent.postback);
+        handlePostback(sender_psid, webhookEvent.postback, getUserById);
       }
 
       // Save User to MongoDB
@@ -184,7 +184,7 @@ function saveUser (fbId, firstName, lastName) {
 
     User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
       if (err) console.log (err);
-      else console.log('user saved ' + user.firstName);
+      else console.log('user saved ' + user[0].firstName); // 注意
     });
   });
 }
@@ -381,7 +381,7 @@ function sendGenericMessage(sender_id) {
 
 
 // handles messaging_postbakcs events
-function handlePostback(sender_psid, received_postback) {
+function handlePostback(sender_psid, received_postback, callback) {
   let response;
   console.log ("what is received_postback" + received_postback);
   // Get the payload for the postback
@@ -394,9 +394,10 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "Oops, try sending another image." }
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
-    let userData = getUserById (sender_psid);
+    callback(sender_psid);
+    // let userData = getUserById (sender_psid);
     // let first_name = userData.firstName;
-    console.log ("hohoho: what is user data: " + userData);
+    console.log ("hohoho: what is user data: " + result);
     // `You sent the message: "${received_message.text}". Now send me an attachment!`
     response = {"text": `Hello, "${userData}"! Welcome to your to_do_list bot!!`};
   }
