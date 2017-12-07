@@ -397,12 +397,12 @@ function handlePostback(sender_psid, received_postback) {
     // Get user data from MongoDB:
     // let userData = getUserById (sender_psid);
     // let first_name = userData.firstName;
-    let result = null;
+    // let result = null;
     User.findOne ({fbId: sender_psid}, function (err, userObj) {
       if (err) {
         console.log ('Cannot get user info ' + err);
       } else if (userObj) {
-        result = userObj;
+        let result = userObj;
         console.log ('LoHAHAHAHA!! User exists. User name is ' + result.firstName);
         response = {"text": `Hello, "${result.firstName}"! Welcome to your to_do_list bot!!`};
       } else {
