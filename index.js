@@ -93,7 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  console.log("================================= Test 5 ================================");
+  console.log("================================= Test 6 ================================");
 
   
 
@@ -109,8 +109,7 @@ app.post('/webhook', (req, res) => {
       /* ----------  Messenger setup  ---------- */
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
-      // let webhookEvent = entry.messaging[0];
-      let webhookEvent = entry.messaging;
+      let webhookEvent = entry.messaging[0];
       console.log(webhookEvent);
 
       // Gets the sender PSID
