@@ -398,7 +398,7 @@ function handlePostback(sender_psid, received_postback) {
     // let first_name = userData.firstName;
     console.log ("hohoho: what is user data: " + userData);
     // `You sent the message: "${received_message.text}". Now send me an attachment!`
-    response = {"text": `Hello, "${first_name}"! Welcome to your to_do_list bot!!`};
+    response = {"text": `Hello, "${userData}"! Welcome to your to_do_list bot!!`};
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
