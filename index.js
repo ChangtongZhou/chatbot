@@ -93,13 +93,14 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  // console.log("================================= Test 2 ================================");
+  console.log("================================= Test 5 ================================");
 
-  addPersistentMenu();
+  
 
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     // addPersistentMenu();
+    addPersistentMenu();
     console.log ("Hellllllo, what is body: " + JSON.stringify(body));
 
     // Iterates over each entry - there may be multiple if batched
@@ -108,7 +109,8 @@ app.post('/webhook', (req, res) => {
       /* ----------  Messenger setup  ---------- */
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
-      let webhookEvent = entry.messaging[0];
+      // let webhookEvent = entry.messaging[0];
+      let webhookEvent = entry.messaging;
       console.log(webhookEvent);
 
       // Gets the sender PSID
@@ -120,7 +122,7 @@ app.post('/webhook', (req, res) => {
         handleMessage(sender_psid, webhookEvent.message);
       } 
       else if (webhookEvent.postback) {
-        console.log("================================= Test 4 ================================");
+        // console.log("================================= Test 4 ================================");
         handlePostback(sender_psid, webhookEvent.postback);
       }
 
