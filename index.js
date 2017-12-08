@@ -96,29 +96,23 @@ app.post('/webhook', (req, res) => {
   // Checks this is an event from a page subscription
   console.log("================================= Test 1 ================================");
   if (body.object === 'page') {
-    // addPersistentMenu();
+    addPersistentMenu();
     
     console.log ("Check req.body, what is body: " + JSON.stringify(body));
-
-    
-    // let sender_id = body.entry.messaging[0].sender.id;
-    console.log("================================= Start saving user info into DB ================================");
-        // Save User to MongoDB
-    saveUser ();
 
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
       /* ----------  Messenger setup  ---------- */
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
-      let webhookEvent = entry.messaging[0];
+      // let webhookEvent = entry.messaging[0];
 
-      // entry.messaging.forEach(function (webhookEvent) {
+      entry.messaging.forEach(function (webhookEvent) {
         let sender_psid = webhookEvent.sender.id;
         console.log ('Sender PSID is: ' + sender_psid);
-        // console.log("================================= Start saving user info into DB ================================");
-        // // Save User to MongoDB
-        // saveUser (sender_psid);
+        console.log("================================= Start saving user info into DB ================================");
+        // Save User to MongoDB
+        saveUser (sender_psid);
         // Check which event 
         if (webhookEvent.message && webhookEvent.message.text) {
           console.log("================================= Handle Messages ================================");
@@ -130,7 +124,7 @@ app.post('/webhook', (req, res) => {
           handlePostback(sender_psid, webhookEvent.postback);
         }
         
-      // });
+      });
 
       // addPersistentMenu();
 
@@ -154,7 +148,7 @@ app.post('/webhook', (req, res) => {
    ============================================= */
 // require Mongoose
 var mongoose = require ('mongoose');
-var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/bot_db'; // This is connected to AWS
+var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/bot_db'; // This is connected to AWS mongodb
 // testing:
 // console.log(mongoose.connection.readyState);
 
