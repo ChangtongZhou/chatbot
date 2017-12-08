@@ -122,7 +122,7 @@ app.post('/webhook', (req, res) => {
           handleMessage(sender_psid, webhookEvent.message);
         } 
         else if (webhookEvent.postback) {
-          console.log("================================= Test 14 ================================");
+          console.log("================================= Test 15 ================================");
           // addPersistentMenu();
           handlePostback(sender_psid, webhookEvent.postback);
         }
@@ -524,7 +524,7 @@ function addPersistentMenu(){
           "persistent_menu":[
             {
               "locale":"default",
-              "composer_input_disabled": false,
+              "composer_input_disabled": true,
               "call_to_actions":[
                 // Row 1:
                 {
