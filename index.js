@@ -110,25 +110,43 @@ app.post('/webhook', (req, res) => {
       /* ----------  Messenger setup  ---------- */
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
-      let webhookEvent = entry.messaging[0];
-      console.log(webhookEvent);
+      // let webhookEvent = entry.messaging[0];
+      entry.messaging.forEach(function (webhookEvent) {
+
+        let sender_psid = webhookEvent.sender.id;
+        console.log ('Sender PSID is: ' + sender_psid);
+        saveUser (sender_psid);
+        // Check which event 
+        if (webhookEvent.message && webhookEvent.message.text) {
+          handleMessage(sender_psid, webhookEvent.message);
+        } 
+        else if (webhookEvent.postback) {
+          console.log("================================= Test 12 ================================");
+          addPersistentMenu();
+          handlePostback(sender_psid, webhookEvent.postback);
+        }
+
+        // // Save User to MongoDB
+        
+      });
+      // console.log(webhookEvent);
 
       // Gets the sender PSID
-      let sender_psid = webhookEvent.sender.id;
-      console.log ('Sender PSID is: ' + sender_psid);
+      // let sender_psid = webhookEvent.sender.id;
+      // console.log ('Sender PSID is: ' + sender_psid);
 
-      // Check which event 
-      if (webhookEvent.message && webhookEvent.message.text) {
-        handleMessage(sender_psid, webhookEvent.message);
-      } 
-      else if (webhookEvent.postback) {
-        console.log("================================= Test 12 ================================");
-        addPersistentMenu();
-        handlePostback(sender_psid, webhookEvent.postback);
-      }
+      // // Check which event 
+      // if (webhookEvent.message && webhookEvent.message.text) {
+      //   handleMessage(sender_psid, webhookEvent.message);
+      // } 
+      // else if (webhookEvent.postback) {
+      //   console.log("================================= Test 12 ================================");
+      //   addPersistentMenu();
+      //   handlePostback(sender_psid, webhookEvent.postback);
+      // }
 
-      // // Save User to MongoDB
-      saveUser (sender_psid);
+      // // // Save User to MongoDB
+      // saveUser (sender_psid);
 
       // addPersistentMenu();
 
