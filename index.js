@@ -559,17 +559,17 @@ function addPersistentMenu(){
               ]
             },
             // Differenet locales in another country (Optional)
-            {
-              "locale":"zh_CN",
-              "composer_input_disabled":false,
-              "call_to_actions":[
-                {
-                  "title":"Pay Bill",
-                  "type":"postback",
-                  "payload":"PAYBILL_PAYLOAD"
-                }
-              ]    
-            }
+            // {
+            //   "locale":"zh_CN",
+            //   "composer_input_disabled":false,
+            //   "call_to_actions":[
+            //     {
+            //       "title":"Pay Bill",
+            //       "type":"postback",
+            //       "payload":"PAYBILL_PAYLOAD"
+            //     }
+            //   ]    
+            // }
           ]
         }
 
