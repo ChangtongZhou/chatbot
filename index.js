@@ -99,7 +99,7 @@ app.post('/webhook', (req, res) => {
 
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
-    addPersistentMenu();
+    // addPersistentMenu();
     
     console.log ("Hellllllo, what is body: " + JSON.stringify(body));
 
@@ -149,7 +149,7 @@ app.post('/webhook', (req, res) => {
       // // // Save User to MongoDB
       // saveUser (sender_psid);
 
-      // addPersistentMenu();
+      addPersistentMenu();
 
      });
 
