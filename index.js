@@ -122,7 +122,7 @@ app.post('/webhook', (req, res) => {
         handleMessage(sender_psid, webhookEvent.message);
       } 
       else if (webhookEvent.postback) {
-        console.log("================================= Test 10 ================================");
+        console.log("================================= Test 12 ================================");
         addPersistentMenu();
         handlePostback(sender_psid, webhookEvent.postback);
       }
@@ -213,7 +213,7 @@ function getFBData(fbId, callback){
     let userData = null
     if (err) console.log (err);
     else userData = JSON.parse (res.body);
-    console.log ("LLLLAAA, what is userData here: " + JSON.parse (res.body));
+    console.log ("LLLLAAA, what is userData here: " + JSON.stringify (res.body));
     callback (err, userData);
   });
 }
@@ -359,7 +359,7 @@ function sendGenericMessage(sender_id) {
               "title": "web url"
             }, {
               "type": "postback",
-              "title": "Postback",
+              "title": "yes",
               "payload": "Payload for first element in a generic bubble",
             }],
           }, {
@@ -368,7 +368,7 @@ function sendGenericMessage(sender_id) {
             "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
             "buttons": [{
               "type": "postback",
-              "title": "Postback",
+              "title": "no",
               "payload": "Payload for second element in a generic bubble",
             }],
           }]
