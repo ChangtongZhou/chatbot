@@ -123,7 +123,7 @@ app.post('/webhook', (req, res) => {
         } 
         else if (webhookEvent.postback) {
           console.log("================================= Test 14 ================================");
-          addPersistentMenu();
+          // addPersistentMenu();
           handlePostback(sender_psid, webhookEvent.postback);
         }
 
