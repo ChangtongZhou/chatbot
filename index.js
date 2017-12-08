@@ -434,7 +434,7 @@ function handlePostback(sender_psid, received_postback) {
       console.log ("hohoho: what is user data: " + userInfo.firstName);
       var userName = JSON.stringify(userInfo.firstName);
       response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
-      // PersistentCallSendAPI(sender_psid, response);
+      PersistentCallSendAPI(sender_psid, response);
     });
       
   }
