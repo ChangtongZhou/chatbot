@@ -111,24 +111,32 @@ app.post('/webhook', (req, res) => {
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
       // let webhookEvent = entry.messaging[0];
-      entry.messaging.forEach(function (webhookEvent) {
+      if (entry.messaging != null) {
+          entry.messaging.forEach(function (webhookEvent) {
+          let sender_psid = webhookEvent.sender.id;
+          console.log ('Sender PSID is: ' + sender_psid);
+          // Save User to MongoDB
+          saveUser (sender_psid);
+          // Check which event 
+          if (webhookEvent.message && webhookEvent.message.text) {
+            handleMessage(sender_psid, webhookEvent.message);
+          } 
+          else if (webhookEvent.postback) {
+            console.log("================================= Test 13 ================================");
+            handlePostback(sender_psid, webhookEvent.postback);
+          }
 
-        let sender_psid = webhookEvent.sender.id;
-        console.log ('Sender PSID is: ' + sender_psid);
-        saveUser (sender_psid);
-        // Check which event 
-        if (webhookEvent.message && webhookEvent.message.text) {
-          handleMessage(sender_psid, webhookEvent.message);
-        } 
-        else if (webhookEvent.postback) {
-          console.log("================================= Test 12 ================================");
-          addPersistentMenu();
-          handlePostback(sender_psid, webhookEvent.postback);
+          // Save User to MongoDB
+          
+        });
+        } else {
+          let webhookEvent = entry[0].standby;
+          let senderID = webhookEvent.sender.id;
+          if (webhookEvent.postback) {
+            handlePostback(senderID, webhookEvent.postback);
+          }
         }
-
-        // // Save User to MongoDB
-        
-      });
+      
       // console.log(webhookEvent);
 
       // Gets the sender PSID
