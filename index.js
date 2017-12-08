@@ -100,19 +100,25 @@ app.post('/webhook', (req, res) => {
     
     console.log ("Check req.body, what is body: " + JSON.stringify(body));
 
+    
+    // let sender_id = body.entry.messaging[0].sender.id;
+    console.log("================================= Start saving user info into DB ================================");
+        // Save User to MongoDB
+    saveUser ();
+
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
       /* ----------  Messenger setup  ---------- */
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
-      // let webhookEvent = entry.messaging[0];
+      let webhookEvent = entry.messaging[0];
 
-      entry.messaging.forEach(function (webhookEvent) {
+      // entry.messaging.forEach(function (webhookEvent) {
         let sender_psid = webhookEvent.sender.id;
         console.log ('Sender PSID is: ' + sender_psid);
-        console.log("================================= Start saving user info into DB ================================");
-        // Save User to MongoDB
-        saveUser (sender_psid);
+        // console.log("================================= Start saving user info into DB ================================");
+        // // Save User to MongoDB
+        // saveUser (sender_psid);
         // Check which event 
         if (webhookEvent.message && webhookEvent.message.text) {
           console.log("================================= Handle Messages ================================");
@@ -124,7 +130,7 @@ app.post('/webhook', (req, res) => {
           handlePostback(sender_psid, webhookEvent.postback);
         }
         
-      });
+      // });
 
       // addPersistentMenu();
 
