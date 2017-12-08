@@ -93,14 +93,14 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  console.log("================================= Test 6 ================================");
+  // console.log("================================= Test 6 ================================");
 
   
 
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     // addPersistentMenu();
-    addPersistentMenu();
+    
     console.log ("Hellllllo, what is body: " + JSON.stringify(body));
 
     // Iterates over each entry - there may be multiple if batched
@@ -121,7 +121,8 @@ app.post('/webhook', (req, res) => {
         handleMessage(sender_psid, webhookEvent.message);
       } 
       else if (webhookEvent.postback) {
-        // console.log("================================= Test 4 ================================");
+        console.log("================================= Test 7 ================================");
+        addPersistentMenu();
         handlePostback(sender_psid, webhookEvent.postback);
       }
 
