@@ -130,7 +130,7 @@ app.post('/webhook', (req, res) => {
           
         });
         } else {
-          let webhookEvent = entry.standby;
+          let webhookEvent = entry.standby[0];
           let senderID = webhookEvent.sender.id;
           if (webhookEvent.postback) {
             handlePostback(senderID, webhookEvent.postback);
