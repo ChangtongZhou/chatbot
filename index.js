@@ -419,6 +419,7 @@ function handlePostback(sender_psid, received_postback) {
   console.log ("handlePostback(" + sender_psid + ", " + JSON.stringify(received_postback) + ")");
   // Get the payload for the postback
   let payload = received_postback.payload;
+  console.log ("payload===" + payload);
 
   // Set the response based on the postback payload
   if (payload === 'yes') {
