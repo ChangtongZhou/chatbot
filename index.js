@@ -121,7 +121,7 @@ app.post('/webhook', (req, res) => {
         handleMessage(sender_psid, webhookEvent.message);
       } 
       else if (webhookEvent.postback) {
-        console.log("================================= Test 8 ================================");
+        console.log("================================= Test 9 ================================");
         addPersistentMenu();
         handlePostback(sender_psid, webhookEvent.postback);
       }
@@ -414,6 +414,7 @@ function handlePostback(sender_psid, received_postback) {
       console.log ("hohoho: what is user data: " + userInfo.firstName);
       var userName = JSON.stringify(userInfo.firstName);
       response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
+      PersistentCallSendAPI(sender_psid, response);
     });
       
     // let userInfo = JSON.stringify(userData);
@@ -468,7 +469,29 @@ function callSendAPI (sender_psid, response) {
 }
 
 
+function PersistentCallSendAPI (sender_psid, response) {
+  // Construct the message body
+  let request_body = {
+    "recipient" : {
+      "id": sender_psid
+    },
+    "message": response
+  }
 
+  // Send the HTTP request to the Messenger Platform
+  request ({
+    "uri": "https://graph.facebook.com/v2.6/me/messenger_profile",
+    "qs": {"access_token": my_access},
+    "method": "POST",
+    "json": request_body
+  }, function (err, res, body){
+    if (!err) {
+      console.log ('message sent!')
+    } else {
+      console.error ("Unable to send message" + err);
+    }
+  });
+}
 
 /* ----------  Persistant Menu API  ---------- */
 function addPersistentMenu(){
