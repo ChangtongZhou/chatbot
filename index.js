@@ -213,7 +213,7 @@ function getFBData(fbId, callback){
     let userData = null
     if (err) console.log (err);
     else userData = JSON.parse (res.body);
-    console.log ("WOOOOOOOW, what is userData here: " + userData);
+    console.log ("LLLLAAA, what is userData here: " + JSON.parse (res.body));
     callback (err, userData);
   });
 }
