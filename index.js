@@ -273,6 +273,7 @@ function firstEntity(nlp, name) {
 
 // handles messages events
 function handleMessage (sender_psid, received_message) {
+  console.log ("handleMessage(" + sender_psid + ", " + JSON.stringify(received_message) + ")");
   let response;
 
   // Checks if the message contains text
