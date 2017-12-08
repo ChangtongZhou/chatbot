@@ -239,7 +239,7 @@ function getFBData(fbId, callback){
 
 
 /* ----------  Find one user  ---------- */
-function getUserById (fbId, callback) {
+function getUserById (fbId, callback, error_callback) {
   
   // var result = null;
   User.findOne ({fbId: fbId}, function (err, userObj) {
@@ -252,7 +252,7 @@ function getUserById (fbId, callback) {
       // callback(userObj);
       return callback(userObj);
     } else {
-      console.log ('User not found!');
+      return callback("User not found");
     }
   });
 }
@@ -415,7 +415,7 @@ function sendGenericMessage(sender_id) {
 // handles messaging_postbakcs events
 function handlePostback(sender_psid, received_postback) {
   let response;
-  console.log ("what is received_postback" + JSON.stringify(received_postback));
+  console.log ("handlePostback(" + sender_psid + ", " + JSON.stringify(received_postback) + ")");
   // Get the payload for the postback
   let payload = received_postback.payload;
 
@@ -427,15 +427,15 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "Oops, try sending another image." }
     
   } else if (payload == 'GET_STARTED_PAYLOAD') {
-    console.log ("lolololololo: what is sender id: " + sender_psid);
-    
     // Get user data from MongoDB by using callback:
-    getUserById (sender_psid, function(userInfo){
-      console.log ("hohoho: what is user data: " + userInfo.firstName);
+    getUserById (sender_psid, function(userInfo) {
+      console.log ("Got User Info: " + JSON.stringify(userInfo));
       // var userName = JSON.stringify(userInfo.firstName);
-      response = {"text": "Hello, Welcome to your to_do_list bot!!"};
+      response = { "text": "Hello, Welcome to your to_do_list bot!!" };
       // response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
       // PersistentCallSendAPI(sender_psid, response);
+    }, function (err) {
+      console.log ("Error getting user info: " + err);
     });
       
   }
