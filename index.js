@@ -422,10 +422,10 @@ function handlePostback(sender_psid, received_postback) {
   // Set the response based on the postback payload
   if (payload === 'yes') {
     response = { "text": "Thanks!" }
-    callSendAPI(sender_psid, response);
+   
   } else if (payload === 'no') {
     response = { "text": "Oops, try sending another image." }
-    callSendAPI(sender_psid, response);
+    
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
     
@@ -434,7 +434,7 @@ function handlePostback(sender_psid, received_postback) {
       console.log ("hohoho: what is user data: " + userInfo.firstName);
       var userName = JSON.stringify(userInfo.firstName);
       response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
-      PersistentCallSendAPI(sender_psid, response);
+      // PersistentCallSendAPI(sender_psid, response);
     });
       
   }
