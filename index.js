@@ -84,29 +84,24 @@ app.get('/webhook', (req, res) => {
 });
 
 
-// /* 
-//  * Add webhook endpoint:
-//  * Allow users to send us messages
-//  */
-// // Creates the endpoint for our webhook 
+/* 
+ * Add webhook endpoint:
+ * Allow users to send us messages
+ */
+// Creates the endpoint for our webhook 
 app.post('/webhook', (req, res) => {  
  
   let body = req.body;
 
-  // console.log("================================= Test 6 ================================");
-
-  
-
   // Checks this is an event from a page subscription
+  console.log("================================= Test 1 ================================");
   if (body.object === 'page') {
     // addPersistentMenu();
     
-    console.log ("Hellllllo, what is body: " + JSON.stringify(body));
+    console.log ("Check req.body, what is body: " + JSON.stringify(body));
 
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
-
-      
       /* ----------  Messenger setup  ---------- */
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
@@ -115,41 +110,23 @@ app.post('/webhook', (req, res) => {
       entry.messaging.forEach(function (webhookEvent) {
         let sender_psid = webhookEvent.sender.id;
         console.log ('Sender PSID is: ' + sender_psid);
+        console.log("================================= Start saving user info into DB ================================");
         // Save User to MongoDB
         saveUser (sender_psid);
         // Check which event 
         if (webhookEvent.message && webhookEvent.message.text) {
+          console.log("================================= Handle Messages ================================");
           handleMessage(sender_psid, webhookEvent.message);
         } 
         else if (webhookEvent.postback) {
-          console.log("================================= Test 15 ================================");
+          console.log("================================= Handle Postbacks ================================");
           // addPersistentMenu();
           handlePostback(sender_psid, webhookEvent.postback);
         }
-
-        // Save User to MongoDB
         
       });
-      // console.log(webhookEvent);
 
-      // Gets the sender PSID
-      // let sender_psid = webhookEvent.sender.id;
-      // console.log ('Sender PSID is: ' + sender_psid);
-
-      // // Check which event 
-      // if (webhookEvent.message && webhookEvent.message.text) {
-      //   handleMessage(sender_psid, webhookEvent.message);
-      // } 
-      // else if (webhookEvent.postback) {
-      //   console.log("================================= Test 12 ================================");
-      //   addPersistentMenu();
-      //   handlePostback(sender_psid, webhookEvent.postback);
-      // }
-
-      // // // Save User to MongoDB
-      // saveUser (sender_psid);
-
-      addPersistentMenu();
+      // addPersistentMenu();
 
      });
 
@@ -171,7 +148,7 @@ app.post('/webhook', (req, res) => {
    ============================================= */
 // require Mongoose
 var mongoose = require ('mongoose');
-var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/bot_db';
+var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/bot_db'; // This is connected to AWS
 // testing:
 // console.log(mongoose.connection.readyState);
 
@@ -182,7 +159,6 @@ mongoose.connect(uristring, function (err, res) {
     console.log("Succeeded connected to: " + uristring);
   }
 });
-// mongoose.connect('https://safe-crag-36560.herokuapp.com/to_do_list');
 
 /* ----------  Create Mongoose Schemas ---------- */
 
@@ -282,11 +258,6 @@ function handleMessage (sender_psid, received_message) {
     // will be added to the body of our request to the Send API
     let text = received_message.text;
     const greeting = firstEntity(received_message.nlp, 'greetings');
-    // if (text == "Get Started") {
-    //   response = {
-    //     "text": 
-    //   }
-    // }
     if (greeting && greeting.confidence > 0.8) {
       response = {
         "text": "Howdy!"
@@ -311,57 +282,44 @@ function handleMessage (sender_psid, received_message) {
       }
     }
   }
-  // else if (received_message.attachments) {
-  //   // Gets the URL of the message attachment
-  //   let attachment_url = received_message.attachments[0].payload.url;
-  //   handleAttachment(sender_psid, attachment_url);
-    // callSendAPI (sender_psid, response);
-    // response = {
-    //   "attachment": {
-    //     "type": "template",
-    //     "payload": {
-    //       "template_type": "generic",
-    //       "elements": [{
-    //         "title": "First Card",
-    //         "subtitle": "Tap a button to answer.",
-    //         "image_url": attachment_url,
-    //         "buttons": [
-    //           {
-    //             "type": "postback",
-    //             "title": "Yes!",
-    //             "payload": "yes",
-    //           },
-    //           {
-    //             "type": "postback",
-    //             "title": "No!",
-    //             "payload": "no",
-    //           },
-    //           {
-    //             "type":"phone_number",
-    //             "title":"call me maybe",
-    //             "payload":"+16692229605"
-    //           }
-    //         ],
-    //       }, 
-    //       {
-    //         "title": "Second card",
-    //         "subtitle": "Element #2 of an hscroll",
-    //         "image_url": "https://github.com/jw84/messenger-bot-tutorial",
-    //         "buttons": [{
-    //           "type": "postback",
-    //           "title": "Click me!",
-    //           "payload": "Payload for second element in a generic bubble"
-    //         }]
-    //       }]
-    //     }
-    //   }
-    // }
-  // }
   
-
   // Sends the response message
   callSendAPI (sender_psid, response);
 }
+
+// handles messaging_postbakcs events like button triggers
+function handlePostback(sender_psid, received_postback) {
+  let response;
+  console.log ("handlePostback(" + sender_psid + ", " + JSON.stringify(received_postback) + ")");
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+  console.log ("payload===" + payload);
+
+  // Set the response based on the postback payload
+  if (payload === 'yes') {
+    response = { "text": "Thanks!" }
+   
+  } else if (payload === 'no') {
+    response = { "text": "Oops, try sending another image." }
+
+  } else if (payload === 'GET_STARTED_PAYLOAD') {
+    // Get user data from MongoDB by using callback:
+    getUserById (sender_psid, function(userInfo) {
+      console.log ("Got User Info: " + JSON.stringify(userInfo));
+      
+      response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
+
+      // Note here: be careful with the scope of response variable
+      callSendAPI(sender_psid, response);
+    }, function (err) {
+      console.log ("Error getting user info: " + err);
+    });
+      
+  }
+  // Send the message to acknowledge the postback
+  callSendAPI(sender_psid, response);
+}
+
 
 function sendGenericMessage(sender_id) {
     let messageData = {
@@ -413,45 +371,9 @@ function sendGenericMessage(sender_id) {
 }
 
 
-// handles messaging_postbakcs events
-function handlePostback(sender_psid, received_postback) {
-  let response;
-  console.log ("handlePostback(" + sender_psid + ", " + JSON.stringify(received_postback) + ")");
-  // Get the payload for the postback
-  let payload = received_postback.payload;
-  console.log ("payload===" + payload);
-
-  // Set the response based on the postback payload
-  if (payload === 'yes') {
-    response = { "text": "Thanks!" }
-   
-  } else if (payload === 'no') {
-    response = { "text": "Oops, try sending another image." }
-
-  } else if (payload === 'GET_STARTED_PAYLOAD') {
-    // Get user data from MongoDB by using callback:
-    getUserById (sender_psid, function(userInfo) {
-      console.log ("Got User Info: " + JSON.stringify(userInfo));
-      
-      response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
-
-      // Note here: be careful with the scope of response variable
-      callSendAPI(sender_psid, response);
-      
-      // PersistentCallSendAPI(sender_psid, response);
-    }, function (err) {
-      console.log ("Error getting user info: " + err);
-    });
-      
-  }
-  // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
-}
-
-
-// sends response messages voa the Send API
 
 /* ----------  Send API  ---------- */
+// sends response messages via the Send API
 function callSendAPI (sender_psid, response) {
   // Construct the message body
   let request_body = {
@@ -461,7 +383,7 @@ function callSendAPI (sender_psid, response) {
     "message": response
   }
 
-  console.log("Sending '" + response + "' to " + sender_psid);
+  console.log("Sending '" + JSON.stringify(response) + "' to " + sender_psid);
 
   // Send the HTTP request to the Messenger Platform
   request ({
@@ -478,34 +400,8 @@ function callSendAPI (sender_psid, response) {
   });
 }
 
-
-function PersistentCallSendAPI (sender_psid, response) {
-  // Construct the message body
-  let request_body = {
-    "recipient" : {
-      "id": sender_psid
-    },
-    "message": response
-  }
-
-  // Send the HTTP request to the Messenger Platform
-  request ({
-    "uri": "https://graph.facebook.com/v2.6/me/messenger_profile",
-    "qs": {"access_token": my_access},
-    "method": "POST",
-    "json": request_body
-  }, function (err, res, body){
-    if (!err) {
-      console.log ('message sent!')
-    } else {
-      console.error ("Unable to send message" + err);
-    }
-  });
-}
-
 /* ----------  Persistant Menu API  ---------- */
 function addPersistentMenu(){
-
 // Get _Started
  request({
     url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
