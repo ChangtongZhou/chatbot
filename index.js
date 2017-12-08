@@ -247,8 +247,8 @@ function getUserById (fbId, callback, error_callback) {
       console.log ('Cannot get user info ' + err);
     } else if (userObj) {
       // result = userObj;
-      console.log ('LoHAHAHAHA!! User exists. User name is ' + userObj.firstName);
-      console.log ('HIIII!! userObj is ' + userObj);
+      console.log ('Check if the specific user exists. User name is ' + userObj.firstName);
+      console.log ('Check the userObj, the userObj is: ' + userObj);
       // callback(userObj);
       return callback(userObj);
     } else {
@@ -432,10 +432,10 @@ function handlePostback(sender_psid, received_postback) {
     // Get user data from MongoDB by using callback:
     getUserById (sender_psid, function(userInfo) {
       console.log ("Got User Info: " + JSON.stringify(userInfo));
-      // var userName = JSON.stringify(userInfo.firstName);
-      // response = { "text": "Hello, Welcome to your to_do_list bot!!" };
       
-response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
+      response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
+
+      // Note here: be careful with the scope of response variable
       callSendAPI(sender_psid, response);
       
       // PersistentCallSendAPI(sender_psid, response);
@@ -564,19 +564,7 @@ function addPersistentMenu(){
                   "webview_height_ratio":"full"
                 }
               ]
-            },
-            // Differenet locales in another country (Optional)
-            // {
-            //   "locale":"zh_CN",
-            //   "composer_input_disabled":false,
-            //   "call_to_actions":[
-            //     {
-            //       "title":"Pay Bill",
-            //       "type":"postback",
-            //       "payload":"PAYBILL_PAYLOAD"
-            //     }
-            //   ]    
-            // }
+            }
           ]
         }
 
