@@ -378,8 +378,8 @@ function sendGenericMessage(sender_id) {
               "title": "web url"
             }, {
               "type": "postback",
-              "title": "yes",
-              "payload": "Payload for first element in a generic bubble",
+              "title": "Yes",
+              "payload": "yes",
             }],
           }, {
             "title": "Second card",
@@ -387,8 +387,8 @@ function sendGenericMessage(sender_id) {
             "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
             "buttons": [{
               "type": "postback",
-              "title": "no",
-              "payload": "Payload for second element in a generic bubble",
+              "title": "No",
+              "payload": "no",
             }],
           }]
         }
