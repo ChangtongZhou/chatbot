@@ -121,7 +121,7 @@ app.post('/webhook', (req, res) => {
         handleMessage(sender_psid, webhookEvent.message);
       } 
       else if (webhookEvent.postback) {
-        console.log("================================= Test 7 ================================");
+        console.log("================================= Test 8 ================================");
         addPersistentMenu();
         handlePostback(sender_psid, webhookEvent.postback);
       }
@@ -395,15 +395,17 @@ function sendGenericMessage(sender_id) {
 // handles messaging_postbakcs events
 function handlePostback(sender_psid, received_postback) {
   let response;
-  console.log ("what is received_postback" + received_postback);
+  console.log ("what is received_postback" + JSON.stringify(received_postback));
   // Get the payload for the postback
   let payload = received_postback.payload;
 
   // Set the response based on the postback payload
   if (payload === 'yes') {
     response = { "text": "Thanks!" }
+    callSendAPI(sender_psid, response);
   } else if (payload === 'no') {
     response = { "text": "Oops, try sending another image." }
+    callSendAPI(sender_psid, response);
   } else if (payload == 'GET_STARTED_PAYLOAD') {
     console.log ("lolololololo: what is sender id: " + sender_psid);
     
@@ -434,7 +436,7 @@ function handlePostback(sender_psid, received_postback) {
     
   }
   // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
+  // callSendAPI(sender_psid, response);
 }
 
 
