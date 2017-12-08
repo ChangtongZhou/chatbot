@@ -111,7 +111,7 @@ app.post('/webhook', (req, res) => {
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
       // let webhookEvent = entry.messaging[0];
-      if (entry.messaging != null) {
+        if (entry.messaging != null) {
           entry.messaging.forEach(function (webhookEvent) {
           let sender_psid = webhookEvent.sender.id;
           console.log ('Sender PSID is: ' + sender_psid);
@@ -130,7 +130,7 @@ app.post('/webhook', (req, res) => {
           
         });
         } else {
-          let webhookEvent = entry[0].standby;
+          let webhookEvent = entry.standby;
           let senderID = webhookEvent.sender.id;
           if (webhookEvent.postback) {
             handlePostback(senderID, webhookEvent.postback);
