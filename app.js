@@ -23,10 +23,6 @@ const app = express();
 /* =============================================
    =           Basic Configuration             =
    ============================================= */
-/* ----------  Variables  ---------- */
-var previousMessageHash = {};
-var senderContext = {};
-var isStopped = false;
 
 /* ----------  Views  ---------- */
 // tell express what view engine is (here we change view to .ejs)
@@ -108,52 +104,31 @@ app.post('/webhook', (req, res) => {
     console.log ("Hellllllo, what is body: " + JSON.stringify(body));
 
     // Iterates over each entry - there may be multiple if batched
-    body.entry.forEach ( function(pageEntry) {
-      var pageId = pageEntry.id;
-      var timeOfEvent = pageEntry.time;
+    body.entry.forEach(function(entry) {
 
-      pageEntry.messaging.forEach (function (messagingEvent) {
-        if (messagingEvent.optin) {
-          receivedAuthentication (messagingEvent);
-        } else if (messagingEvent.message) {
-          receivedMessage (messagingEvent);
-        } else if (messagingEvent.postback) {
-          receivedPostback (messagingEvent);
-        } else if (messagingEvent.delivery) {
-          receivedDeliveryConfirmation (messagingEvent);
-
-        } else {
-          console.log ("Webhook received unknow messagingEvent: ", messagingEvent);
-        }
-
-      })
-
-
-
-      // ---------------------------------------------------------------------------------------
+      
       /* ----------  Messenger setup  ---------- */
-      // Iterate over each messaging event
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
-      // let webhookEvent = entry.messaging[0];
-      // console.log(webhookEvent);
+      let webhookEvent = entry.messaging[0];
+      console.log(webhookEvent);
 
-      // // Gets the sender PSID
-      // let sender_psid = webhookEvent.sender.id;
-      // console.log ('Sender PSID is: ' + sender_psid);
+      // Gets the sender PSID
+      let sender_psid = webhookEvent.sender.id;
+      console.log ('Sender PSID is: ' + sender_psid);
 
-      // // Check which event 
-      // if (webhookEvent.message && webhookEvent.message.text) {
-      //   handleMessage(sender_psid, webhookEvent.message);
-      // } 
-      // else if (webhookEvent.postback) {
-      //   console.log("================================= Test 10 ================================");
-      //   // addPersistentMenu();
-      //   handlePostback(sender_psid, webhookEvent.postback);
-      // }
+      // Check which event 
+      if (webhookEvent.message && webhookEvent.message.text) {
+        handleMessage(sender_psid, webhookEvent.message);
+      } 
+      else if (webhookEvent.postback) {
+        console.log("================================= Test 10 ================================");
+        // addPersistentMenu();
+        handlePostback(sender_psid, webhookEvent.postback);
+      }
 
-      // // // Save User to MongoDB
-      // saveUser (sender_psid);
+      // // Save User to MongoDB
+      saveUser (sender_psid);
 
       // addPersistentMenu();
 
@@ -265,386 +240,13 @@ function getUserById (fbId, callback) {
 
 
 
-
-
-
-
-/* =============================================
-   =                 Events Setup                =
-   ============================================= */
-/* ---------- Authorization Event ---------------*/
-function receivedAuthentication(event) {
-  if(isStopped == true)
-  {
-    return;
-  }
-  var data = req.body;
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfAuth = event.timestamp;
-
-  // The 'ref' field is set in the 'Send to Messenger' plugin, in the 'data-ref'
-  // The developer can set this to an arbitrary value to associate the 
-  // authentication callback with the 'Send to Messenger' click event. This is
-  // a way to do account linking when the user clicks the 'Send to Messenger' 
-  // plugin.
-  var passThroughParam = event.optin.ref;
-
-  console.log("Received authentication for user %d and page %d with pass " +
-    "through param '%s' at %d", senderID, recipientID, passThroughParam, 
-    timeOfAuth);
-
-  // When an authentication is received, we'll send a message back to the sender
-  // to let them know it was successful.
-  sendTextMessage(senderID, "Authentication successful");
-}
-
-var firstName = "undefined";
-var lastName = "undefined"; 
-
 /* ----------  Webview API  ---------- */
 app.get('/', function(req, res){
   res.send("Hello I am testing");
   // res.render('login');
 });
 
-/* ----------  Messenging Event  ---------- */
-
-function receivedMessage (event) {
-  callGetLocaleAPI (event, handleReceivedMessage);
-}
-
-function handleReceivedMessage (event) {
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfMessage = event.timestamp;
-  var message = event.message;
-  var messageID = message.mid;
-
-  // You may get a text or attachment but not both
-  var messageText = message.text;
-  var quickReply = message.quick_reply;
-
-  if (isEcho) {
-    // just logging message echoes to console
-    console.log ("Receved echo for message %s", messageID);
-    return;
-  } else if (quickReply) {
-    var quickReplyPayload = quickReply.payload;
-    messageText = quickReplyPayload;
-    sendCustomMessage (senderID, messageText);
-    return;
-  }
-
-  if (messageText) {
-    if ((isStopped == true) && (messageText != "start")) {
-      return;
-    }
-
-    console.log ("Received message for user %d and page %d at %d with message: %s", senderID, recipientID, timeOfMessage, messageText);
-
-    // If receive a text message, check to see if it matches any special keywords and 
-    // send back the corresponding example. Otherwise, just echo the text we received.
-    switch (messageText.toLowerCase()) {
-      case 'button':
-        sendButtonMessage (senderID);
-        break;
-
-      case 'to do list':
-        sendGenericMessage (senderID);
-        break;
-
-      case 'quick reply':
-        sendQuickReply (senderID);
-        break;
-      case 'user info':
-        if (firstName) {
-          sendTextMessage(senderID, firstName);
-        }
-        break;
-      case 'add menu':
-        addPersistentMenu();
-        break;
-      case 'stop':  // Stop the Bot from responding if the admin sends this messages
-        if(senderID ==  1073962542672604) {
-          console.log("Stoppping bot");
-          isStopped = true;
-        }
-        break;
-
-      default:
-        sendEnteredMessage(senderID, messageText);
-    }
-  } 
-
-  // Add messageAttachment later
-
-}
-
-
-
-/* =============================================
-   =                 Message Functions                =
-   ============================================= */
-
- // Delivery Confirmation Event:
-function receivedDeliveryConfirmation (event) {
-  if (isStopped == true) {
-    return;
-  }
-
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var delivery = event.delivery;
-  var messageIDs = delivery.mids;
-  var watermark = delivery.watermark;
-  var sequenceNumber = delivery.seq;
-
-  if (messageIDs) {
-    messageIDs.forEach(function(messageID) {
-      console.log("Received delivery confirmation for message ID: %s", 
-        messageID);
-    });
-  }
-
-  console.log("All message before %d were delivered.", watermark);
-}
-
-// Postback Event:
-function receivedPostback (event) {
-  if (isStopped == true) {
-    return;
-  }
-  callGetLocaleAPI (event, handleReceivedPostback);
-}
-
-function handleReceivedPostback (event) {
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfPostback = event.timestamp;
-
-  // The 'payload' param is a developer-defined field which is set in a postback 
-  // button for Structured Messages. 
-  var payload = event.postback.payload;
-
-  console.log("Received postback for user %d and page %d with payload '%s' " + 
-    "at %d", senderID, recipientID, payload, timeOfPostback);
-
-  // When a postback is called, we'll send a message back to the sender to 
-  // let them know it was successful
-  sendCustomMessage(senderID,payload);
-}
-
-// Message read event
-function receivedMessageRead(event) {
-  if(isStopped == true)
-  {
-    return;
-  }
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-
-  // All messages before watermark (a timestamp) or sequence have been seen.
-  var watermark = event.read.watermark;
-  var sequenceNumber = event.read.seq;
-
-  console.log("Received message read event for watermark %d and sequence " +
-    "number %d", watermark, sequenceNumber);
-}
-
-// Send a text message using the Send API
-function sendTextMessage (recipientID, messageText) {
-  var messageData = {
-    "recipient": {
-      "id": recipientID
-    }, 
-
-    "message": {
-      "text": messageText,
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-// Send the user information back, the bot grabs this for every message
-function sendLocale (recipientID) {
-  var nameString = firstName + " " + lastName;
-
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: nameString,
-      quick_replies: [
-        {
-          "content_type":"text",
-          "title":"Home",
-          "payload":"home"
-        }
-      ]
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-/*
- * Send a button message using the Send API.
- *
- */
-function sendButtonMessage(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "button",
-          text: "This is test text",
-          buttons:[{
-            type: "web_url",
-            url: "https://www.oculus.com/en-us/rift/",
-            title: "Open Web URL"
-          }, {
-            type: "postback",
-            title: "Trigger Postback",
-            payload: "DEVELOPED_DEFINED_PAYLOAD"
-          }, {
-            type: "phone_number",
-            title: "Call Phone Number",
-            payload: "+16505551234"
-          }]
-        }
-      }
-    }
-  };  
-
-  callSendAPI(messageData);
-}
-
-/*
- * Send a message with Quick Reply buttons.
- *
- */
-function sendQuickReply(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: "Some regular buttons and a location test",
-      metadata: "DEVELOPER_DEFINED_METADATA",
-      quick_replies: [
-        {
-          "content_type":"text",
-          "title":"Action",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION"
-        },
-        {
-          "content_type":"text",
-          "title":"Something else",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_SOMETHING"
-        },
-        {
-          "content_type":"location",
-          "title":"Send Location",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_LOCATION"
-        }
-      ]
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-/*
- * Call the Send API. The message data goes in the body. If successful, we'll 
- * get the message id in a response 
- *
- */
-function callSendAPI(messageData) {
-  request({
-    uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: my_access },
-    method: 'POST',
-    json: messageData
-
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
-      if (messageId) {
-        console.log("Successfully sent message with id %s to recipient %s", 
-          messageId, recipientId);
-      } 
-    } else {
-      console.error("Unable to send message. :" + response.error);
-    }
-  });  
-}
-
-/*
- * Call the Get Locale API. The message data goes in the body. If successful, we'll 
- * get the message id in a response 
- *
- */
-function callGetLocaleAPI(event, handleReceived) {
-    var userID = event.sender.id;
-    var http = require('https');
-    var path = '/v2.6/' + userID +'?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=' + my_access;
-    var options = {
-      host: 'graph.facebook.com',
-      path: path
-    };
-    
-    if(senderContext[userID])
-    {
-       firstName = senderContext[userID].firstName; 
-       lastName = senderContext[userID].lastName; 
-       console.log("found " + JSON.stringify(senderContext[userID]));
-       if(!firstName) 
-          firstName = "undefined";
-       if(!lastName) 
-          lastName = "undefined";
-       handleReceived(event);
-       return;
-    }
-
-    var req = http.get(options, function(res) {
-      //console.log('STATUS: ' + res.statusCode);
-      //console.log('HEADERS: ' + JSON.stringify(res.headers));
-
-      // Buffer the body entirely for processing as a whole.
-      var bodyChunks = [];
-      res.on('data', function(chunk) {
-        // You can process streamed parts here...
-        bodyChunks.push(chunk);
-      }).on('end', function() {
-        var body = Buffer.concat(bodyChunks);
-        var bodyObject = JSON.parse(body);
-        firstName = bodyObject.first_name;
-        lastName = bodyObject.last_name;
-        if(!firstName) 
-          firstName = "undefined";
-        if(!lastName) 
-          lastName = "undefined";
-        senderContext[userID] = {};
-        senderContext[userID].firstName = firstName;
-        senderContext[userID].lastName = lastName;
-        console.log("defined " + JSON.stringify(senderContext));
-        handleReceived(event);
-      })
-    });
-    req.on('error', function(e) {
-      console.log('ERROR: ' + e.message);
-    });
-}
-
+/* ----------  Messenging API  ---------- */
 function firstEntity(nlp, name) {
   return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
 }
@@ -741,7 +343,7 @@ function handleMessage (sender_psid, received_message) {
 }
 
 function sendGenericMessage(sender_id) {
-    var messageData = {
+    let messageData = {
       "attachment": {
         "type": "template",
         "payload": {
@@ -824,29 +426,29 @@ function handlePostback(sender_psid, received_postback) {
 // sends response messages voa the Send API
 
 /* ----------  Send API  ---------- */
-// function callSendAPI (sender_psid, response) {
-//   // Construct the message body
-//   let request_body = {
-//     "recipient" : {
-//       "id": sender_psid
-//     },
-//     "message": response
-//   }
+function callSendAPI (sender_psid, response) {
+  // Construct the message body
+  let request_body = {
+    "recipient" : {
+      "id": sender_psid
+    },
+    "message": response
+  }
 
-//   // Send the HTTP request to the Messenger Platform
-//   request ({
-//     "uri": "https://graph.facebook.com/v2.6/me/messages",
-//     "qs": {"access_token": my_access},
-//     "method": "POST",
-//     "json": request_body
-//   }, function (err, res, body){
-//     if (!err) {
-//       console.log ('message sent!')
-//     } else {
-//       console.error ("Unable to send message" + err);
-//     }
-//   });
-// }
+  // Send the HTTP request to the Messenger Platform
+  request ({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "qs": {"access_token": my_access},
+    "method": "POST",
+    "json": request_body
+  }, function (err, res, body){
+    if (!err) {
+      console.log ('message sent!')
+    } else {
+      console.error ("Unable to send message" + err);
+    }
+  });
+}
 
 
 function PersistentCallSendAPI (sender_psid, response) {
