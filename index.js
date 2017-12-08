@@ -97,7 +97,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  // console.log("================================= Test 6 ================================");
+  console.log("================================= Test 11 ================================");
 
   
 
@@ -324,6 +324,7 @@ function handleReceivedMessage (event) {
   // You may get a text or attachment but not both
   var messageText = message.text;
   var quickReply = message.quick_reply;
+  var isEcho = message.is_echo;
 
   if (isEcho) {
     // just logging message echoes to console
