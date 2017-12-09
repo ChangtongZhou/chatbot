@@ -234,7 +234,7 @@ function firstEntity(nlp, name) {
 // handles messages events
 function handleMessage (sender_psid, received_message) {
   console.log ("handleMessage(" + sender_psid + ", " + JSON.stringify(received_message) + ")");
-  let response;
+  // let response;
 
   // Checks if the message was sent via the Message Echo Callback
   if (!received_message.is_echo) {
@@ -271,9 +271,11 @@ function handleMessage (sender_psid, received_message) {
             // create a new list
             //break;
           default:
-            response = {
+            var response = {
               "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
             }
+            // Sends the response message
+            callSendAPI (sender_psid, response);
           
         }
 
@@ -295,11 +297,10 @@ function handleMessage (sender_psid, received_message) {
         // }
       }
     } else if (received_message.attachments) {
-      response = {"text": "Sorry, I don't understand your request. "}
+      var response = {"text": "Sorry, I don't understand your request. "};
+      callSendAPI (sender_psid, response);
     }
     
-    // Sends the response message
-    callSendAPI (sender_psid, response);
   }
 }
 
@@ -319,7 +320,7 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "Oops, try sending another image." }
 
   } else if (payload === 'GET_STARTED_PAYLOAD') {
-    // Get user data from MongoDB by using callback:
+    // Get user data from FB by using callback:
     // getUserById (sender_psid, function(userInfo) {
       getFBData (sender_psid, function(err, userInfo){
         if (err) console.log ("Error getting user info: " + err);
@@ -331,8 +332,7 @@ function handlePostback(sender_psid, received_postback) {
       // Note here: be careful with the scope of response variable
         callSendAPI(sender_psid, response);
       }
-    // }, function (err) {
-    //   console.log ("Error getting user info: " + err);
+
     });
       
   }
