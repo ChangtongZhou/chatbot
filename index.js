@@ -159,7 +159,7 @@ mongoose.connect(uristring, function (err, res) {
 });
 
 
-var User = require("./models/to_do_list_db"); // We are retrieving this Schema from our Models, named 'User'
+var User = require("./models/to_do_list_db"); // We are retrieving this Schema from our Models, named 'User' model
 
 /* ----------  Get User/sender data and save it on MongoDB  ---------- */
 function saveUser (fbId, firstName, lastName) {
@@ -192,30 +192,58 @@ function getFBData(fbId, callback){
     let userData = null
     if (err) console.log (err);
     else userData = JSON.parse (res.body);
-    console.log ("LLLLAAA, what is userData here: " + JSON.stringify (res.body));
+    console.log ("Get FB profile data, what is userData here: " + JSON.stringify (res.body));
     callback (err, userData);
   });
 }
 
 
-/* ----------  Find one user  ---------- */
-function getUserById (fbId, callback, error_callback) {
-  
-  // var result = null;
-  User.findOne ({fbId: fbId}, function (err, userObj) {
+/* ----------  Get To-Do-List Info  ---------- */
+function getListInfo (fbId) {
+  User.findOne ({fbId: fbId}, function (err, listData) {
     if (err) {
-      console.log ('Cannot get user info ' + err);
-    } else if (userObj) {
-      // result = userObj;
-      console.log ('Check if the specific user exists. User name is ' + userObj.firstName);
-      console.log ('Check the userObj, the userObj is: ' + userObj);
-      // callback(userObj);
-      return callback(userObj);
+      callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
     } else {
-      return callback("User not found");
+      var items = listData.items;
+      console.log ("Checking to do list items: " + JSON.stringify(items));
+      // Send back to FB messenger platform:
+      // need for loop here to go through items array:
+      // callSendAPI (fbId, {"text": `Item: ${items.text} -> Priority: $(items.priority)`})
     }
-  });
+  }
+
 }
+
+/* ----------  Add Item in To-Do-List ---------- */
+function addItem (fbId, msg) {
+  var newItem = User(msg).save (function (err, data) {
+    if (err) console.log("new Item is not added");
+    else {
+      console.log("New item is added!");
+      console.log ("Checking what is added: " + JSON.stringify(data));
+    }
+    
+  })
+}
+
+
+// function getUserById (fbId, callback, error_callback) {
+  
+//   // var result = null;
+//   User.findOne ({fbId: fbId}, function (err, userObj) {
+//     if (err) {
+//       console.log ('Cannot get user info ' + err);
+//     } else if (userObj) {
+//       // result = userObj;
+//       console.log ('Check if the specific user exists. User name is ' + userObj.firstName);
+//       console.log ('Check the userObj, the userObj is: ' + userObj);
+//       // callback(userObj);
+//       return callback(userObj);
+//     } else {
+//       return callback("User not found");
+//     }
+//   });
+// }
 
 
 
@@ -247,7 +275,7 @@ function handleMessage (sender_psid, received_message) {
       const greeting = firstEntity(received_message.nlp, 'greetings');
       if (greeting && greeting.confidence > 0.8) {
         response = {
-          "text": "Howdy!"
+          "text": "Hello there! I am you To-Do-List agent. Please type operations like: add, show, edit, delete, to explore more about me!"
         }
       } else {
         // special messages/keywords to trigger the cards/functions
@@ -257,13 +285,22 @@ function handleMessage (sender_psid, received_message) {
             break;
           case "/show":
             // display list
+            // use webview here!!
             //break;
           case "/create":
             // create a new list
             //break;
-          case "/add":
+          case "add":
+            addButton (sender_psid);
+            break;
+          case text.substring(0, 4) == "/add":
+            // var response = {
+            //   "text": "Please type the item you want to add into your To-Do-List!"
+            // }
+            // callSendAPI (sender_psid, response);
             // add new item to list
-            //break;
+            addItem(received_message.text.substring(4));
+            break;
           case "/edit":
             // create a new list
             //break;
@@ -272,7 +309,7 @@ function handleMessage (sender_psid, received_message) {
             //break;
           default:
             var response = {
-              "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+              "text": `You want to add the following item : "${received_message.text}". Now send me an attachment!`
             }
             // Sends the response message
             callSendAPI (sender_psid, response);
@@ -319,6 +356,8 @@ function handlePostback(sender_psid, received_postback) {
 
     });
       
+  } else if (payload == 'ADD_ITEM') {
+    addButton(sender_psid);
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
@@ -361,6 +400,25 @@ function sendGenericMessage(sender_id) {
 }
 
 
+// Postback ADD button
+function addButton (sender_id) {
+  let messageData = {
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        // "text":"What do you want to do next?",
+        "text": "Please type the item you want to add into your To-Do-List!",
+        "buttons":[
+          {
+            "type":"postback",
+            "title":"Add items",
+            "payload"; "ADD_ITEM"
+          }
+        ]}}
+  }
+  callSendAPI(sender_id, messageData);
+}
 
 /* ----------  Send API  ---------- */
 // sends response messages via the Send API
@@ -442,7 +500,8 @@ function addPersistentMenu(){
                     }
                   ]
                 },
-                // Row 2:
+                // Row 2: a web view for showing to-do list
+                // https://developers.facebook.com/docs/messenger-platform/webview
                 {
                   "type":"web_url",
                   "title":"Show me my todo list",

@@ -10,13 +10,13 @@ var Schema = mongoose.Schema;
 // User Schema:
 var UserSchema = new Schema({
   fbId: {type: String, required: true},
-  firstName: String,
-  lastName: String,
+  // firstName: String,
+  // lastName: String,
   // lisf of items
-  items: [{
-    text: { type: String, trim: true },
-    priority: { type: Number, min: 0 } 
-    }]}, 
+  items: [
+    { text: { type: String, trim: true }, priority: { type: Number, min: 0 } }
+    ]
+  }, 
   {timestamps: true});
 
 // User model:
