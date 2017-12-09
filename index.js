@@ -93,8 +93,8 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  // Checks this is an event from a page subscription
   console.log("================================= Test 1 ================================");
+  // Checks this is an event from a page subscription
   if (body.object === 'page') {
     addPersistentMenu();
     
@@ -374,16 +374,16 @@ function sendGenericMessage(sender_id) {
 
 /* ----------  Send API  ---------- */
 // sends response messages via the Send API
-function callSendAPI (sender_psid, response) {
+function callSendAPI (recipientId, response) {
   // Construct the message body
   let request_body = {
     "recipient" : {
-      "id": sender_psid
+      "id": recipientId
     },
     "message": response
   }
 
-  console.log("Sending '" + JSON.stringify(response) + "' to " + sender_psid);
+  console.log("Sending '" + JSON.stringify(response) + "' to " + recipientId);
 
   // Send the HTTP request to the Messenger Platform
   request ({
