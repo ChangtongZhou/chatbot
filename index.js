@@ -288,6 +288,10 @@ function handleMessage (sender_psid, received_message) {
             var msg = received_message.text.substring(4);
             console.log("Potential adding item: " + msg);
             addItem(sender_psid, msg);
+            response = {
+             "text": "You are trying to add items right?"
+            }
+            callSendAPI (sender_psid, response);
       }
       else {
         // special messages/keywords to trigger the cards/functions
@@ -352,7 +356,7 @@ function handlePostback(sender_psid, received_postback) {
         else {
         console.log ("Got User Info: " + JSON.stringify(userInfo));
       
-        response = {"text": `Hello, "${userInfo.first_name}"! Welcome to your to_do_list bot!!`};
+        response = {"text": `Hello, "${userInfo.first_name}"! Welcome to your to_do_list bot!! Please type operations like: add, show, edit, delete, to explore more about your bot!"`};
 
       // Note here: be careful with the scope of response variable
         callSendAPI(sender_psid, response);
