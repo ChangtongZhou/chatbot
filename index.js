@@ -300,7 +300,9 @@ function handleMessage (sender_psid, received_message) {
             // }
             // callSendAPI (sender_psid, response);
             // add new item to list
-            addItem(received_message.text.substring(4));
+            console.log("========================== Adding messages ======================");
+            var msg = received_message.text.substring(4);
+            addItem(sender_psid, msg);
             break;
           case "/edit":
             // create a new list
@@ -356,10 +358,11 @@ function handlePostback(sender_psid, received_postback) {
       }
 
     });
-      
-  } else if (payload == 'ADD_ITEM') {
-    addButton(sender_psid);
   }
+      
+  // } else if (payload == 'ADD_ITEM') {
+  //   addButton(sender_psid);
+  // }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
 }
