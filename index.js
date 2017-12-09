@@ -304,15 +304,19 @@ function handlePostback(sender_psid, received_postback) {
 
   } else if (payload === 'GET_STARTED_PAYLOAD') {
     // Get user data from MongoDB by using callback:
-    getUserById (sender_psid, function(userInfo) {
-      console.log ("Got User Info: " + JSON.stringify(userInfo));
+    // getUserById (sender_psid, function(userInfo) {
+      getFBData (sender_psid, function(err, userInfo){
+        if (err) console.log ("Error getting user info: " + err);
+        else {
+        console.log ("Got User Info: " + JSON.stringify(userInfo));
       
-      response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
+        response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
 
       // Note here: be careful with the scope of response variable
-      callSendAPI(sender_psid, response);
-    }, function (err) {
-      console.log ("Error getting user info: " + err);
+        callSendAPI(sender_psid, response);
+      }
+    // }, function (err) {
+    //   console.log ("Error getting user info: " + err);
     });
       
   }
