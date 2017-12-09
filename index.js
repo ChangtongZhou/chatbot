@@ -310,7 +310,7 @@ function handlePostback(sender_psid, received_postback) {
         else {
         console.log ("Got User Info: " + JSON.stringify(userInfo));
       
-        response = {"text": `Hello, "${userInfo.firstName}"! Welcome to your to_do_list bot!!`};
+        response = {"text": `Hello, "${userInfo.first_name}"! Welcome to your to_do_list bot!!`};
 
       // Note here: be careful with the scope of response variable
         callSendAPI(sender_psid, response);
