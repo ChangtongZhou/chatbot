@@ -277,6 +277,7 @@ function handleMessage (sender_psid, received_message) {
         response = {
           "text": "Hello there! I am you To-Do-List agent. Please type operations like: add, show, edit, delete, to explore more about me!"
         }
+        callSendAPI (sender_psid, response);
       } else {
         // special messages/keywords to trigger the cards/functions
         switch (text) {
