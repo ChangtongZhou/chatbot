@@ -150,15 +150,15 @@ app.post('/webhook', (req, res) => {
 var mongoose = require ('mongoose');
 var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/bot_db'; // This is connected to AWS mongodb
 
-var db = mongoose.connect(uristring);
+// var db = mongoose.connect(uristring);
 
-// mongoose.connect(uristring, function (err, res) {
-//   if (err) {
-//     console.log ("ERROR connecting to: " + uristring + ". " + err);
-//   } else {
-//     console.log("Succeeded connected to: " + uristring);
-//   }
-// });
+mongoose.connect(uristring, function (err, res) {
+  if (err) {
+    console.log ("ERROR connecting to: " + uristring + ". " + err);
+  } else {
+    console.log("Succeeded connected to: " + uristring);
+  }
+});
 
 /* ----------  Create Mongoose Schemas ---------- */
 
