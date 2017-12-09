@@ -210,7 +210,7 @@ function getListInfo (fbId) {
       // need for loop here to go through items array:
       // callSendAPI (fbId, {"text": `Item: ${items.text} -> Priority: $(items.priority)`})
     }
-  }
+  })
 
 }
 
@@ -413,7 +413,7 @@ function addButton (sender_id) {
           {
             "type":"postback",
             "title":"Add items",
-            "payload"; "ADD_ITEM"
+            "payload": "ADD_ITEM"
           }
         ]}}
   }
