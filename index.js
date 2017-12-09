@@ -286,6 +286,7 @@ function handleMessage (sender_psid, received_message) {
             // add new item to list
             console.log("========================== Adding messages ======================");
             var msg = received_message.text.substring(4);
+            console.log("Potential adding item: " + msg);
             addItem(sender_psid, msg);
       }
       else {
@@ -294,11 +295,11 @@ function handleMessage (sender_psid, received_message) {
           case "to do list":
             sendGenericMessage(sender_psid);
             break;
-          case "/show":
+          case "show":
             // display list
             // use webview here!!
             //break;
-          case "/create":
+          case "create":
             // create a new list
             //break;
           case "add":
