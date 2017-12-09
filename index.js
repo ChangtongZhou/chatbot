@@ -279,22 +279,6 @@ function handleMessage (sender_psid, received_message) {
           
         }
 
-        // if (text == "to do list") {
-        //   sendGenericMessage(sender_psid);
-        // }
-        // if(text.substring(0, 4) == "/add") {
-        //   // add new item to list
-        // } else if(text.substring(0, 7) == "/create") {
-        //   // create a new list
-        // } else if(text.substring(0, 7) == "/delete") {
-        //   // delete current list
-        // } else if(text.substring(0, 5) == "/edit") {
-        //   // edit list item
-        // } else {
-        //   response = {
-        //     "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
-        //   }
-        // }
       }
     } else if (received_message.attachments) {
       var response = {"text": "Sorry, I don't understand your request. "};
@@ -373,21 +357,7 @@ function sendGenericMessage(sender_id) {
         }
       }
     }
-    request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:my_access},
-      method: 'POST',
-      json: {
-        recipient: {id:sender_id},
-        message: messageData,
-      }
-    }, function(error, response, body) {
-      if (error) {
-        console.log('Error sending messages: ', error)
-      } else if (response.body.error) {
-        console.log('Error: ', response.body.error)
-      }
-    })
+    callSendAPI(sender_id, messageData);
 }
 
 
