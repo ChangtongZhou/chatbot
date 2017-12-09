@@ -158,21 +158,7 @@ mongoose.connect(uristring, function (err, res) {
   }
 });
 
-/* ----------  Create Mongoose Schemas ---------- */
 
-// User Schema:
-// var UserSchema = new mongoose.Schema({
-//   fbId: {type: String, required: true},
-//   firstName: String,
-//   lastName: String,
-//   items: [{
-//     text: { type: String, trim: true },
-//       priority: { type: Number, min: 0 } 
-//     }]}, 
-//   {timestamps: true});
-
-// User model:
-//mongoose.model('User', UserSchema); // We are setting this Schema in our Models as 'User'
 var User = require("./models/to_do_list_db"); // We are retrieving this Schema from our Models, named 'User'
 
 /* ----------  Get User/sender data and save it on MongoDB  ---------- */
@@ -250,39 +236,71 @@ function handleMessage (sender_psid, received_message) {
   console.log ("handleMessage(" + sender_psid + ", " + JSON.stringify(received_message) + ")");
   let response;
 
-  // Checks if the message contains text
-  if (received_message.text) {
-    // Creates the payload for a basic text message, which
-    // will be added to the body of our request to the Send API
-    let text = received_message.text;
-    const greeting = firstEntity(received_message.nlp, 'greetings');
-    if (greeting && greeting.confidence > 0.8) {
-      response = {
-        "text": "Howdy!"
-      }
-    } else {
-      // special messages to trigger the cards
-      if (text == "To Do List") {
-        sendGenericMessage(sender_psid);
-      }
-      if(text.substring(0, 4) == "/add") {
-        // add new item to list
-      } else if(text.substring(0, 7) == "/create") {
-        // create a new list
-      } else if(text.substring(0, 7) == "/delete") {
-        // delete current list
-      } else if(text.substring(0, 5) == "/edit") {
-        // edit list item
-      } else {
+  // Checks if the message was sent via the Message Echo Callback
+  if (!received_message.is_echo) {
+    // Checks if the message contains text
+    if (received_message.text) {
+      // Creates the payload for a basic text message, which
+      // will be added to the body of our request to the Send API
+      let text = received_message.text.toLowerCase().trim();
+
+      const greeting = firstEntity(received_message.nlp, 'greetings');
+      if (greeting && greeting.confidence > 0.8) {
         response = {
-          "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+          "text": "Howdy!"
         }
+      } else {
+        // special messages/keywords to trigger the cards/functions
+        switch (text) {
+          case "to do list":
+            sendGenericMessage(sender_psid);
+            break;
+          case "/show":
+            // display list
+            //break;
+          case "/create":
+            // create a new list
+            //break;
+          case "/add":
+            // add new item to list
+            //break;
+          case "/edit":
+            // create a new list
+            //break;
+          case "/delete":
+            // create a new list
+            //break;
+          default:
+            response = {
+              "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+            }
+          
+        }
+
+        // if (text == "to do list") {
+        //   sendGenericMessage(sender_psid);
+        // }
+        // if(text.substring(0, 4) == "/add") {
+        //   // add new item to list
+        // } else if(text.substring(0, 7) == "/create") {
+        //   // create a new list
+        // } else if(text.substring(0, 7) == "/delete") {
+        //   // delete current list
+        // } else if(text.substring(0, 5) == "/edit") {
+        //   // edit list item
+        // } else {
+        //   response = {
+        //     "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+        //   }
+        // }
       }
+    } else if (received_message.attachments) {
+      response = {"text": "Sorry, I don't understand your request. "}
     }
+    
+    // Sends the response message
+    callSendAPI (sender_psid, response);
   }
-  
-  // Sends the response message
-  callSendAPI (sender_psid, response);
 }
 
 // handles messaging_postbakcs events like button triggers
