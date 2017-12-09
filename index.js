@@ -215,17 +215,32 @@ function getListInfo (fbId) {
 }
 
 /* ----------  Add Item in To-Do-List ---------- */
-function addItem (fbId, msg) {
-  var newItem = User(msg).save (function (err, data) {
-    if (err) console.log("new Item is not added");
-    else {
-      console.log("New item is added!");
-      console.log ("Checking what is added: " + JSON.stringify(data));
-    }
+// function addItem (fbId, msg) {
+//   var newItem = User(msg).save (function (err, data) {
+//     if (err) console.log("new Item is not added");
+//     else {
+//       console.log("New item is added!");
+//       console.log ("Checking what is added: " + JSON.stringify(data));
+//     }
     
-  })
-}
+//   })
+// }
 
+function addItem (fbId, msg) {
+  let user = {
+      fbId: fbId,
+      items: [
+          { text: msg}
+      ]
+
+    };
+
+    // User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
+    User.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
+      if (err) console.log (err);
+      else console.log('item saved ' + user);
+    });
+}
 
 // function getUserById (fbId, callback, error_callback) {
   
