@@ -149,33 +149,33 @@ app.post('/webhook', (req, res) => {
 // require Mongoose
 var mongoose = require ('mongoose');
 var uristring = 'mongodb://bot_acc:ilikeyou3707@35.160.59.136/bot_db'; // This is connected to AWS mongodb
-// testing:
-// console.log(mongoose.connection.readyState);
 
-mongoose.connect(uristring, function (err, res) {
-  if (err) {
-    console.log ("ERROR connecting to: " + uristring + ". " + err);
-  } else {
-    console.log("Succeeded connected to: " + uristring);
-  }
-});
+var db = mongoose.connect(uristring);
+
+// mongoose.connect(uristring, function (err, res) {
+//   if (err) {
+//     console.log ("ERROR connecting to: " + uristring + ". " + err);
+//   } else {
+//     console.log("Succeeded connected to: " + uristring);
+//   }
+// });
 
 /* ----------  Create Mongoose Schemas ---------- */
 
 // User Schema:
-var UserSchema = new mongoose.Schema({
-  fbId: {type: String, required: true},
-  firstName: String,
-  lastName: String,
-  items: [{
-    text: { type: String, trim: true },
-      priority: { type: Number, min: 0 } 
-    }]}, 
-  {timestamps: true});
+// var UserSchema = new mongoose.Schema({
+//   fbId: {type: String, required: true},
+//   firstName: String,
+//   lastName: String,
+//   items: [{
+//     text: { type: String, trim: true },
+//       priority: { type: Number, min: 0 } 
+//     }]}, 
+//   {timestamps: true});
 
 // User model:
-mongoose.model('User', UserSchema); // We are setting this Schema in our Models as 'User'
-var User = mongoose.model ('User'); // We are retrieving this Schema from our Models, named 'User'
+//mongoose.model('User', UserSchema); // We are setting this Schema in our Models as 'User'
+var User = require("./models/to_do_list_db"); // We are retrieving this Schema from our Models, named 'User'
 
 /* ----------  Get User/sender data and save it on MongoDB  ---------- */
 function saveUser (fbId, firstName, lastName) {
