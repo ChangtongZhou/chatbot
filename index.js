@@ -278,7 +278,17 @@ function handleMessage (sender_psid, received_message) {
           "text": "Hello there! I am you To-Do-List agent. Please type operations like: add, show, edit, delete, to explore more about me!"
         }
         callSendAPI (sender_psid, response);
-      } else {
+      } else if (text.substring(0, 4) == "/add") {
+            // var response = {
+            //   "text": "Please type the item you want to add into your To-Do-List!"
+            // }
+            // callSendAPI (sender_psid, response);
+            // add new item to list
+            console.log("========================== Adding messages ======================");
+            var msg = received_message.text.substring(4);
+            addItem(sender_psid, msg);
+      }
+      else {
         // special messages/keywords to trigger the cards/functions
         switch (text) {
           case "to do list":
@@ -294,20 +304,10 @@ function handleMessage (sender_psid, received_message) {
           case "add":
             addButton (sender_psid);
             break;
-          case text.substring(0, 4) == "/add":
-            // var response = {
-            //   "text": "Please type the item you want to add into your To-Do-List!"
-            // }
-            // callSendAPI (sender_psid, response);
-            // add new item to list
-            console.log("========================== Adding messages ======================");
-            var msg = received_message.text.substring(4);
-            addItem(sender_psid, msg);
-            break;
-          case "/edit":
+          case "edit":
             // create a new list
             //break;
-          case "/delete":
+          case "delete":
             // create a new list
             //break;
           default:
