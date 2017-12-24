@@ -93,7 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  console.log("================================= Test 1 ================================");
+  console.log("================================= Test 2 ================================");
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     addPersistentMenu();
@@ -237,6 +237,7 @@ class List {
       text: text,
       priority: priority
     };
+    console.log("what is your user: "+ JSON.stringify(this.user));
     this.user.items.push(list_item);
 
     this.prioritize();
