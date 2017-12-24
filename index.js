@@ -368,7 +368,7 @@ function firstEntity(nlp, name) {
 function handleMessage (sender_psid, received_message) {
   console.log ("handleMessage(" + sender_psid + ", " + JSON.stringify(received_message) + ")");
 
-  my_list = new List(sender_psid);
+  var my_list = new List(sender_psid);
   // let response;
 
   // Checks if the message was sent via the Message Echo Callback
