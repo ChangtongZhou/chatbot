@@ -93,7 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  console.log("================================= Test 3 ================================");
+  console.log("================================= Test 4 ================================");
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     addPersistentMenu();
@@ -238,6 +238,8 @@ class List {
   }
 
   get() {
+    console.log("checking this.userData" + this.userData);
+    console.log("checking this.userData.items" + this.userData.items);
     return this.userData.items;
   }
 
@@ -361,6 +363,7 @@ function handleMessage (sender_psid, received_message) {
       callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
     } else {
       var my_list = new List(userData);
+      console.log ("Checing my_list: " + my_list);
       console.log ("Checking to do list items: " + my_list.get());
       // Checks if the message was sent via the Message Echo Callback
       if (!received_message.is_echo) {
