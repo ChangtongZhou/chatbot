@@ -93,7 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  console.log("================================= Test 3 ================================");
+  console.log("================================= Test 2 ================================");
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     addPersistentMenu();
@@ -215,22 +215,8 @@ function getListInfo (fbId) {
 }
 
 class List {
-  constructor(fbId) {
-    var that = this;
-    this.fbId = fbId;
-    
-    User.findOne ({fbId: this.fbId}, function (err, userData) {
-      if (err) {
-        callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
-      } else {
-        that.user = userData;
-        console.log ("Here is your userData: " + JSON.stringify(userData));
-        console.log ("Here is your that.user: " + JSON.stringify(that.user));
-        // Send back to FB messenger platform:
-        // need for loop here to go through items array:
-        // callSendAPI (fbId, {"text": `Item: ${items.text} -> Priority: $(items.priority)`})
-      }
-    })
+  constructor(userData) {
+    this.userData = userData;
   }
 
   add(text, priority) {
@@ -238,15 +224,14 @@ class List {
       text: text,
       priority: priority
     };
-    console.log("what is your user: "+ JSON.stringify(this.user));
-    this.user.items.push(list_item);
+    this.userData.items.push(list_item);
 
     this.prioritize();
     this.update_db();
   }
 
   edit(idx, text) {
-    list[idx].text = text;
+    this.userData.items[idx].text = text;
 
     this.prioritize();
     this.update_db();
@@ -318,7 +303,7 @@ class List {
   //   }
     
   // })
-// }
+//}
 
 //function updateItem (fbId, msg) {
 //  
@@ -371,76 +356,85 @@ function firstEntity(nlp, name) {
 function handleMessage (sender_psid, received_message) {
   console.log ("handleMessage(" + sender_psid + ", " + JSON.stringify(received_message) + ")");
 
-  var my_list = new List(sender_psid);
+  User.findOne ({fbId: this.fbId}, function (err, userData) {
+    if (err) {
+      callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
+    } else {
+      var my_list = new List(userData);
+      console.log ("Checking to do list items: " + my_list.get());
+      // Checks if the message was sent via the Message Echo Callback
+      if (!received_message.is_echo) {
+        // Checks if the message contains text
+        if (received_message.text) {
+          // Creates the payload for a basic text message, which
+          // will be added to the body of our request to the Send API
+          let text = received_message.text.toLowerCase().trim();
+
+          const greeting = firstEntity(received_message.nlp, 'greetings');
+          if (greeting && greeting.confidence > 0.8) {
+            response = {
+              "text": "Hello there! I am you To-Do-List agent. Please type operations like: add, show, edit, delete, to explore more about me!"
+            }
+            callSendAPI (sender_psid, response);
+          } else if (text.substring(0, 4) == "/add") {
+                // var response = {
+                //   "text": "Please type the item you want to add into your To-Do-List!"
+                // }
+                // callSendAPI (sender_psid, response);
+                // add new item to list
+                console.log("========================== Adding messages ======================");
+                var msg = received_message.text.substring(4);
+                console.log("Potential adding item: " + msg);
+                my_list.add(msg);
+                response = {
+                 "text": "You are trying to add items right?"
+                }
+                callSendAPI (sender_psid, response);
+          } else {
+            // special messages/keywords to trigger the cards/functions
+            switch (text) {
+              case "to do list":
+                sendGenericMessage(sender_psid);
+                break;
+              case "show":
+                // display list
+                // use webview here!!
+                //break;
+              case "create":
+                // create a new list
+                //break;
+              case "add":
+                addButton (sender_psid);
+                break;
+              case "edit":
+                // create a new list
+                //break;
+              case "delete":
+                // create a new list
+                //break;
+              default:
+                var response = {
+                  "text": `You want to add the following item : "${received_message.text}". Now send me an attachment!`
+                }
+                // Sends the response message
+                callSendAPI (sender_psid, response);
+              
+            }
+
+          }
+        } else if (received_message.attachments) {
+          var response = {"text": "Sorry, I don't understand your request. "};
+          callSendAPI (sender_psid, response);
+        }
+        
+      }
+          // Send back to FB messenger platform:
+          // need for loop here to go through items array:
+          // callSendAPI (fbId, {"text": `Item: ${items.text} -> Priority: $(items.priority)`})
+        }
+      })
   // let response;
 
-  // Checks if the message was sent via the Message Echo Callback
-  if (!received_message.is_echo) {
-    // Checks if the message contains text
-    if (received_message.text) {
-      // Creates the payload for a basic text message, which
-      // will be added to the body of our request to the Send API
-      let text = received_message.text.toLowerCase().trim();
-
-      const greeting = firstEntity(received_message.nlp, 'greetings');
-      if (greeting && greeting.confidence > 0.8) {
-        response = {
-          "text": "Hello there! I am you To-Do-List agent. Please type operations like: add, show, edit, delete, to explore more about me!"
-        }
-        callSendAPI (sender_psid, response);
-      } else if (text.substring(0, 4) == "/add") {
-            // var response = {
-            //   "text": "Please type the item you want to add into your To-Do-List!"
-            // }
-            // callSendAPI (sender_psid, response);
-            // add new item to list
-            console.log("========================== Adding messages ======================");
-            var msg = received_message.text.substring(4);
-            console.log("Potential adding item: " + msg);
-            my_list.add(msg);
-            response = {
-             "text": "You are trying to add items right?"
-            }
-            callSendAPI (sender_psid, response);
-      }
-      else {
-        // special messages/keywords to trigger the cards/functions
-        switch (text) {
-          case "to do list":
-            sendGenericMessage(sender_psid);
-            break;
-          case "show":
-            // display list
-            // use webview here!!
-            //break;
-          case "create":
-            // create a new list
-            //break;
-          case "add":
-            addButton (sender_psid);
-            break;
-          case "edit":
-            // create a new list
-            //break;
-          case "delete":
-            // create a new list
-            //break;
-          default:
-            var response = {
-              "text": `You want to add the following item : "${received_message.text}". Now send me an attachment!`
-            }
-            // Sends the response message
-            callSendAPI (sender_psid, response);
-          
-        }
-
-      }
-    } else if (received_message.attachments) {
-      var response = {"text": "Sorry, I don't understand your request. "};
-      callSendAPI (sender_psid, response);
-    }
-    
-  }
 }
 
 // handles messaging_postbakcs events like button triggers
