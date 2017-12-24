@@ -356,7 +356,7 @@ function firstEntity(nlp, name) {
 function handleMessage (sender_psid, received_message) {
   console.log ("handleMessage(" + sender_psid + ", " + JSON.stringify(received_message) + ")");
 
-  User.findOne ({fbId: this.fbId}, function (err, userData) {
+  User.findOne ({fbId: sender_psid}, function (err, userData) {
     if (err) {
       callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
     } else {
