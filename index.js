@@ -93,7 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  console.log("================================= Test 2 ================================");
+  console.log("================================= Test 3 ================================");
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     addPersistentMenu();
@@ -356,7 +356,7 @@ function firstEntity(nlp, name) {
 function handleMessage (sender_psid, received_message) {
   console.log ("handleMessage(" + sender_psid + ", " + JSON.stringify(received_message) + ")");
 
-  User.findOne ({fbId: sender_psid}, function (err, userData) {
+  User.findOne ({fbId: sender_psid}, {upsert: true}, function (err, userData) {
     if (err) {
       callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
     } else {
@@ -387,7 +387,7 @@ function handleMessage (sender_psid, received_message) {
                 console.log("Potential adding item: " + msg);
                 my_list.add(msg);
                 response = {
-                 "text": "You are trying to add items right?"
+                 "text": "Congrats, you just added 1 item!"
                 }
                 callSendAPI (sender_psid, response);
           } else {
