@@ -93,7 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  console.log("================================= Test 2 ================================");
+  console.log("================================= Test 3 ================================");
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     addPersistentMenu();
@@ -225,6 +225,7 @@ class List {
       } else {
         that.user = userData;
         console.log ("Here is your userData: " + JSON.stringify(userData));
+        console.log ("Here is your that.user: " + JSON.stringify(that.user));
         // Send back to FB messenger platform:
         // need for loop here to go through items array:
         // callSendAPI (fbId, {"text": `Item: ${items.text} -> Priority: $(items.priority)`})
