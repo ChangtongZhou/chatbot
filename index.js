@@ -164,28 +164,20 @@ var User = require("./models/to_do_list_db"); // We are retrieving this Schema f
 /* ----------  Get User/sender data and save it on MongoDB  ---------- */
 function saveUser (fbId, firstName, lastName) {
   getFBData (fbId, function (err, userData) {
-    // let user = {
-    //   fbId: fbId,
-    //   firstName: firstName || userData.first_name,
-    //   lastName: lastName || userData.last_name
-    // };
-
-    User.find({fbId: fbId}, function(err, user) {
-      console.log("Got user: " + JSON.stringify(user));
-      user.firstName = firstName;
-      user.lastName = lastName;
-
-      user.save(function(err, updatedUser) {
-        if (err) console.log(err);
-        else console.log("Updated user: " + JSON.stringify(user));
-      });
-    });
+    let user = {
+      fbId: fbId,
+      firstName: firstName || userData.first_name,
+      lastName: lastName || userData.last_name
+    };
 
     // User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
-    // User.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
-    //   if (err) console.log (err);
-    //   else console.log('user saved: ' + JSON.stringify(user));
-    // });
+    User.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, updatedUser) {
+      if (err) {
+        console.log (err);
+      } else {
+        console.log('User saved: ' + JSON.stringify(updatedUser));
+      }
+    });
   });
 }
 
