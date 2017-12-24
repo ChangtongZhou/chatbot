@@ -216,13 +216,14 @@ function getListInfo (fbId) {
 
 class List {
   constructor(fbId) {
+    var that = this;
     this.fbId = fbId;
     
     User.findOne ({fbId: this.fbId}, function (err, userData) {
       if (err) {
         callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
       } else {
-        this.user = userData;
+        that.user = userData;
         console.log ("Here is your userData: " + JSON.stringify(userData));
         // Send back to FB messenger platform:
         // need for loop here to go through items array:
