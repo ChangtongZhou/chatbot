@@ -173,7 +173,7 @@ function saveUser (fbId, firstName, lastName) {
     // User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
     User.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
       if (err) console.log (err);
-      else console.log('user saved ' + user.firstName);
+      else console.log('user saved: ' + JSON.stringify(user));
     });
   });
 }
