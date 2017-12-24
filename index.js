@@ -214,33 +214,123 @@ function getListInfo (fbId) {
 
 }
 
-/* ----------  Add Item in To-Do-List ---------- */
-// function addItem (fbId, msg) {
-//   var newItem = User(msg).save (function (err, data) {
-//     if (err) console.log("new Item is not added");
-//     else {
-//       console.log("New item is added!");
-//       console.log ("Checking what is added: " + JSON.stringify(data));
-//     }
+class List {
+  constructor(fbId) {
+    this.fbId = fbId;
     
-//   })
-// }
+    User.findOne ({fbId: this.fbId}, function (err, userData) {
+      if (err) {
+        callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
+      } else {
+        this.user = userData;
+        console.log ("Checking to do list items: " + JSON.stringify(items));
+        // Send back to FB messenger platform:
+        // need for loop here to go through items array:
+        // callSendAPI (fbId, {"text": `Item: ${items.text} -> Priority: $(items.priority)`})
+      }
+    })
+  }
 
-function addItem (fbId, msg) {
-  let user = {
-      fbId: fbId,
-      items: [
-          { text: msg}
-      ]
-
+  add(text, priority) {
+    var list_item = {
+      text: text,
+      priority: priority
     };
+    this.user.items.push(list_item);
 
-    // User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
-    User.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
+    this.prioritize();
+    this.update_db();
+  }
+
+  edit(idx, text) {
+    list[idx].text = text;
+
+    this.prioritize();
+    this.update_db();
+  }
+
+  get() {
+    return this.userData.items;
+  }
+
+  remove(idx) {
+    if(this.userData.items.indexOf(idx) > -1) {
+      this.userData.items.splice(idx, 1);
+
+      this.prioritize();
+      this.update_db();
+    }
+  }
+
+  prioritize() {
+    this.userData.items.sort(function (a, b) {
+      return a.priority < b.priority;
+    });
+  }
+
+  update_db() {
+    User.findOneAndUpdate({fbId: this.fbId}, this.userData, {upsert: true}, function (err, user) {
       if (err) console.log (err);
       else console.log('item saved ' + user);
     });
+  }
 }
+
+/* ----------  Add Item in To-Do-List ---------- */
+//function addItem (fbId, msg) {
+  // User.update({
+  //   {fbId: fbId},
+  //   {$push: {items: {"text": msg}}}
+  // }
+    // Get last character of the msg
+  //    var text = msg.subString(0, msg.length);
+  //    var priority = msg.slice(-1);
+  //
+  //    var item = {text: text, priority: priority};
+  //    User.update(
+  //    {
+  //      fbId: fbId
+  //    },
+  //    {
+  //      { $push: { items: item } }
+  //    });
+    // let user = {
+    //   fbId: fbId,
+    //   { $push: { items: item } }
+    // };
+    // User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
+    // User.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
+    //   if (err) console.log (err);
+    //   else 
+    //     console.log('item saved ' + user);
+      
+    // });
+  
+
+  // var newItem = User(msg).save (function (err, data) {
+  //   if (err) console.log("new Item is not added");
+  //   else {
+  //     console.log("New item is added!");
+  //     console.log ("Checking what is added: " + JSON.stringify(data));
+  //   }
+    
+  // })
+// }
+
+//function updateItem (fbId, msg) {
+//  
+//  let user = {
+//      fbId: fbId,
+//      items: [
+//          { text: msg}
+//      ]
+//    };
+//    // User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
+//    User.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
+//      if (err) console.log (err);
+//      else console.log('item saved ' + user);
+//    });
+//}
 
 // function getUserById (fbId, callback, error_callback) {
   
@@ -277,6 +367,8 @@ function firstEntity(nlp, name) {
 // handles messages events
 function handleMessage (sender_psid, received_message) {
   console.log ("handleMessage(" + sender_psid + ", " + JSON.stringify(received_message) + ")");
+
+  my_list = new List(sender_psid);
   // let response;
 
   // Checks if the message was sent via the Message Echo Callback
@@ -302,7 +394,7 @@ function handleMessage (sender_psid, received_message) {
             console.log("========================== Adding messages ======================");
             var msg = received_message.text.substring(4);
             console.log("Potential adding item: " + msg);
-            addItem(sender_psid, msg);
+            my_list.add(msg);
             response = {
              "text": "You are trying to add items right?"
             }
