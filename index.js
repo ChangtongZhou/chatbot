@@ -171,6 +171,7 @@ function saveUser (fbId, firstName, lastName) {
     // };
 
     User.find({fbId: fbId}, function(err, user) {
+      console.log("Got user: " + JSON.stringify(user));
       user.firstName = firstName;
       user.lastName = lastName;
 
