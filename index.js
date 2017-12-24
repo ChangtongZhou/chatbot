@@ -287,7 +287,8 @@ function handleMessage (sender_psid, received_message) {
     if (err) {
       callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
     } else {
-      console.log ("Checing userData in handleMessage: " + userData);
+      console.log ("Checing sender_psid in handleMessage: " + sender_psid);
+      // console.log ("Checing userData in handleMessage: " + userData);
       var my_list = new List(userData);
       console.log ("Checing my_list: " + my_list);
       console.log ("Checking to do list items: " + my_list.get());
