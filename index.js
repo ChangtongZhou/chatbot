@@ -266,81 +266,6 @@ class List {
   }
 }
 
-/* ----------  Add Item in To-Do-List ---------- */
-//function addItem (fbId, msg) {
-  // User.update({
-  //   {fbId: fbId},
-  //   {$push: {items: {"text": msg}}}
-  // }
-    // Get last character of the msg
-  //    var text = msg.subString(0, msg.length);
-  //    var priority = msg.slice(-1);
-  //
-  //    var item = {text: text, priority: priority};
-  //    User.update(
-  //    {
-  //      fbId: fbId
-  //    },
-  //    {
-  //      { $push: { items: item } }
-  //    });
-    // let user = {
-    //   fbId: fbId,
-    //   { $push: { items: item } }
-    // };
-    // User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
-    // User.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
-    //   if (err) console.log (err);
-    //   else 
-    //     console.log('item saved ' + user);
-      
-    // });
-  
-
-  // var newItem = User(msg).save (function (err, data) {
-  //   if (err) console.log("new Item is not added");
-  //   else {
-  //     console.log("New item is added!");
-  //     console.log ("Checking what is added: " + JSON.stringify(data));
-  //   }
-    
-  // })
-//}
-
-//function updateItem (fbId, msg) {
-//  
-//  let user = {
-//      fbId: fbId,
-//      items: [
-//          { text: msg}
-//      ]
-//    };
-//    // User.collection.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
-//    User.findOneAndUpdate({fbId: fbId}, user, {upsert: true}, function (err, user) {
-//      if (err) console.log (err);
-//      else console.log('item saved ' + user);
-//    });
-//}
-
-// function getUserById (fbId, callback, error_callback) {
-  
-//   // var result = null;
-//   User.findOne ({fbId: fbId}, function (err, userObj) {
-//     if (err) {
-//       console.log ('Cannot get user info ' + err);
-//     } else if (userObj) {
-//       // result = userObj;
-//       console.log ('Check if the specific user exists. User name is ' + userObj.firstName);
-//       console.log ('Check the userObj, the userObj is: ' + userObj);
-//       // callback(userObj);
-//       return callback(userObj);
-//     } else {
-//       return callback("User not found");
-//     }
-//   });
-// }
-
-
 
 
 /* ----------  Webview API  ---------- */
@@ -362,6 +287,7 @@ function handleMessage (sender_psid, received_message) {
     if (err) {
       callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
     } else {
+      console.log ("Checing userData in handleMessage: " + userData);
       var my_list = new List(userData);
       console.log ("Checing my_list: " + my_list);
       console.log ("Checking to do list items: " + my_list.get());
