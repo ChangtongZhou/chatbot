@@ -93,7 +93,7 @@ app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
-  console.log("================================= Test 4 ================================");
+  console.log("================================= Test 5 ================================");
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
     addPersistentMenu();
@@ -109,14 +109,16 @@ app.post('/webhook', (req, res) => {
 
       entry.messaging.forEach(function (webhookEvent) {
         let sender_psid = webhookEvent.sender.id;
+        let recipient_id = webhookEvent.recipient.id;
         console.log ('Sender PSID is: ' + sender_psid);
+        console.log ('Recipient PSID is: ' + recipient_id);
         console.log("================================= Start saving user info into DB ================================");
         // Save User to MongoDB
         saveUser (sender_psid);
         // Check which event 
         if (webhookEvent.message && webhookEvent.message.text) {
           console.log("================================= Handle Messages ================================");
-          handleMessage(sender_psid, webhookEvent.message);
+          handleMessage(sender_psid, recipient_id, webhookEvent.message);
         } 
         else if (webhookEvent.postback) {
           console.log("================================= Handle Postbacks ================================");
@@ -283,14 +285,14 @@ function firstEntity(nlp, name) {
 }
 
 // handles messages events
-function handleMessage (sender_psid, received_message) {
-  console.log ("handleMessage(" + sender_psid + ", " + JSON.stringify(received_message) + ")");
-
-  User.findOne ({fbId: sender_psid}, function (err, userData) {
+function handleMessage (sender_psid, recipient_id, received_message) {
+  console.log ("handleMessage( sender psid: " + sender_psid + ", " + JSON.stringify(received_message) + ")");
+  console.log ("handleMessage( recipient id: " + recipient_id + ", " + JSON.stringify(received_message) + ")");
+  User.findOne ({fbId: recipient_id}, function (err, userData) {
     if (err) {
       callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
     } else {
-      console.log ("Checing sender_psid in handleMessage: " + sender_psid);
+      console.log ("Checking sender_psid in handleMessage: " + sender_psid);
       // console.log ("Checing userData in handleMessage: " + userData);
       var my_list = new List(userData);
       console.log ("Checing my_list: " + my_list);
