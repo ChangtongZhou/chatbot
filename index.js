@@ -223,7 +223,7 @@ class List {
         callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
       } else {
         this.user = userData;
-        console.log ("Checking to do list items: " + JSON.stringify(items));
+        console.log ("Here is your userData: " + JSON.stringify(userData));
         // Send back to FB messenger platform:
         // need for loop here to go through items array:
         // callSendAPI (fbId, {"text": `Item: ${items.text} -> Priority: $(items.priority)`})
