@@ -110,7 +110,7 @@ app.post('/webhook', (req, res) => {
 
       entry.messaging.forEach(function (webhookEvent) {
         let sender_psid = webhookEvent.sender.id;
-        // let recipient_id = webhookEvent.recipient.id;
+        let recipient_id = webhookEvent.recipient.id;
         console.log ('Sender PSID is: ' + sender_psid);
         // console.log ('Recipient PSID is: ' + recipient_id);
         console.log("================================= Start saving user info into DB ================================");
