@@ -10,7 +10,8 @@
 const 
   express = require('express'),
   bodyParser = require('body-parser'),
-  request = require('request');
+  request = require('request'),
+  CHATBOT_ID = 134479210603866;
 
 /* ===== ROUTES =============================================================== */
 //const router = require('./routes/routes.js');
@@ -118,7 +119,11 @@ app.post('/webhook', (req, res) => {
         // Check which event 
         if (webhookEvent.message && webhookEvent.message.text) {
           console.log("================================= Handle Messages ================================");
-          handleMessage(sender_psid, recipient_id, webhookEvent.message);
+          if(sender_psid == CHATBOT_ID) {
+            console.log("From Chatbot to " + recipient_id);
+          } else {
+            handleMessage(sender_psid, recipient_id, webhookEvent.message);
+          }
         } 
         else if (webhookEvent.postback) {
           console.log("================================= Handle Postbacks ================================");
