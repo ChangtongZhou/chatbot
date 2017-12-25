@@ -110,9 +110,9 @@ app.post('/webhook', (req, res) => {
 
       entry.messaging.forEach(function (webhookEvent) {
         let sender_psid = webhookEvent.sender.id;
-        let recipient_id = webhookEvent.recipient.id;
+        // let recipient_id = webhookEvent.recipient.id;
         console.log ('Sender PSID is: ' + sender_psid);
-        console.log ('Recipient PSID is: ' + recipient_id);
+        // console.log ('Recipient PSID is: ' + recipient_id);
         console.log("================================= Start saving user info into DB ================================");
         // Save User to MongoDB
         saveUser (sender_psid);
@@ -122,7 +122,7 @@ app.post('/webhook', (req, res) => {
           if(sender_psid == CHATBOT_ID) {
             console.log("From Chatbot to " + recipient_id);
           } else {
-            handleMessage(sender_psid, recipient_id, webhookEvent.message);
+            handleMessage(sender_psid, webhookEvent.message);
           }
         } 
         else if (webhookEvent.postback) {
@@ -290,10 +290,10 @@ function firstEntity(nlp, name) {
 }
 
 // handles messages events
-function handleMessage (sender_psid, recipient_id, received_message) {
+function handleMessage (sender_psid, received_message) {
   console.log ("handleMessage( sender psid: " + sender_psid + ", " + JSON.stringify(received_message) + ")");
-  console.log ("handleMessage( recipient id: " + recipient_id + ", " + JSON.stringify(received_message) + ")");
-  User.findOne ({fbId: recipient_id}, function (err, userData) {
+  // console.log ("handleMessage( recipient id: " + recipient_id + ", " + JSON.stringify(received_message) + ")");
+  User.findOne ({fbId: sender_psid}, function (err, userData) {
     if (err) {
       callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
     } else {
