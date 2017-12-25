@@ -330,6 +330,11 @@ function handleMessage (sender_psid, recipient_id, received_message) {
                  "text": "Congrats, you just added 1 item!"
                 }
                 callSendAPI (sender_psid, response);
+          } else if (text.substring(0, 5) == "/show") {
+            response = {
+              "text": JSON.stringify(my_list.get());
+            }
+            callSendAPI(sender_psid, response);
           } else {
             // special messages/keywords to trigger the cards/functions
             switch (text) {
