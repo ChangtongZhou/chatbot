@@ -269,7 +269,7 @@ class List {
   }
 
   update_db() {
-    User.findOneAndUpdate({fbId: this.fbId}, this.userData, {upsert: true}, function (err, user) {
+    User.findOneAndUpdate({fbId: this.userData.fbId}, this.userData, {upsert: true}, function (err, user) {
       if (err) console.log (err);
       else console.log('item saved ' + user);
     });
