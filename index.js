@@ -262,7 +262,8 @@ class List {
     }
 
     remove(idx) {
-        if (this.userData.items.indexOf(idx) > -1) {
+        // if (this.userData.items.indexOf(idx) > -1) {
+        if (idx > -1) {
 
             this.userData.items.splice(idx, 1);
             console.log("After removing: " + this.userData.items);
@@ -362,15 +363,15 @@ function handleMessage(sender_psid, received_message) {
                     } else if (text.substring(0, 7) == "/remove") {
                         var msg = received_message.text.substring(7);
                         console.log("REMOVE: msg " + msg);
-                        if (isNaN(msg)) {
+                        if (isNaN(msg) && msg == "") {
                             response = {
                                 "text": "Please indicate the index of the item that you want to remove (number only)."
                             }
                             // removal_time += 1;
                             callSendAPI(sender_psid, response);
-                        } else if (!isNaN(msg) && msg != "") {
+                        } else if (!isNaN(msg)) {
                             // var index = received_message.text;
-                            my_list.remove(msg - 1);
+                            my_list.remove(msg);
                             var list = my_list.get();
                             response = {
                                 "text": "Congrats! You just deleted 1 item! Here is your updated list: \n" + list.map((item, idx) => {
