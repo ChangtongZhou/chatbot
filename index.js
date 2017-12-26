@@ -329,6 +329,7 @@ function handleMessage (sender_psid, received_message) {
                 callSendAPI (sender_psid, response);
           } else if (text.substring(0, 5) == "/show") {
             var item = my_list.get().text;
+            console.log("show the items: " + item);
             // "text": JSON.stringify(my_list.get())
             response = {
               "text": item
