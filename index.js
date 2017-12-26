@@ -323,16 +323,18 @@ function handleMessage (sender_psid, received_message) {
                 var msg = received_message.text.substring(4);
                 console.log("Potential adding item: " + msg);
                 my_list.add(msg);
-                response = {
-                 "text": "Congrats, you just added 1 item!"
-                }
-                callSendAPI (sender_psid, response);
-                // Show the list after adding:
                 var list = my_list.get();
                 response = {
-                  "text": list.map((item, idx) => { return (idx + 1) + ": " + item.text }).join("\n")
+                 "text": "Congrats, you just added 1 item! Here is your list: \n" + list.map((item, idx) => { return (idx + 1) + ": " + item.text }).join("\n")
                 }
-                callSendAPI(sender_psid, response);
+                
+                callSendAPI (sender_psid, response);
+                // Show the list after adding:
+                // var list = my_list.get();
+                // response = {
+                //   "text": list.map((item, idx) => { return (idx + 1) + ": " + item.text }).join("\n")
+                // }
+                // callSendAPI(sender_psid, response);
           } else if (text.substring(0, 5) == "/show") {
             var list = my_list.get();
             response = {
