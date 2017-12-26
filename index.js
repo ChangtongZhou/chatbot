@@ -297,11 +297,7 @@ function handleMessage (sender_psid, received_message) {
     if (err) {
       callSendAPI (fbId, {text: "Something went wrong. Please try again!"});
     } else {
-      console.log ("Checking sender_psid in handleMessage: " + sender_psid);
-      // console.log ("Checing userData in handleMessage: " + userData);
       var my_list = new List(userData);
-      console.log ("Checing my_list: " + my_list);
-      console.log ("Checking to do list items: " + my_list.get());
       // Checks if the message was sent via the Message Echo Callback
       if (!received_message.is_echo) {
         // Checks if the message contains text
@@ -311,6 +307,7 @@ function handleMessage (sender_psid, received_message) {
           let text = received_message.text.toLowerCase().trim();
 
           const greeting = firstEntity(received_message.nlp, 'greetings');
+
           if (greeting && greeting.confidence > 0.8) {
             response = {
               "text": "Hello there! I am you To-Do-List agent. Please type operations like: add, show, edit, delete, to explore more about me!"
@@ -331,8 +328,10 @@ function handleMessage (sender_psid, received_message) {
                 }
                 callSendAPI (sender_psid, response);
           } else if (text.substring(0, 5) == "/show") {
+            var item = my_list.get().text;
+            // "text": JSON.stringify(my_list.get())
             response = {
-              "text": JSON.stringify(my_list.get())
+              "text": item
             }
             callSendAPI(sender_psid, response);
           } else {
