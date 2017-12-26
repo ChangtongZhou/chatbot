@@ -369,9 +369,9 @@ function handleMessage(sender_psid, received_message) {
                             }
                             // removal_time += 1;
                             callSendAPI(sender_psid, response);
-                        } else if (!isNaN(msg)) {
+                        } else if (msg != "" && !isNaN(msg) ) {
                             // var index = received_message.text;
-                            my_list.remove(msg);
+                            my_list.remove(msg - 1);
                             var list = my_list.get();
                             response = {
                                 "text": "Congrats! You just deleted 1 item! Here is your updated list: \n" + list.map((item, idx) => {
