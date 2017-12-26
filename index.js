@@ -328,8 +328,12 @@ function handleMessage (sender_psid, received_message) {
                 }
                 callSendAPI (sender_psid, response);
           } else if (text.substring(0, 5) == "/show") {
-            var item = my_list.get();
-            console.log("show the items: " + item);
+            var list = my_list.get();
+            for (var i in list) {
+              var item = list[i].text;
+              console.log("show the items: " + item);
+            }
+            // console.log("show the items: " + item);
             // "text": JSON.stringify(my_list.get())
             response = {
               "text": item
