@@ -363,7 +363,7 @@ function handleMessage(sender_psid, received_message) {
                     } else if (text.substring(0, 7) == "/remove") {
                         var remove_idx = parseInt(text.replace("/remove", ""));
                         var list = my_list.get();
-                        if(!list[remove_idx]) {
+                        if(!isNaN(remove_idx) && !list[remove_idx]) {
                             response = {
                                 "text": "The specified index is out of the list boundaries, please input a new one."
                             }
