@@ -327,14 +327,14 @@ function handleMessage (sender_psid, received_message) {
                  "text": "Congrats, you just added 1 item!"
                 }
                 callSendAPI (sender_psid, response);
+                // Show the list after adding:
+                var list = my_list.get();
+                response = {
+                  "text": list.map((item, idx) => { return (idx + 1) + ": " + item.text }).join("\n")
+                }
+                callSendAPI(sender_psid, response);
           } else if (text.substring(0, 5) == "/show") {
             var list = my_list.get();
-            // for (var i in list) {
-            //   var item = list[i].text;
-            //   console.log("show the items: " + item);
-            // }
-            // console.log("show the items: " + item);
-            // "text": JSON.stringify(my_list.get())
             response = {
               "text": list.map((item, idx) => { return (idx + 1) + ": " + item.text }).join("\n")
             }
