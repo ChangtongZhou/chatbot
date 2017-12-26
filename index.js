@@ -361,17 +361,10 @@ function handleMessage(sender_psid, received_message) {
                         }
                         callSendAPI(sender_psid, response);
                     } else if (text.substring(0, 7) == "/remove") {
-                        var msg = received_message.text.substring(7);
-                        console.log("REMOVE: msg " + msg);
-                        if (isNaN(msg) && msg == "") {
-                            response = {
-                                "text": "Please indicate the index of the item that you want to remove (number only)."
-                            }
-                            // removal_time += 1;
-                            callSendAPI(sender_psid, response);
-                        } else if (msg != "" && !isNaN(msg) ) {
+                        var remove_idx = parseInt(text.replace("/remove", ""));
+                        if(!isNaN(remove_idx)) {
                             // var index = received_message.text;
-                            my_list.remove(msg - 1);
+                            my_list.remove(remove_idx - 1);
                             var list = my_list.get();
                             response = {
                                 "text": "Congrats! You just deleted 1 item! Here is your updated list: \n" + list.map((item, idx) => {
@@ -379,6 +372,12 @@ function handleMessage(sender_psid, received_message) {
                                 }).join("\n")
                             }
                             // removal_time = 0;
+                            callSendAPI(sender_psid, response);
+                        } else {
+                            response = {
+                                "text": "Please indicate the index of the item that you want to remove (number only)."
+                            }
+                            // removal_time += 1;
                             callSendAPI(sender_psid, response);
                         }
                     } else {
