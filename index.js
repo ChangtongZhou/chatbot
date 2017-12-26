@@ -359,20 +359,22 @@ function handleMessage(sender_psid, received_message) {
                         }
                         callSendAPI(sender_psid, response);
                     } else if (text.substring(0, 7) == "/remove") {
-                        if (removal_time == 0) {
+                        var msg = received_message.text.substring(7);
+                        if (isNaN(msg)) {
                             response = {
-                                "text": "Please indicate the index of the item that you want to remove"
+                                "text": "Please indicate the index of the item that you want to remove (number only)."
                             }
-                            removal_time += 1;
-                        } else if (removal_time > 0) {
-                            var index = received_message.text;
-                            my_list.remove(index);
+                            // removal_time += 1;
+                            callSendAPI(sender_psid, response);
+                        } else if (!isNaN(msg)) {
+                            // var index = received_message.text;
+                            my_list.remove(msg);
                             response = {
                                 "text": "Congrats! You just deleted 1 item! Here is your updated list: \n" + list.map((item, idx) => {
                                     return (idx + 1) + ": " + item.text
                                 }).join("\n")
                             }
-                            removal_time = 0;
+                            // removal_time = 0;
                             callSendAPI(sender_psid, response);
                         }
                     } else {
