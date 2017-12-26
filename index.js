@@ -263,8 +263,9 @@ class List {
 
     remove(idx) {
         if (this.userData.items.indexOf(idx) > -1) {
-            this.userData.items.splice(idx, 1);
 
+            this.userData.items.splice(idx, 1);
+            console.log("After removing: " + this.userData.items);
             this.prioritize();
             this.update_db();
         }
@@ -367,9 +368,9 @@ function handleMessage(sender_psid, received_message) {
                             }
                             // removal_time += 1;
                             callSendAPI(sender_psid, response);
-                        } else if (!isNaN(msg)) {
+                        } else if (!isNaN(msg) && msg != "") {
                             // var index = received_message.text;
-                            my_list.remove(msg);
+                            my_list.remove(msg - 1);
                             var list = my_list.get();
                             response = {
                                 "text": "Congrats! You just deleted 1 item! Here is your updated list: \n" + list.map((item, idx) => {
