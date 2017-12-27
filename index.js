@@ -367,7 +367,7 @@ function handleMessage(sender_psid, received_message) {
                         }
                         callSendAPI(sender_psid, response);
                     } else if (text.substring(0, 7) == "/remove") {
-                        var remove_idx = parseInt(text.replace("/remove", ""));
+                        var remove_idx = parseInt(text.replace("/remove", "")) - 1;
                         var list = my_list.get();
                         if(!isNaN(remove_idx) && !list[remove_idx]) {
                             response = {
@@ -377,7 +377,7 @@ function handleMessage(sender_psid, received_message) {
                         }
                         else if(!isNaN(remove_idx)) {
                             // var index = received_message.text;
-                            my_list.remove(remove_idx - 1);
+                            my_list.remove(remove_idx);
                             list = my_list.get();
                             response = {
                                 "text": "Congrats! You just deleted 1 item! Here is your updated list: \n" + list.map((item, idx) => {
@@ -394,17 +394,17 @@ function handleMessage(sender_psid, received_message) {
                             callSendAPI(sender_psid, response);
                         }
                     } else if (text.substring(0, 5) == "/edit") {
+                      // separate /edit with the rest of text
                       var edit_txt = text.replace("/edit", "");
-                      console.log("edit_txt is: " + edit_txt);
+                      // trim the begining and end spaces of the text
                       var trimed_txt = edit_txt.trim();
-                      console.log("trimed_txt is: " + edit_txt);
+                      // split the number and the other characters in the text and store into an array
                       var splited_txt = naturalSplitMapFilterNumber(trimed_txt);
-                      console.log("splited_txt is: " + splited_txt);
+                      // get the number
                       var edit_idx = splited_txt[0] - 1;
+                      // get the text after the number
                       var msg = splited_txt[1];
-                      console.log("edit_idx is: " + edit_idx);
-                      console.log("msg is: " + msg);
-                      // edit_txt.split(/(\d+)/).map((elem, i) => i % 2 ? Number(elem) : elem).filter(elem => elem !== "");
+                    
                       var list = my_list.get();
 
                       if (!isNaN(edit_idx) && !list[edit_idx]) {
