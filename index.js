@@ -413,7 +413,7 @@ function handleMessage(sender_psid, received_message) {
                         callSendAPI (sender_psid, response);
                       }
                       else if (edit_idx != undefined && msg != undefined && !isNaN(edit_idx)) {
-                        my_list.edit(edit_idx, msg);
+                        my_list.edit(edit_idx - 1, msg);
                         response = {
                           "text": "Congrats! You just edited 1 item! Here is your updated list: \n" + list.map((item, idx) => {
                                     return (idx + 1) + ": " + item.text
