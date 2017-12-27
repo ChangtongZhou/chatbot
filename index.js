@@ -395,7 +395,7 @@ function handleMessage(sender_psid, received_message) {
                             callSendAPI(sender_psid, response);
                         }
                     } else if (text.substring() == "/edit") {
-                      var edit_txt = text.replace("/remove", "");
+                      var edit_txt = text.replace("/edit", "");
                       var trimed_txt = edit_txt.trim();
                       var splited_txt = naturalSplitMapFilterNumber(trimed_txt);
                       var edit_idx = splited_txt[0];
