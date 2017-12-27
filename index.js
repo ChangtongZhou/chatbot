@@ -393,9 +393,11 @@ function handleMessage(sender_psid, received_message) {
                             // removal_time += 1;
                             callSendAPI(sender_psid, response);
                         }
-                    } else if (text.substring() == "/edit") {
+                    } else if (text.substring(0, 5) == "/edit") {
                       var edit_txt = text.replace("/edit", "");
+                      console.log("edit_txt is: " + edit_txt);
                       var trimed_txt = edit_txt.trim();
+                      console.log("trimed_txt is: " + edit_txt);
                       var splited_txt = naturalSplitMapFilterNumber(trimed_txt);
                       console.log("splited_txt is: " + splited_txt);
                       var edit_idx = splited_txt[0];
