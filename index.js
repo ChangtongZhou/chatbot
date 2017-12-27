@@ -299,11 +299,11 @@ app.get('/', function(req, res) {
 });
 
 function naturalSplitMapFilterNumber(str) {
-    return str.split(/(\d+)/)
-        .map((elem, i) => i % 2 ? Number(elem) : elem)
-        .filter(elem => elem !== "");
+    return [
+       parseInt(str.match(/^\d+/)[0]),
+       str.replace(/^\d+/, "")
+       ];
 }
-
 /* ----------  Messenging API  ---------- */
 function firstEntity(nlp, name) {
     return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
