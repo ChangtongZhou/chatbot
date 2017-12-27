@@ -345,24 +345,25 @@ function handleMessage(sender_psid, received_message) {
                     } else if (text.substring(0, 4) == "/add") {
                         // add new item to list
                         console.log("========================== Adding messages ======================");
-                        var msg = received_message.text.substring(4);
+                        var msg = received_message.text.replace ("/add", "");
                         console.log("Potential adding item: " + msg);
-                        my_list.add(msg);
-                        var list = my_list.get();
-                        // Respond to add function, shows the list of items after adding
-                        response = {
-                            "text": "Congrats, you just added 1 item! Here is your list: \n" + list.map((item, idx) => {
-                                return (idx + 1) + ": " + item.text
-                            }).join("\n")
-                        }
+                        if (msg == "") {
+                          response = {
+                            "text": "Are you trying to add items to your to_do_list? Please type the items you want to add after /add."
+                          }
+                          callSendAPI(sender_psid, response);
+                        } else {
+                          my_list.add(msg);
+                          var list = my_list.get();
+                          // Respond to add function, shows the list of items after adding
+                          response = {
+                              "text": "Congrats, you just added 1 item! Here is your list: \n" + list.map((item, idx) => {
+                                  return (idx + 1) + ": " + item.text
+                              }).join("\n")
+                          }
 
-                        callSendAPI(sender_psid, response);
-                        // Show the list after adding:
-                        // var list = my_list.get();
-                        // response = {
-                        //   "text": list.map((item, idx) => { return (idx + 1) + ": " + item.text }).join("\n")
-                        // }
-                        // callSendAPI(sender_psid, response);
+                          callSendAPI(sender_psid, response);
+                        }
                     } else if (text.substring(0, 5) == "/show") {
                         var list = my_list.get();
                         response = {
@@ -524,6 +525,10 @@ function handlePostback(sender_psid, received_postback) {
             }
 
         });
+    } else if (payload === 'CREATE_PAYLOAD') {
+      response = {
+        "text": "Please type: /add to add items into your to_do_list!"
+      }
     }
 
     // } else if (payload == 'ADD_ITEM') {
