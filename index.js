@@ -398,8 +398,11 @@ function handleMessage(sender_psid, received_message) {
                       var edit_txt = text.replace("/edit", "");
                       var trimed_txt = edit_txt.trim();
                       var splited_txt = naturalSplitMapFilterNumber(trimed_txt);
+                      console.log("splited_txt is: " + splited_txt);
                       var edit_idx = splited_txt[0];
                       var msg = splited_txt[1];
+                      console.log("edit_idx is: " + edit_idx);
+                      console.log("msg is: " + msg);
                       // edit_txt.split(/(\d+)/).map((elem, i) => i % 2 ? Number(elem) : elem).filter(elem => elem !== "");
                       var list = my_list.get();
 
@@ -409,7 +412,7 @@ function handleMessage(sender_psid, received_message) {
                         }
                         callSendAPI (sender_psid, response);
                       }
-                      else if (!isNaN (edit_idx)) {
+                      else if (edit_idx != undefined && msg != undefined && !isNaN(edit_idx)) {
                         my_list.edit(edit_idx, msg);
                         response = {
                           "text": "Congrats! You just edited 1 item! Here is your updated list: \n" + list.map((item, idx) => {
