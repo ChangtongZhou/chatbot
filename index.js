@@ -298,6 +298,13 @@ app.get('/', function(req, res) {
     // res.render('login');
 });
 
+function naturalSplitMapFilterNumber(str) {
+    'use strict';
+    return str.split(/(\d+)/)
+        .map((elem, i) => i % 2 ? Number(elem) : elem)
+        .filter(elem => elem !== "");
+}
+
 /* ----------  Messenging API  ---------- */
 function firstEntity(nlp, name) {
     return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
@@ -387,6 +394,37 @@ function handleMessage(sender_psid, received_message) {
                             // removal_time += 1;
                             callSendAPI(sender_psid, response);
                         }
+                    } else if (text.substring() == "/edit") {
+                      var edit_txt = text.replace("/remove", "");
+                      var trimed_txt = edit_txt.trim();
+                      var splited_txt = naturalSplitMapFilterNumber(trimed_txt);
+                      var edit_idx = splited_txt[0];
+                      var msg = splited_txt[1];
+                      // edit_txt.split(/(\d+)/).map((elem, i) => i % 2 ? Number(elem) : elem).filter(elem => elem !== "");
+                      var list = my_list.get();
+
+                      if (!isNaN(edit_idx) && !list[edit_idx]) {
+                        response = {
+                          "text": "The specified index is out of the list boundaries, please input a new one."
+                        }
+                        callSendAPI (sender_psid, response);
+                      }
+                      else if (!isNaN (edit_idx)) {
+                        my_list.edit(edit_idx, msg);
+                        response = {
+                          "text": "Congrats! You just edited 1 item! Here is your updated list: \n" + list.map((item, idx) => {
+                                    return (idx + 1) + ": " + item.text
+                                }).join("\n")
+                        }
+                        callSendAPI(sender_psid, response);
+                        // for (var i in myArray) { if (myArray[i] == "" || myArray[i] == " ") { i++; } console.log(myArray[i].trim()); }
+                      } else {
+                        response = {
+                          "text": "Please indicate the index of the item that you want to edit and write the edited item in text."
+                        }
+                        callSendAPI(sender_psid, response);
+                      }
+
                     } else {
                         // special messages/keywords to trigger the cards/functions
                         switch (text) {
