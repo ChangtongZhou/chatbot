@@ -529,7 +529,16 @@ function handlePostback(sender_psid, received_postback) {
       response = {
         "text": "Please type: /add to add items into your to_do_list!"
       }
+    } else if (payload === 'UPDATE_PAYLOAD') {
+      response = {
+        "text": "Please type: /edit to update the item on your to_do_list!"
+      }
+    } else if (payload === 'DELETE_PAYLOAD') {
+        response = {
+          "text": "Please type: /remove to delete the item on your to_do_list!"
+        }
     }
+    
 
     // } else if (payload == 'ADD_ITEM') {
     //   addButton(sender_psid);
