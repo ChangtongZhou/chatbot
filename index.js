@@ -299,10 +299,15 @@ app.get('/', function(req, res) {
 });
 
 function naturalSplitMapFilterNumber(str) {
-    return [
-       parseInt(str.match(/^\d+/)[0]),
-       str.replace(/^\d+/, "")
-       ];
+    if (str.match(/^\d+/) != null) {
+      return [
+        parseInt(str.match(/^\d+/)[0]),
+          str.replace(/^\d+/, "")
+        ];
+    } else {
+      return -1;
+    }
+    
 }
 /* ----------  Messenging API  ---------- */
 function firstEntity(nlp, name) {
@@ -406,29 +411,34 @@ function handleMessage(sender_psid, received_message) {
                       var msg = splited_txt[1];
                     
                       var list = my_list.get();
-
-                      if (edit_idx != undefined && !isNaN(edit_idx) && !list[edit_idx]) {
+                      if (splited_txt == -1) {
                         response = {
-                          "text": "The specified index is out of the list boundaries, please input a new one."
+                          "text": "Please indicate the index of the item that you want to edit before writing the edited item in the text."
                         }
                         callSendAPI (sender_psid, response);
-                      }
-                      else if (edit_idx != undefined && !isNaN(edit_idx)) {
-                        my_list.edit(edit_idx, msg);
-                        response = {
-                          "text": "Congrats! You just edited 1 item! Here is your updated list: \n" + list.map((item, idx) => {
-                                    return (idx + 1) + ": " + item.text
-                                }).join("\n")
-                        }
-                        callSendAPI(sender_psid, response);
-                        // for (var i in myArray) { if (myArray[i] == "" || myArray[i] == " ") { i++; } console.log(myArray[i].trim()); }
                       } else {
-                        response = {
-                          "text": "Please indicate the index of the item that you want to edit and write the edited item in text."
+                        if (!isNaN(edit_idx) && !list[edit_idx]) {
+                          response = {
+                            "text": "The specified index is out of the list boundaries, please input a new one."
+                          }
+                          callSendAPI (sender_psid, response);
                         }
-                        callSendAPI(sender_psid, response);
+                        else if (!isNaN(edit_idx)) {
+                          my_list.edit(edit_idx, msg);
+                          response = {
+                            "text": "Congrats! You just edited 1 item! Here is your updated list: \n" + list.map((item, idx) => {
+                                      return (idx + 1) + ": " + item.text
+                                  }).join("\n")
+                          }
+                          callSendAPI(sender_psid, response);
+                          // for (var i in myArray) { if (myArray[i] == "" || myArray[i] == " ") { i++; } console.log(myArray[i].trim()); }
+                        } else {
+                          response = {
+                            "text": "Please indicate the index of the item that you want to edit and write the edited item in the text."
+                          }
+                          callSendAPI(sender_psid, response);
+                        }
                       }
-
                     } else {
                         // special messages/keywords to trigger the cards/functions
                         switch (text) {
