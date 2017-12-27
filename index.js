@@ -299,7 +299,6 @@ app.get('/', function(req, res) {
 });
 
 function naturalSplitMapFilterNumber(str) {
-    'use strict';
     return str.split(/(\d+)/)
         .map((elem, i) => i % 2 ? Number(elem) : elem)
         .filter(elem => elem !== "");
