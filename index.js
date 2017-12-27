@@ -692,7 +692,7 @@ function addPersistentMenu() {
                     // https://developers.facebook.com/docs/messenger-platform/webview
                     {
                         "type": "web_url",
-                        "title": "Show me my todo list",
+                        "title": "Show my todo list",
                         "url": "http://petershats.parseapp.com/hat-news",
                         "webview_height_ratio": "full"
                     }
