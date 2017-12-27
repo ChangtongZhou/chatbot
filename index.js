@@ -407,13 +407,13 @@ function handleMessage(sender_psid, received_message) {
                     
                       var list = my_list.get();
 
-                      if (!isNaN(edit_idx) && !list[edit_idx]) {
+                      if (edit_idx != undefined && !isNaN(edit_idx) && !list[edit_idx]) {
                         response = {
                           "text": "The specified index is out of the list boundaries, please input a new one."
                         }
                         callSendAPI (sender_psid, response);
                       }
-                      else if (!isNaN(edit_idx)) {
+                      else if (edit_idx != undefined && !isNaN(edit_idx)) {
                         my_list.edit(edit_idx, msg);
                         response = {
                           "text": "Congrats! You just edited 1 item! Here is your updated list: \n" + list.map((item, idx) => {
