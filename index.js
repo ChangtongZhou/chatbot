@@ -693,7 +693,7 @@ function addPersistentMenu() {
                     {
                         "type": "web_url",
                         "title": "Show my todo list",
-                        "url": "http://petershats.parseapp.com/hat-news",
+                        "url": "https://safe-crag-36560.herokuapp.com/",
                         "webview_height_ratio": "full"
                     }
                 ]
