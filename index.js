@@ -520,7 +520,7 @@ function handlePostback(sender_psid, received_postback) {
                 console.log("Got User Info: " + JSON.stringify(userInfo));
 
                 response = {
-                    "text": `Hello, "${userInfo.first_name}"! Welcome to your to_do_list bot!! Please type operations like: add, show, edit, delete, to explore more about your bot!"`
+                    "text": `Hello, "${userInfo.first_name}"! Welcome to your to_do_list bot!! Please type operations like: /add, /show, /edit, /remove, to explore more about your bot!"`
                 };
 
                 // Note here: be careful with the scope of response variable
