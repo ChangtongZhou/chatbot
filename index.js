@@ -294,7 +294,7 @@ class List {
 
 /* ----------  Webview API  ---------- */
 app.get('/', function(req, res) {
-    res.send("Hello I am testing");
+    res.sendFile('./client/static/login.html');
     // res.render('login');
 });
 
