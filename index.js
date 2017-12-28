@@ -608,35 +608,56 @@ function sendGenericMessage(sender_id) {
 }
 
 function list_temp(sender_id) {
-    let messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "list",
-                "top_element_style": "compact",
-                "elements": [{
-                    "title": "Classic T-Shirt Collection",
-                    "subtitle": "Element #1 of an hscroll"
-                    // "image_url": "http://messengerdemo.parseapp.com/img/rift.png"
-                    // "buttons": [{
-                    //     "type": "web_url",
-                    //     "url": "https://www.messenger.com",
-                    //     "title": "web url"
-                    // }]
-                }, {
-                    "title": "Classic White T-Shirt",
-                    "subtitle": "Element #1 of an hscroll"
-                    // "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png"
-                    // "buttons": [{
-                    //     "type": "postback",
-                    //     "title": "No",
-                    //     "payload": "no",
-                    // }]
-                }]
+    User.findOne({
+            fbId: sender_psid
+        }, function(err, userData) {
+            if (err) {
+                callSendAPI(fbId, {
+                    text: "Something went wrong. Please try again!"
+                });
+            } else {
+                var my_list = new List(userData);
+                var list = my_list.get();
+                console.log("what is the list in the list_temp" + list)
+                
+                list.map((item, idx) => {
+                    let messageData = {
+                        "attachment": {
+                        "type": "template",
+                        "payload": {
+                            "template_type": "list",
+                            "top_element_style": "compact",
+                            "elements": [{
+                                    "title": item.text,
+                                    "subtitle": idx + 1
+                                }]
+                            }
+                        }
+                    }
+                    callSendAPI(sender_id, messageData)
+                })
+                
+                
+                
             }
-        }
-    }
-    callSendAPI(sender_id, messageData);
+        })
+    // let messageData = {
+    //     "attachment": {
+    //         "type": "template",
+    //         "payload": {
+    //             "template_type": "list",
+    //             "top_element_style": "compact",
+    //             "elements": [{
+    //                 "title": "Classic T-Shirt Collection",
+    //                 "subtitle": "Element #1 of an hscroll"
+    //             }, {
+    //                 "title": "Classic White T-Shirt",
+    //                 "subtitle": "Element #1 of an hscroll"
+    //             }]
+    //         }
+    //     }
+    // }
+    // callSendAPI(sender_id, messageData);
 }
 
 // Postback ADD button
