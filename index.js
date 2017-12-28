@@ -620,12 +620,7 @@ function list_temp(sender_id) {
                     "buttons": [{
                         "type": "web_url",
                         "url": "https://www.messenger.com",
-                        "title": "web url 1"
-                    }, 
-                    {
-                        "type": "web_url",
-                        "url": "https://www.messenger.com",
-                        "title": "web url 2"
+                        "title": "web url"
                     }]
                 }, {
                     "title": "Classic White T-Shirt",
