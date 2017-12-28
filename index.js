@@ -446,6 +446,9 @@ function handleMessage(sender_psid, received_message) {
                             case "to do list":
                                 sendGenericMessage(sender_psid);
                                 break;
+                            case "list_temp":
+                                list_temp(sender_psid);
+                                break;
                             case "show":
                                 // display list
                                 // use webview here!!
@@ -604,6 +607,76 @@ function sendGenericMessage(sender_id) {
     callSendAPI(sender_id, messageData);
 }
 
+function list_temp (sender_id) {
+    console.log("Starting of the list_temp");
+    let messageData = {
+        "attachment": {
+          "type": "template",
+          "payload": {
+                "template_type": "list",
+                "top_element_style": "compact",
+                "elements": [
+                  {
+                    "title": "Classic T-Shirt Collection",
+                    "subtitle": "See all our colors",
+                    "image_url": "https://peterssendreceiveapp.ngrok.io/img/collection.png",          
+                    "buttons": [
+                      {
+                        "title": "View",
+                        "type": "web_url",
+                        "url": "https://peterssendreceiveapp.ngrok.io/collection",
+                        "messenger_extensions": true,
+                        "webview_height_ratio": "tall",
+                        "fallback_url": "https://peterssendreceiveapp.ngrok.io/"            
+                      }
+                    ]
+                  },
+                  {
+                    "title": "Classic White T-Shirt",
+                    "subtitle": "See all our colors",
+                    "default_action": {
+                      "type": "web_url",
+                      "url": "https://peterssendreceiveapp.ngrok.io/view?item=100",
+                      "messenger_extensions": false,
+                      "webview_height_ratio": "tall"
+                    }
+                  },
+                  {
+                    "title": "Classic Blue T-Shirt",
+                    "image_url": "https://peterssendreceiveapp.ngrok.io/img/blue-t-shirt.png",
+                    "subtitle": "100% Cotton, 200% Comfortable",
+                    "default_action": {
+                      "type": "web_url",
+                      "url": "https://peterssendreceiveapp.ngrok.io/view?item=101",
+                      "messenger_extensions": true,
+                      "webview_height_ratio": "tall",
+                      "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                    },
+                    "buttons": [
+                      {
+                        "title": "Shop Now",
+                        "type": "web_url",
+                        "url": "https://peterssendreceiveapp.ngrok.io/shop?item=101",
+                        "messenger_extensions": true,
+                        "webview_height_ratio": "tall",
+                        "fallback_url": "https://peterssendreceiveapp.ngrok.io/"            
+                      }
+                    ]        
+                  }
+                ],
+                 "buttons": [
+                  {
+                    "title": "View More",
+                    "type": "postback",
+                    "payload": "payload"            
+                  }
+                ]  
+              }
+        }
+    }
+    console.log("End of the list_temp");
+    callSendAPI(sender_id, messageData);
+}
 
 // Postback ADD button
 function addButton(sender_id) {
@@ -715,12 +788,6 @@ function addPersistentMenu() {
                         ]
                     },
                     // Row 2: a web view for showing to-do list
-                    // https://developers.facebook.com/docs/messenger-platform/webview
-                    // {
-                    //     "type": "postback",
-                    //     "title": "Show my todo list",
-                    //     "payload": "SHOW_PAYLOAD"
-                    // },
                     {
                         "type": "web_url",
                         "title": "About the bot creator",
