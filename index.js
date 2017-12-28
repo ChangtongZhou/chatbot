@@ -615,7 +615,8 @@ function list_temp(sender_id) {
                 "template_type": "list",
                 "top_element_style": "compact",
                 "elements": [{
-                    "title": "Classic T-Shirt Collection"
+                    "title": "Classic T-Shirt Collection",
+                    "subtitle": "Element #1 of an hscroll"
                     // "image_url": "http://messengerdemo.parseapp.com/img/rift.png"
                     // "buttons": [{
                     //     "type": "web_url",
@@ -623,7 +624,8 @@ function list_temp(sender_id) {
                     //     "title": "web url"
                     // }]
                 }, {
-                    "title": "Classic White T-Shirt"
+                    "title": "Classic White T-Shirt",
+                    "subtitle": "Element #1 of an hscroll"
                     // "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png"
                     // "buttons": [{
                     //     "type": "postback",
