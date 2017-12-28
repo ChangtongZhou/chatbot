@@ -609,7 +609,7 @@ function sendGenericMessage(sender_id) {
 
 function list_temp(sender_id) {
     User.findOne({
-            fbId: sender_psid
+            fbId: sender_id
         }, function(err, userData) {
             if (err) {
                 callSendAPI(fbId, {
