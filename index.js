@@ -642,8 +642,8 @@ function list_temp(sender_id) {
                 
                 
                 
-    //         }
-    //     })
+            }
+        })
     // let messageData = {
     //     "attachment": {
     //         "type": "template",
