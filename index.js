@@ -648,34 +648,34 @@ function list_temp(sender_id) {
                 })
                 
                 
-                // let messageData = {
-                //     "attachment": {
-                //         "type": "template",
-                //         "payload": {
-                //             "template_type": "list",
-                //             "top_element_style": "compact",
-                //             "elements": JSON.stringify(elements)
-                //         }
-                //     }
-                // }
-                // callSendAPI (sender_id, messageData);
-                
-            }
-        })
-    elements = JSON.stringify(elements);
-    console.log("After stringify elements in list_temp: " + elements);
-
-    let messageData = {
+                let messageData = {
                     "attachment": {
                         "type": "template",
                         "payload": {
                             "template_type": "list",
                             "top_element_style": "compact",
-                            "elements": elements
+                            "elements": JSON.stringify(elements)
                         }
                     }
                 }
-    callSendAPI (sender_id, messageData);
+                callSendAPI (sender_id, messageData);
+                
+            }
+        })
+    // elements = JSON.stringify(elements);
+    // console.log("After stringify elements in list_temp: " + elements);
+
+    // let messageData = {
+    //                 "attachment": {
+    //                     "type": "template",
+    //                     "payload": {
+    //                         "template_type": "list",
+    //                         "top_element_style": "compact",
+    //                         "elements": elements
+    //                     }
+    //                 }
+    //             }
+    // callSendAPI (sender_id, messageData);
     // let messageData = {
     //     "attachment": {
     //         "type": "template",
