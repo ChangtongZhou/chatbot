@@ -16,7 +16,7 @@ const
 //const router = require('./routes/routes.js');
 // import router from './routes/routes';
 
-const app = express();
+var app = express();
 // const app = express().use(bodyParser.json()); // creates express http server
 
 
@@ -27,12 +27,11 @@ const app = express();
 /* ----------  Views  ---------- */
 // tell express what view engine is (here we change view to .ejs)
 app.set('views', __dirname + '/client/views');
-app.set('view engine', 'html');
-// app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');
+
 
 /* ----------  Static Assets  ---------- */
-// app.use(express.static(__dirname + '/client/static')); // add css files into html/ejs files (static contents)
-app.use('/client/static', express.static(__dirname + '/client/static'));
+app.use(express.static(__dirname + '/client/static')); // add css files into html/ejs files (static contents)
 
 
 /* =============================================
@@ -296,7 +295,7 @@ class List {
 app.get('/', function(req, res) {
     // res.sendFile('login.html')
     // res.send("Hello I am testing");
-    res.render('login');
+    res.render('main');
 });
 
 function naturalSplitMapFilterNumber(str) {
