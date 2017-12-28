@@ -31,8 +31,8 @@ app.set('view engine', 'html');
 // app.set('view engine', 'ejs');
 
 /* ----------  Static Assets  ---------- */
-app.use(express.static(__dirname + '/client/static')); // add css files into html/ejs files (static contents)
-
+// app.use(express.static(__dirname + '/client/static')); // add css files into html/ejs files (static contents)
+app.use('/client/static', express.static(__dirname + '/client/static'));
 
 
 /* =============================================
@@ -294,7 +294,8 @@ class List {
 
 /* ----------  Webview API  ---------- */
 app.get('/', function(req, res) {
-    // res.sendFile('client/static/login.html');
+    // res.sendFile('login.html')
+    // res.send("Hello I am testing");
     res.render('login');
 });
 
