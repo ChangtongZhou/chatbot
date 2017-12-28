@@ -537,6 +537,13 @@ function handlePostback(sender_psid, received_postback) {
         response = {
           "text": "Please type: /remove to delete the item on your to_do_list!"
         }
+    } else if (payload === 'SHOW_PAYLOAD') {
+        var list = my_list.get();
+        response = {
+            "text": list.map((item, idx) => {
+                return (idx + 1) + ": " + item.text
+            }).join("\n")
+        }
     }
     
 
@@ -691,8 +698,13 @@ function addPersistentMenu() {
                     // Row 2: a web view for showing to-do list
                     // https://developers.facebook.com/docs/messenger-platform/webview
                     {
-                        "type": "web_url",
+                        "type": "postback",
                         "title": "Show my todo list",
+                        "payload": "SHOW_PAYLOAD"
+                    },
+                    {
+                        "type": "web_url",
+                        "title": "About the bot creator",
                         // "url": "https://safe-crag-36560.herokuapp.com/",
                         "url": "http://www.nicolezhou.com/",
                         "webview_height_ratio": "full"
