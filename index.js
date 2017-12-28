@@ -294,8 +294,8 @@ class List {
 
 /* ----------  Webview API  ---------- */
 app.get('/', function(req, res) {
-    res.sendFile('./client/static/login.html');
-    // res.render('login');
+    // res.sendFile('client/static/login.html');
+    res.render('login');
 });
 
 function naturalSplitMapFilterNumber(str) {
