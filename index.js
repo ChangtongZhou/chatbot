@@ -608,6 +608,7 @@ function sendGenericMessage(sender_id) {
 }
 
 function list_temp(sender_id) {
+    var elements = [];
     User.findOne({
             fbId: sender_id
         }, function(err, userData) {
@@ -621,29 +622,47 @@ function list_temp(sender_id) {
                 console.log("what is the list in the list_temp" + list)
                 
                 list.map((item, idx) => {
-                    let messageData = {
-                        "attachment": {
+                    var element = {
+                        "title": item.text,
+                        "subtitle": idx + 1
+                    }
+                    elements.push (element);
+                    console.log("elements in list_temp: " + elements);
+                    // let messageData = {
+                    //     "attachment": {
+                    //     "type": "template",
+                    //     "payload": {
+                    //         "template_type": "list",
+                    //         "top_element_style": "compact",
+                    //         "elements": [{
+                    //                 "title": item.text,
+                    //                 "subtitle": idx + 1
+                    //             }, {
+                    //                 "title": "Classic White T-Shirt",
+                    //                 "subtitle": "Element #1 of an hscroll"
+                    //             }]
+                    //         }
+                    //     }
+                    // }
+                    // callSendAPI(sender_id, messageData)
+                })
+                
+                
+                let messageData = {
+                    "attachment": {
                         "type": "template",
                         "payload": {
                             "template_type": "list",
                             "top_element_style": "compact",
-                            "elements": [{
-                                    "title": item.text,
-                                    "subtitle": idx + 1
-                                }, {
-                                    "title": "Classic White T-Shirt",
-                                    "subtitle": "Element #1 of an hscroll"
-                                }]
-                            }
+                            "elements": elements
                         }
                     }
-                    callSendAPI(sender_id, messageData)
-                })
-                
-                
+                }
+                callSendAPI (sender_id, messageData);
                 
             }
         })
+    
     // let messageData = {
     //     "attachment": {
     //         "type": "template",
