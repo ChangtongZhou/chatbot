@@ -615,21 +615,21 @@ function list_temp(sender_id) {
                 "template_type": "list",
                 "top_element_style": "compact",
                 "elements": [{
-                    "title": "Classic T-Shirt Collection"
-                    // "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+                    "title": "Classic T-Shirt Collection",
+                    "image_url": "http://messengerdemo.parseapp.com/img/rift.png"
                     // "buttons": [{
                     //     "type": "web_url",
                     //     "url": "https://www.messenger.com",
                     //     "title": "web url"
                     // }]
                 }, {
-                    "title": "Classic White T-Shirt"
-                    // "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    "title": "Classic White T-Shirt",
+                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png"
                     // "buttons": [{
                     //     "type": "postback",
                     //     "title": "No",
                     //     "payload": "no",
-                    // }],
+                    // }]
                 }]
             }
         }
