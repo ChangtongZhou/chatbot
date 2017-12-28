@@ -693,7 +693,8 @@ function addPersistentMenu() {
                     {
                         "type": "web_url",
                         "title": "Show my todo list",
-                        "url": "https://safe-crag-36560.herokuapp.com/",
+                        // "url": "https://safe-crag-36560.herokuapp.com/",
+                        "url": "http://www.nicolezhou.com/",
                         "webview_height_ratio": "full"
                     }
                 ]
