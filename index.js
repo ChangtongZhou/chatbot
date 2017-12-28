@@ -654,7 +654,7 @@ function list_temp(sender_id) {
                         "payload": {
                             "template_type": "list",
                             "top_element_style": "compact",
-                            "elements": elements
+                            "elements": JSON.stringify(elements)
                         }
                     }
                 }
