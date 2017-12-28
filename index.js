@@ -607,75 +607,36 @@ function sendGenericMessage(sender_id) {
     callSendAPI(sender_id, messageData);
 }
 
-function list_temp (sender_id) {
-    console.log("Starting of the list_temp");
-    let responseData = {
+function list_temp(sender_id) {
+    let messageData = {
         "attachment": {
-          "type": "template",
-          "payload": {
+            "type": "template",
+            "payload": {
                 "template_type": "list",
                 "top_element_style": "compact",
-                "elements": [
-                  {
+                "elements": [{
                     "title": "Classic T-Shirt Collection",
-                    "subtitle": "See all our colors",
-                    "image_url": "https://peterssendreceiveapp.ngrok.io/img/collection.png",          
-                    "buttons": [
-                      {
-                        "title": "View",
+                    "subtitle": "Element #1 of an hscroll",
+                    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+                    "buttons": [{
                         "type": "web_url",
-                        "url": "https://peterssendreceiveapp.ngrok.io/collection",
-                        "messenger_extensions": true,
-                        "webview_height_ratio": "tall",
-                        "fallback_url": "https://peterssendreceiveapp.ngrok.io/"            
-                      }
-                    ]
-                  },
-                  {
+                        "url": "https://www.messenger.com",
+                        "title": "web url"
+                    }]
+                }, {
                     "title": "Classic White T-Shirt",
                     "subtitle": "See all our colors",
-                    "default_action": {
-                      "type": "web_url",
-                      "url": "https://peterssendreceiveapp.ngrok.io/view?item=100",
-                      "messenger_extensions": false,
-                      "webview_height_ratio": "tall"
-                    }
-                  },
-                  {
-                    "title": "Classic Blue T-Shirt",
-                    "image_url": "https://peterssendreceiveapp.ngrok.io/img/blue-t-shirt.png",
-                    "subtitle": "100% Cotton, 200% Comfortable",
-                    "default_action": {
-                      "type": "web_url",
-                      "url": "https://peterssendreceiveapp.ngrok.io/view?item=101",
-                      "messenger_extensions": true,
-                      "webview_height_ratio": "tall",
-                      "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
-                    },
-                    "buttons": [
-                      {
-                        "title": "Shop Now",
-                        "type": "web_url",
-                        "url": "https://peterssendreceiveapp.ngrok.io/shop?item=101",
-                        "messenger_extensions": true,
-                        "webview_height_ratio": "tall",
-                        "fallback_url": "https://peterssendreceiveapp.ngrok.io/"            
-                      }
-                    ]        
-                  }
-                ],
-                 "buttons": [
-                  {
-                    "title": "View More",
-                    "type": "postback",
-                    "payload": "payload"            
-                  }
-                ]  
-              }
+                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "No",
+                        "payload": "no",
+                    }],
+                }]
+            }
         }
     }
-    console.log("End of the list_temp");
-    callSendAPI(sender_id, responseData);
+    callSendAPI(sender_id, messageData);
 }
 
 // Postback ADD button
