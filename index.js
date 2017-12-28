@@ -616,17 +616,20 @@ function list_temp(sender_id) {
                 "top_element_style": "compact",
                 "elements": [{
                     "title": "Classic T-Shirt Collection",
-                    "subtitle": "Element #1 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+                    // "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
                     "buttons": [{
                         "type": "web_url",
                         "url": "https://www.messenger.com",
-                        "title": "web url"
+                        "title": "web url 1"
+                    }, 
+                    {
+                        "type": "web_url",
+                        "url": "https://www.messenger.com",
+                        "title": "web url 2"
                     }]
                 }, {
                     "title": "Classic White T-Shirt",
-                    "subtitle": "See all our colors",
-                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                    // "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
                     "buttons": [{
                         "type": "postback",
                         "title": "No",
