@@ -394,7 +394,7 @@ function handleMessage(sender_psid, received_message) {
                             callSendAPI(sender_psid, response);
                         } else {
                             response = {
-                                "text": "Please indicate the index of the item that you want to remove (number only)."
+                                "text": "Please indicate the index of the item that you want to remove (number only) after typing /remove."
                             }
                             // removal_time += 1;
                             callSendAPI(sender_psid, response);
@@ -435,7 +435,7 @@ function handleMessage(sender_psid, received_message) {
                           // for (var i in myArray) { if (myArray[i] == "" || myArray[i] == " ") { i++; } console.log(myArray[i].trim()); }
                         } else {
                           response = {
-                            "text": "Please indicate the index of the item that you want to edit and write the edited item in the text."
+                            "text": "Please indicate the index of the item that you want to edit and write the edited item in the text after typing /edit."
                           }
                           callSendAPI(sender_psid, response);
                         }
@@ -538,6 +538,7 @@ function handlePostback(sender_psid, received_postback) {
           "text": "Please type: /remove to delete the item on your to_do_list!"
         }
     } else if (payload === 'SHOW_PAYLOAD') {
+        console.log("Does show_payload work?")
         User.findOne({
             fbId: sender_psid
         }, function(err, userData) {
@@ -548,6 +549,7 @@ function handlePostback(sender_psid, received_postback) {
             } else {
                 var my_list = new List(userData);
                 var list = my_list.get();
+                console.log("what is the list here" + list)
                 response = {
                     "text": list.map((item, idx) => {
                         return (idx + 1) + ": " + item.text
