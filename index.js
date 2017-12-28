@@ -626,8 +626,8 @@ function list_temp(sender_id) {
                         "title": item.text,
                         "subtitle": idx + 1
                     }
-                    elements.push (element);
-                    // console.log("elements in list_temp: " + JSON.stringify(elements));
+                    elements.add(element);
+                    console.log("elements in list_temp: " + JSON.stringify(elements));
                     // let messageData = {
                     //     "attachment": {
                     //     "type": "template",
@@ -663,7 +663,7 @@ function list_temp(sender_id) {
             }
         })
     elements = JSON.stringify(elements);
-    console.log("elements in list_temp: " + elements);
+    console.log("After stringify elements in list_temp: " + elements);
 
     let messageData = {
                     "attachment": {
