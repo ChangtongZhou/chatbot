@@ -538,12 +538,24 @@ function handlePostback(sender_psid, received_postback) {
           "text": "Please type: /remove to delete the item on your to_do_list!"
         }
     } else if (payload === 'SHOW_PAYLOAD') {
-        var list = my_list.get();
-        response = {
-            "text": list.map((item, idx) => {
-                return (idx + 1) + ": " + item.text
-            }).join("\n")
-        }
+        User.findOne({
+            fbId: sender_psid
+        }, function(err, userData) {
+            if (err) {
+                callSendAPI(fbId, {
+                    text: "Something went wrong. Please try again!"
+                });
+            } else {
+                var my_list = new List(userData);
+                var list = my_list.get();
+                response = {
+                    "text": list.map((item, idx) => {
+                        return (idx + 1) + ": " + item.text
+                    }).join("\n")
+                }
+                callSendAPI(sender_psid, response);
+            }
+        })
     }
     
 
