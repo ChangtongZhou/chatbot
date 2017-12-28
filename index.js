@@ -706,16 +706,21 @@ function addPersistentMenu() {
                                 "title": "Delete",
                                 "type": "postback",
                                 "payload": "DELETE_PAYLOAD"
+                            },
+                            {
+                                "title": "Show my todo list",
+                                "type": "postback",
+                                "payload": "SHOW_PAYLOAD"
                             }
                         ]
                     },
                     // Row 2: a web view for showing to-do list
                     // https://developers.facebook.com/docs/messenger-platform/webview
-                    {
-                        "type": "postback",
-                        "title": "Show my todo list",
-                        "payload": "SHOW_PAYLOAD"
-                    },
+                    // {
+                    //     "type": "postback",
+                    //     "title": "Show my todo list",
+                    //     "payload": "SHOW_PAYLOAD"
+                    // },
                     {
                         "type": "web_url",
                         "title": "About the bot creator",
