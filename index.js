@@ -339,7 +339,7 @@ function handleMessage(sender_psid, received_message) {
 
                     if (greeting && greeting.confidence > 0.8) {
                         response = {
-                            "text": "Hello there! I am you To-Do-List agent. Please type operations like: add, show, edit, delete, to explore more about me!"
+                            "text": "Hello there! I am you To-Do-List agent. Please type operations like: /add, /show, /edit, /remove, to explore more about me!"
                         }
                         callSendAPI(sender_psid, response);
                     } else if (text.substring(0, 4) == "/add") {
