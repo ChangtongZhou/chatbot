@@ -446,7 +446,7 @@ function handleMessage(sender_psid, received_message) {
                             case "to do list":
                                 sendGenericMessage(sender_psid);
                                 break;
-                            case "list_temp":
+                            case "list temp":
                                 list_temp(sender_psid);
                                 break;
                             case "show":
@@ -751,7 +751,8 @@ function addPersistentMenu() {
         }
     })
     request({
-        url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
+        // url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
+        url: 'https://graph.facebook.com/me/messenger_profile',
         qs: {
             access_token: my_access
         },
