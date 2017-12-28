@@ -609,7 +609,7 @@ function sendGenericMessage(sender_id) {
 
 function list_temp (sender_id) {
     console.log("Starting of the list_temp");
-    let messageData = {
+    let responseData = {
         "attachment": {
           "type": "template",
           "payload": {
@@ -675,7 +675,7 @@ function list_temp (sender_id) {
         }
     }
     console.log("End of the list_temp");
-    callSendAPI(sender_id, messageData);
+    callSendAPI(sender_id, responseData);
 }
 
 // Postback ADD button
