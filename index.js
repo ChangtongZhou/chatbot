@@ -664,14 +664,14 @@ function list_temp(sender_id) {
         })
     elements = JSON.stringify(elements);
     console.log("elements in list_temp: " + elements);
-    
+
     let messageData = {
                     "attachment": {
                         "type": "template",
                         "payload": {
                             "template_type": "list",
                             "top_element_style": "compact",
-                            "elements": 
+                            "elements": elements
                         }
                     }
                 }
