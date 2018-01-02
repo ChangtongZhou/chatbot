@@ -440,41 +440,7 @@ function handleMessage(sender_psid, received_message) {
                           callSendAPI(sender_psid, response);
                         }
                       }
-                    } else {
-                        // special messages/keywords to trigger the cards/functions
-                        switch (text) {
-                            case "to do list":
-                                sendGenericMessage(sender_psid);
-                                break;
-                            case "list temp":
-                                list_temp(sender_psid);
-                                break;
-                            case "show":
-                                // display list
-                                // use webview here!!
-                                //break;
-                            case "create":
-                                // create a new list
-                                //break;
-                            case "add":
-                                addButton(sender_psid);
-                                break;
-                            case "edit":
-                                // create a new list
-                                //break;
-                            case "delete":
-                                // create a new list
-                                //break;
-                            default:
-                                var response = {
-                                    "text": `You want to add the following item : "${received_message.text}". Now send me an attachment!`
-                                }
-                                // Sends the response message
-                                callSendAPI(sender_psid, response);
-
-                        }
-
-                    }
+                    } 
                 } else if (received_message.attachments) {
                     var response = {
                         "text": "Sorry, I don't understand your request. "
@@ -483,12 +449,8 @@ function handleMessage(sender_psid, received_message) {
                 }
 
             }
-            // Send back to FB messenger platform:
-            // need for loop here to go through items array:
-            // callSendAPI (fbId, {"text": `Item: ${items.text} -> Priority: $(items.priority)`})
         }
     })
-    // let response;
 
 }
 
@@ -562,71 +524,10 @@ function handlePostback(sender_psid, received_postback) {
             }
         })
     }
-    
-
-    // } else if (payload == 'ADD_ITEM') {
-    //   addButton(sender_psid);
-    // }
-    // Send the message to acknowledge the postback
     callSendAPI(sender_psid, response);
 }
 
 
-function sendGenericMessage(sender_id) {
-    let messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "generic",
-                "elements": [{
-                    "title": "First card",
-                    "subtitle": "Element #1 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
-                    "buttons": [{
-                        "type": "web_url",
-                        "url": "https://www.messenger.com",
-                        "title": "web url"
-                    }, {
-                        "type": "postback",
-                        "title": "Yes",
-                        "payload": "yes",
-                    }],
-                }, {
-                    "title": "Second card",
-                    "subtitle": "Element #2 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": "No",
-                        "payload": "no",
-                    }],
-                }]
-            }
-        }
-    }
-    callSendAPI(sender_id, messageData);
-}
-
-
-// Postback ADD button
-function addButton(sender_id) {
-    let messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "button",
-                // "text":"What do you want to do next?",
-                "text": "Please type the item you want to add into your To-Do-List!",
-                "buttons": [{
-                    "type": "postback",
-                    "title": "Add items",
-                    "payload": "ADD_ITEM"
-                }]
-            }
-        }
-    }
-    callSendAPI(sender_id, messageData);
-}
 
 /* ----------  Send API  ---------- */
 // sends response messages via the Send API
