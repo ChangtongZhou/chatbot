@@ -514,6 +514,11 @@ function handlePostback(sender_psid, received_postback) {
             } else {
                 var my_list = new List(userData);
                 var list = my_list.get();
+                if (list.length < 1) {
+                    response = {
+                        "text": "Your list is empty, please add items."
+                    }
+                }
                 console.log("what is the list here" + list)
                 response = {
                     "text": list.map((item, idx) => {
