@@ -404,19 +404,19 @@ function handleMessage(sender_psid, received_message) {
                         else if(!isNaN(remove_idx)) {
                             // var index = received_message.text;
                             if (list.length == 1) {
+                                my_list.remove(remove_idx);
                                 response = {
                                     "text": "Your list is empty now!"
                                 }
-                                my_list.remove(remove_idx);
-                                
                             } else {
+                                my_list.remove(remove_idx);
+                                list = my_list.get();
                                 response = {
                                     "text": "Congrats! You just deleted 1 item! Here is your updated list: \n" + list.map((item, idx) => {
                                         return (idx + 1) + ": " + item.text
                                     }).join("\n")
                                 }
-                                my_list.remove(remove_idx);
-                                list = my_list.get();
+                                
                             }                            
                             // removal_time = 0;
                             callSendAPI(sender_psid, response);
