@@ -518,14 +518,17 @@ function handlePostback(sender_psid, received_postback) {
                     response = {
                         "text": "Your list is empty, please add items."
                     }
+                    console.log("what is the list here" + list)
                 }
-                console.log("what is the list here" + list)
-                response = {
-                    "text": list.map((item, idx) => {
-                        return (idx + 1) + ": " + item.text
-                    }).join("\n")
+                else {
+                    response = {
+                        "text": list.map((item, idx) => {
+                            return (idx + 1) + ": " + item.text
+                        }).join("\n")
+                    }
                 }
                 callSendAPI(sender_psid, response);
+                
             }
         })
     }
