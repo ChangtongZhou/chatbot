@@ -1,5 +1,7 @@
-const User = require('../models/to_do_list_db');
-const request = require('request');
+const User = require('../models/to_do_list_db'),
+		request = require('request'),
+		my_token = process.env.FB_VERIFY_TOKEN,
+		my_access = process.env.FB_ACCESS_TOKEN;
 
 
 /* ----------  Get User/sender data and save it on MongoDB  ---------- */
