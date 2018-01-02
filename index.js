@@ -567,7 +567,8 @@ function handlePostback(sender_psid, received_postback) {
                             
                         }
                         else {
-                            console.log("what is the list here" + list)
+                            console.log("what is the list here" + list);
+                            console.log ("what is the length of list here: " + list.length);
                             response = {
                                 "text": list.map((item, idx) => {
                                     return (idx + 1) + ": " + item.text
