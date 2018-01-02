@@ -394,6 +394,12 @@ function handleMessage(sender_psid, received_message) {
                                 "text": "Your list is empty, please add some items first!"
                             }
                             callSendAPI(sender_psid, response);
+                        } 
+                        else if (list.length == 1) {
+                            response = {
+                                "text": "You list is empty now!"
+                            }
+                            callSendAPI(sender_psid, response);
                         }
                         else if(!isNaN(remove_idx) && !list[remove_idx]) {
                             response = {
@@ -438,8 +444,8 @@ function handleMessage(sender_psid, received_message) {
                         }
                         callSendAPI (sender_psid, response);
                       }
-                      
-                      if (splited_txt == -1) {
+
+                      else if (splited_txt == -1) {
                         response = {
                           "text": "Please indicate the index of the item that you want to edit before writing the edited item in the text."
                         }
@@ -540,6 +546,10 @@ function handlePostback(sender_psid, received_postback) {
                         if (list.length < 1) {
                             response = {
                                 "text": "Your list is empty, please add some items first."
+                            }
+                        } else if (list.length == 1) {
+                            response = {
+                                "text": "Your list is empty now!"
                             }
                         } else {
                             response = {
