@@ -211,26 +211,6 @@ function getFBData(fbId, callback) {
 }
 
 
-/* ----------  Get To-Do-List Info  ---------- */
-function getListInfo(fbId) {
-    User.findOne({
-        fbId: fbId
-    }, function(err, listData) {
-        if (err) {
-            callSendAPI(fbId, {
-                text: "Something went wrong. Please try again!"
-            });
-        } else {
-            var items = listData.items;
-            console.log("Checking to do list items: " + JSON.stringify(items));
-            // Send back to FB messenger platform:
-            // need for loop here to go through items array:
-            // callSendAPI (fbId, {"text": `Item: ${items.text} -> Priority: $(items.priority)`})
-        }
-    })
-
-}
-
 class List {
     constructor(userData) {
         this.userData = userData;
@@ -344,7 +324,7 @@ function handleMessage(sender_psid, received_message) {
                         callSendAPI(sender_psid, response);
                     } else if (text.substring(0, 4) == "/add") {
                         // add new item to list
-                        console.log("========================== Adding messages ======================");
+                        console.log("========================== Add Items ======================");
                         var msg = received_message.text.replace ("/add", "");
                         console.log("Potential adding item: " + msg);
                         if (msg == "") {
@@ -371,6 +351,7 @@ function handleMessage(sender_psid, received_message) {
                           callSendAPI(sender_psid, response);
                         }
                     } else if (text.substring(0, 5) == "/show") {
+                        console.log("========================== Show the to_do_list ======================");
                         var list = my_list.get();
                         if (list.length < 1) {
                                 response = {
@@ -387,6 +368,7 @@ function handleMessage(sender_psid, received_message) {
                         callSendAPI(sender_psid, response);
 
                     } else if (text.substring(0, 7) == "/remove") {
+                        console.log("========================== Remove items ======================");
                         var remove_idx = parseInt(text.replace("/remove", "")) - 1;
                         var list = my_list.get();
                         if (list.length < 1) {
@@ -428,6 +410,7 @@ function handleMessage(sender_psid, received_message) {
                             callSendAPI(sender_psid, response);
                         }
                     } else if (text.substring(0, 5) == "/edit") {
+                      console.log("========================== Edit Items ======================");
                       // separate /edit with the rest of text
                       var edit_txt = text.replace("/edit", "");
                       // trim the begining and end spaces of the text
@@ -573,7 +556,6 @@ function handlePostback(sender_psid, received_postback) {
                                 }).join("\n")
                             }
                         }
-                                // callSendAPI(sender_psid, response);
                                 
                     }
 
