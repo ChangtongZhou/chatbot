@@ -339,7 +339,7 @@ function handleMessage(sender_psid, received_message) {
 
                     if (greeting && greeting.confidence > 0.8) {
                         response = {
-                            "text": "Hello there! I am you To-Do-List agent. Please type operations like: /add, /show, /edit, /remove, to explore more about me!"
+                            "text": "Hello there! I am you To-Do-List agent. Please type operations like: /add, /show, /edit, /remove, to explore more about me or you can use the persistent menu for a quick start!"
                         }
                         callSendAPI(sender_psid, response);
                     } else if (text.substring(0, 4) == "/add") {
@@ -482,7 +482,7 @@ function handlePostback(sender_psid, received_postback) {
                 console.log("Got User Info: " + JSON.stringify(userInfo));
 
                 response = {
-                    "text": `Hello, "${userInfo.first_name}"! Welcome to your to_do_list bot!! Please type operations like: /add, /show, /edit, /remove, to explore more about your bot!"`
+                    "text": `Hello, "${userInfo.first_name}"! Welcome to your to_do_list bot!! Please type operations like: /add, /show, /edit, /remove, or use the persistent menu to explore more about your bot!"`
                 };
 
                 // Note here: be careful with the scope of response variable
