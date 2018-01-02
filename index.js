@@ -394,12 +394,6 @@ function handleMessage(sender_psid, received_message) {
                                 "text": "Your list is empty, please add some items first!"
                             }
                             callSendAPI(sender_psid, response);
-                        } 
-                        else if (list.length == 1) {
-                            response = {
-                                "text": "You list is empty now!"
-                            }
-                            callSendAPI(sender_psid, response);
                         }
                         else if(!isNaN(remove_idx) && !list[remove_idx]) {
                             response = {
@@ -409,13 +403,21 @@ function handleMessage(sender_psid, received_message) {
                         }
                         else if(!isNaN(remove_idx)) {
                             // var index = received_message.text;
-                            my_list.remove(remove_idx);
-                            list = my_list.get();
-                            response = {
-                                "text": "Congrats! You just deleted 1 item! Here is your updated list: \n" + list.map((item, idx) => {
-                                    return (idx + 1) + ": " + item.text
-                                }).join("\n")
-                            }
+                            if (list.length == 1) {
+                                response = {
+                                    "text": "Your list is empty now!"
+                                }
+                                my_list.remove(remove_idx);
+                                
+                            } else {
+                                response = {
+                                    "text": "Congrats! You just deleted 1 item! Here is your updated list: \n" + list.map((item, idx) => {
+                                        return (idx + 1) + ": " + item.text
+                                    }).join("\n")
+                                }
+                                my_list.remove(remove_idx);
+                                list = my_list.get();
+                            }                            
                             // removal_time = 0;
                             callSendAPI(sender_psid, response);
                         } else {
@@ -546,10 +548,6 @@ function handlePostback(sender_psid, received_postback) {
                         if (list.length < 1) {
                             response = {
                                 "text": "Your list is empty, please add some items first."
-                            }
-                        } else if (list.length == 1) {
-                            response = {
-                                "text": "Your list is empty now!"
                             }
                         } else {
                             response = {
