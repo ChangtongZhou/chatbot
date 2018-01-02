@@ -356,26 +356,46 @@ function handleMessage(sender_psid, received_message) {
                           my_list.add(msg);
                           var list = my_list.get();
                           // Respond to add function, shows the list of items after adding
-                          response = {
-                              "text": "Congrats, you just added 1 item! Here is your list: \n" + list.map((item, idx) => {
-                                  return (idx + 1) + ": " + item.text
-                              }).join("\n")
-                          }
-
+                          if (list.length < 1) {
+                                response = {
+                                    "text": "Your list is empty, please add some items first."
+                                }
+                            } else {
+                                response = {
+                                    "text": "Congrats, you just added 1 item! Here is your list: \n" + list.map((item, idx) => {
+                                    return (idx + 1) + ": " + item.text
+                                    }).join("\n")
+                                }
+                            }
+                          
                           callSendAPI(sender_psid, response);
                         }
                     } else if (text.substring(0, 5) == "/show") {
                         var list = my_list.get();
-                        response = {
-                            "text": list.map((item, idx) => {
-                                return (idx + 1) + ": " + item.text
-                            }).join("\n")
-                        }
+                        if (list.length < 1) {
+                                response = {
+                                    "text": "Your list is empty, please add some items first."
+                                }
+                        } 
+                        else {
+                                response = {
+                                    "text": list.map((item, idx) => {
+                                        return (idx + 1) + ": " + item.text
+                                    }).join("\n")
+                                }
+                            }
                         callSendAPI(sender_psid, response);
+
                     } else if (text.substring(0, 7) == "/remove") {
                         var remove_idx = parseInt(text.replace("/remove", "")) - 1;
                         var list = my_list.get();
-                        if(!isNaN(remove_idx) && !list[remove_idx]) {
+                        if (list.length < 1) {
+                            response = {
+                                "text": "Your list is empty, please add some items first!"
+                            }
+                            callSendAPI(sender_psid, response);
+                        }
+                        else if(!isNaN(remove_idx) && !list[remove_idx]) {
                             response = {
                                 "text": "The specified index is out of the list boundaries, please input a new one."
                             }
@@ -412,6 +432,13 @@ function handleMessage(sender_psid, received_message) {
                       var msg = splited_txt[1];
                     
                       var list = my_list.get();
+                      if (list.length < 1) {
+                        response = {
+                            "text": "Your list is empty, please add some items first!"
+                        }
+                        callSendAPI (sender_psid, response);
+                      }
+                      
                       if (splited_txt == -1) {
                         response = {
                           "text": "Please indicate the index of the item that you want to edit before writing the edited item in the text."
@@ -463,17 +490,8 @@ function handlePostback(sender_psid, received_postback) {
     console.log("payload===" + payload);
 
     // Set the response based on the postback payload
-    if (payload === 'yes') {
-        response = {
-            "text": "Thanks!"
-        }
 
-    } else if (payload === 'no') {
-        response = {
-            "text": "Oops, try sending another image."
-        }
-
-    } else if (payload === 'GET_STARTED_PAYLOAD') {
+    if (payload === 'GET_STARTED_PAYLOAD') {
         // Get user data from FB by using callback:
         // getUserById (sender_psid, function(userInfo) {
         getFBData(sender_psid, function(err, userInfo) {
@@ -490,49 +508,71 @@ function handlePostback(sender_psid, received_postback) {
             }
 
         });
-    } else if (payload === 'CREATE_PAYLOAD') {
-      response = {
-        "text": "Please type: /add to add items into your to_do_list!"
-      }
-    } else if (payload === 'UPDATE_PAYLOAD') {
-      response = {
-        "text": "Please type: /edit to update the item on your to_do_list!"
-      }
-    } else if (payload === 'DELETE_PAYLOAD') {
-        response = {
-          "text": "Please type: /remove to delete the item on your to_do_list!"
-        }
-    } else if (payload === 'SHOW_PAYLOAD') {
-        console.log("Does show_payload work?")
-        User.findOne({
-            fbId: sender_psid
-        }, function(err, userData) {
-            if (err) {
-                callSendAPI(fbId, {
-                    text: "Something went wrong. Please try again!"
-                });
-            } else {
-                var my_list = new List(userData);
-                var list = my_list.get();
-                if (list.length < 1) {
-                    response = {
-                        "text": "Your list is empty, please add items."
+    } else {
+            User.findOne(
+            {
+                fbId: sender_psid
+            }, 
+            function(err, userData) {
+                if (err) {
+                    callSendAPI(fbId, {
+                        text: "Something went wrong. Please try again!"
+                    });
+                } else {
+                    var my_list = new List(userData);
+                    var list = my_list.get();
+                    if (payload === 'CREATE_PAYLOAD') {
+                        response = {
+                            "text": "Please type: /add to add items into your to_do_list!"
+                        }
+                    } else if (payload === 'UPDATE_PAYLOAD') {
+                        if (list.length < 1) {
+                            response = {
+                                "text": "Your list is empty, please add some items first."
+                            }
+                        } else {
+                            response = {
+                                "text": "Please type: /edit to update the item on your to_do_list!"
+                            } 
+                        }
+                      
+                    } else if (payload === 'DELETE_PAYLOAD') {
+                        if (list.length < 1) {
+                            response = {
+                                "text": "Your list is empty, please add some items first."
+                            }
+                        } else {
+                            response = {
+                                "text": "Please type: /remove to delete the item on your to_do_list!"
+                            }
+                        }
+                       
+                    } else if (payload === 'SHOW_PAYLOAD') {
+                        console.log("Does show_payload work?")
+
+                        if (list.length < 1) {
+                            response = {
+                                "text": "Your list is empty, please add items."
+                            }
+                            console.log("what is the list here" + list)
+                        }
+                        else {
+                            response = {
+                                "text": list.map((item, idx) => {
+                                    return (idx + 1) + ": " + item.text
+                                }).join("\n")
+                            }
+                        }
+                                // callSendAPI(sender_psid, response);
+                                
                     }
-                    console.log("what is the list here" + list)
-                }
-                else {
-                    response = {
-                        "text": list.map((item, idx) => {
-                            return (idx + 1) + ": " + item.text
-                        }).join("\n")
-                    }
+
                 }
                 callSendAPI(sender_psid, response);
-                
-            }
-        })
-    }
-    callSendAPI(sender_psid, response);
+
+            })
+    } 
+    
 }
 
 
