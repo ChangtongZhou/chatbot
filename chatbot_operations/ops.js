@@ -1,7 +1,18 @@
+/* =============================================
+   =                 Webhook Setup                =
+   ============================================= */
+/* 
+ * Adds support for GET requests to facebook webhook
+ * Message handling
+ * Button (postback) response
+ */
 
 const
+    // webhook verification:
     my_token = process.env.FB_VERIFY_TOKEN,
     my_access = process.env.FB_ACCESS_TOKEN,
+
+    // External function calls:
     db = require('../db_operations/user'),
     User = require('../models/to_do_list_db'),
     request = require('request')
@@ -110,7 +121,7 @@ function handleMessage(sender_psid, received_message) {
                             }
                             callSendAPI(sender_psid, response);
                         } else if (!isNaN(remove_idx)) {
-                            // var index = received_message.text;
+
                             if (list.length == 1) {
                                 my_list.remove(remove_idx);
                                 response = {
@@ -126,7 +137,6 @@ function handleMessage(sender_psid, received_message) {
                                 }
 
                             }
-                            // removal_time = 0;
                             callSendAPI(sender_psid, response);
                         } else {
                             response = {
@@ -322,7 +332,7 @@ function callSendAPI(recipientId, response) {
 
 /* ----------  Persistant Menu API  ---------- */
 function addPersistentMenu() {
-    // Get _Started
+    // Get _Started Button
     request({
         url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
         qs: {
@@ -343,7 +353,6 @@ function addPersistentMenu() {
         }
     })
     request({
-        // url: 'https://graph.facebook.com/v2.6/me/messenger_profile',
         url: 'https://graph.facebook.com/me/messenger_profile',
         qs: {
             access_token: my_access
