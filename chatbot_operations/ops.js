@@ -191,13 +191,15 @@ function handleMessage(sender_psid, received_message) {
                                 callSendAPI(sender_psid, response);
                             }
                         }
+
+                    } else {
+                        var response = {
+                            "text": "Sorry, I don't understand your request. Please type operations such as /add, /edit, /remove or /show to start your chatbot!"
+                        };
+                        callSendAPI(sender_psid, response);
                     }
-                } else if (received_message.attachments) {
-                    var response = {
-                        "text": "Sorry, I don't understand your request. "
-                    };
-                    callSendAPI(sender_psid, response);
                 }
+
 
             }
         }
