@@ -1,7 +1,7 @@
 const User = require('../models/to_do_list_db'),
-		request = require('request'),
-		my_token = process.env.FB_VERIFY_TOKEN,
-		my_access = process.env.FB_ACCESS_TOKEN;
+    request = require('request'),
+    my_token = process.env.FB_VERIFY_TOKEN,
+    my_access = process.env.FB_ACCESS_TOKEN;
 
 
 /* ----------  Get User/sender data and save it on MongoDB  ---------- */
@@ -107,7 +107,7 @@ class List {
 }
 
 module.exports = {
-	saveUser: saveUser,
-	getFBData: getFBData,
-	List: List
+    saveUser: saveUser,
+    getFBData: getFBData,
+    List: List
 }
