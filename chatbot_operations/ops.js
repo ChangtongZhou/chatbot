@@ -61,7 +61,7 @@ function handleMessage(sender_psid, received_message) {
                         response = {
                             "text": "Hello there! I am you To-Do-List agent. Please type operations like: /add, /show, /edit, /remove, to explore more about me or you can use the persistent menu for a quick start!"
                         }
-                        callSendAPI(sender_psid, response);
+                        // callSendAPI(sender_psid, response);
                     } else if (text.substring(0, 4) == "/add") {
                         // add new item to list
                         console.log("========================== Add Items ======================");
@@ -71,7 +71,7 @@ function handleMessage(sender_psid, received_message) {
                             response = {
                                 "text": "Are you trying to add items to your to_do_list? Please type the items you want to add after /add."
                             }
-                            callSendAPI(sender_psid, response);
+                            // callSendAPI(sender_psid, response);
                         } else {
                             my_list.add(msg);
                             var list = my_list.get();
@@ -88,7 +88,7 @@ function handleMessage(sender_psid, received_message) {
                                 }
                             }
 
-                            callSendAPI(sender_psid, response);
+                            // callSendAPI(sender_psid, response);
                         }
                     } else if (text.substring(0, 5) == "/show") {
                         console.log("========================== Show the to_do_list ======================");
@@ -104,7 +104,7 @@ function handleMessage(sender_psid, received_message) {
                                 }).join("\n")
                             }
                         }
-                        callSendAPI(sender_psid, response);
+                        // callSendAPI(sender_psid, response);
 
                     } else if (text.substring(0, 7) == "/remove") {
                         console.log("========================== Remove items ======================");
@@ -114,12 +114,12 @@ function handleMessage(sender_psid, received_message) {
                             response = {
                                 "text": "Your list is empty, please add some items first!"
                             }
-                            callSendAPI(sender_psid, response);
+                            // callSendAPI(sender_psid, response);
                         } else if (!isNaN(remove_idx) && !list[remove_idx]) {
                             response = {
                                 "text": "The specified index is out of the list boundaries, please input a new one."
                             }
-                            callSendAPI(sender_psid, response);
+                            // callSendAPI(sender_psid, response);
                         } else if (!isNaN(remove_idx)) {
 
                             if (list.length == 1) {
@@ -137,13 +137,13 @@ function handleMessage(sender_psid, received_message) {
                                 }
 
                             }
-                            callSendAPI(sender_psid, response);
+                            // callSendAPI(sender_psid, response);
                         } else {
                             response = {
                                 "text": "Please indicate the index of the item that you want to remove (number only) after typing /remove."
                             }
                             // removal_time += 1;
-                            callSendAPI(sender_psid, response);
+                            // callSendAPI(sender_psid, response);
                         }
                     } else if (text.substring(0, 5) == "/edit") {
                         console.log("========================== Edit Items ======================");
@@ -163,18 +163,18 @@ function handleMessage(sender_psid, received_message) {
                             response = {
                                 "text": "Your list is empty, please add some items first!"
                             }
-                            callSendAPI(sender_psid, response);
+                            // callSendAPI(sender_psid, response);
                         } else if (splited_txt == -1) {
                             response = {
                                 "text": "Please indicate the index of the item that you want to edit before writing the edited item in the text."
                             }
-                            callSendAPI(sender_psid, response);
+                            // callSendAPI(sender_psid, response);
                         } else {
                             if (!isNaN(edit_idx) && !list[edit_idx]) {
                                 response = {
                                     "text": "The specified index is out of the list boundaries, please input a new one."
                                 }
-                                callSendAPI(sender_psid, response);
+                                // callSendAPI(sender_psid, response);
                             } else if (!isNaN(edit_idx)) {
                                 my_list.edit(edit_idx, msg);
                                 response = {
@@ -182,13 +182,13 @@ function handleMessage(sender_psid, received_message) {
                                         return (idx + 1) + ": " + item.text
                                     }).join("\n")
                                 }
-                                callSendAPI(sender_psid, response);
+                                // callSendAPI(sender_psid, response);
                                 // for (var i in myArray) { if (myArray[i] == "" || myArray[i] == " ") { i++; } console.log(myArray[i].trim()); }
                             } else {
                                 response = {
                                     "text": "Please indicate the index of the item that you want to edit and write the edited item in the text after typing /edit."
                                 }
-                                callSendAPI(sender_psid, response);
+                                // callSendAPI(sender_psid, response);
                             }
                         }
 
@@ -196,8 +196,10 @@ function handleMessage(sender_psid, received_message) {
                         var response = {
                             "text": "Sorry, I don't understand your request. Please type operations such as /add, /edit, /remove or /show to start your chatbot!"
                         };
-                        callSendAPI(sender_psid, response);
+                        // callSendAPI(sender_psid, response);
                     }
+
+                    callSendAPI(sender_psid, response);
                 }
 
 
